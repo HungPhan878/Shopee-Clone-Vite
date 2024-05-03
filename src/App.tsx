@@ -1,13 +1,10 @@
-import './App.css'
+// components
+import useRouteElements from './hooks/useRouteElements'
 
 function App() {
-  console.log('app')
+  const routeElements = useRouteElements()
 
-  return (
-    <>
-      <p className='read-the-docs bg-red-400'>Click on the Vite and React logos to learn more</p>
-    </>
-  )
+  return <>{routeElements}</>
 }
 
 export default App
