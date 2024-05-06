@@ -14,13 +14,16 @@
   },
   "dependencies": {
     "classnames": "^2.5.1",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.3",
     "react-router-dom": "^6.23.0",
+    "react-toastify": "^10.0.5",
     "sass": "^1.75.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.1",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

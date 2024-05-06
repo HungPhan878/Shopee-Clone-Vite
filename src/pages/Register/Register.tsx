@@ -11,6 +11,11 @@ import style from './Register.module.scss'
 // import { getRules } from 'src/utils/rules'
 import { schema, SchemaType } from 'src/utils/rules'
 import Input from 'src/Components/Input'
+import { useMutation } from '@tanstack/react-query'
+import { registerAccount } from 'src/apis/auth.api'
+import omit from 'lodash/omit'
+import { isAxiosUnprocessableEntityError } from 'src/utils/util'
+import { ResponsiveApi } from 'src/types/util.type'
 
 const cx = classNames.bind(style)
 
@@ -21,7 +26,8 @@ export default function Register() {
     register,
     handleSubmit,
     formState: { errors },
-    getValues
+    // getValues,
+    setError
   } = useForm<FormData>({
     defaultValues: {
       email: '',
@@ -31,15 +37,45 @@ export default function Register() {
     resolver: yupResolver(schema)
   })
 
-  // const rules = getRules(getValues)
+  // react query
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerAccount(body)
+  })
 
   // handler function
   const onSubmit = handleSubmit(
-    (data) => console.log(data),
-    () => {
-      const password = getValues('password')
-      console.log(password)
+    (data) => {
+      const body = omit(data, ['confirm_password'])
+
+      registerAccountMutation.mutate(body, {
+        onSuccess: (data) => {
+          console.log(data)
+        },
+        onError: (error) => {
+          // console.log(error)
+          if (
+            isAxiosUnprocessableEntityError<ResponsiveApi<Omit<FormData, 'confirm_password'>>>(
+              error
+            )
+          ) {
+            const formError = error.response?.data.data
+            if (formError) {
+              Object.keys(formError).forEach((key) =>
+                setError(key as keyof Omit<FormData, 'confirm_password'>, {
+                  message: formError[key as keyof Omit<FormData, 'confirm_password'>],
+                  type: 'Server'
+                })
+              )
+            }
+          }
+        }
+      })
     }
+    // ,
+    // () => {
+    //   const password = getValues('password')
+    //   console.log(password)
+    // }
   )
 
   return (
