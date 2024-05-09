@@ -1,68 +1,14 @@
 /* eslint-disable prettier/prettier */
 import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
-import { useRef, useState } from 'react'
-import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  useInteractions,
-  useHover,
-  useDismiss,
-  useRole,
-  useFocus,
-  FloatingPortal,
-  safePolygon,
-  arrow,
-  FloatingArrow
-} from '@floating-ui/react'
-import { AnimatePresence, motion } from 'framer-motion'
 
 // scss
 import style from './header.module.scss'
+import Popover from '../Popover'
 
 const cx = classNames.bind(style)
 
 export default function Header() {
-  // Dùng để đóng mở popover
-  const [isOpen, setIsOpen] = useState(true)
-  const arrowRef = useRef<SVGSVGElement>(null)
-  // tham chiếu đến div nhấn vào để đóng mở popover
-  const data = useFloating({
-    open: isOpen,
-    onOpenChange: setIsOpen,
-    middleware: [
-      offset(-1),
-      flip(),
-      shift(),
-      arrow({
-        element: arrowRef
-      })
-    ],
-    whileElementsMounted: autoUpdate,
-    transform: false,
-    placement: 'bottom-end'
-  })
-
-  const { refs, floatingStyles, context } = data
-
-  // tạo các hành động cho element
-  const hover = useHover(context, {
-    move: false,
-    // Cho vào để khi hover khỏi element vẫn chạm vào được form floating
-    handleClose: safePolygon()
-  })
-  const focus = useFocus(context)
-  const dismiss = useDismiss(context)
-  const role = useRole(context, {
-    // If your reference element has its own label (text).
-    role: 'tooltip'
-  })
-  // tạo biến tương tác với element
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role])
-  // ngay mai neu con song hay cho arrow vao de kiem tra thu nha
   return (
     <header className={cx('header-wrapper')}>
       <div className={cx('container')}>
@@ -70,10 +16,14 @@ export default function Header() {
         <div className={cx('header-top')}>
           <ul className={cx('header-list')}>
             <li className={cx('header-item')}>
-              <div
+              <Popover
                 className={cx('header-item__wrap')}
-                ref={refs.setReference}
-                {...getReferenceProps()}
+                renderProps={
+                  <div className={cx('ppv-lang__row')}>
+                    <button className={cx('ppv-lang__btn')}>Tiếng Việt</button>
+                    <button className={cx('ppv-lang__btn')}>English</button>
+                  </div>
+                }
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -104,39 +54,7 @@ export default function Header() {
                     d='m19.5 8.25-7.5 7.5-7.5-7.5'
                   />
                 </svg>
-                <FloatingPortal>
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        ref={refs.setFloating}
-                        style={{
-                          transformOrigin: `${data.middlewareData.arrow?.x}px top`,
-                          ...floatingStyles
-                        }}
-                        {...getFloatingProps()}
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <div className={cx('ppv-lang')}>
-                          <FloatingArrow
-                            ref={arrowRef}
-                            context={context}
-                            height={8}
-                            width={22}
-                            fill='white'
-                          />
-                          <div className={cx('ppv-lang__row')}>
-                            <button className={cx('ppv-lang__btn')}>Tiếng Việt</button>
-                            <button className={cx('ppv-lang__btn')}>English</button>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </FloatingPortal>
-              </div>
+              </Popover>
             </li>
             <li className={cx('header-item')}>
               <div className={cx('header-item__wrap')}>
