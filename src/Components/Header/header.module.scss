@@ -182,3 +182,22 @@
     }
   }
 }
+
+.ppv-info {
+  &__link {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    width: 165px;
+    padding-left: 15px;
+
+    text-transform: capitalize;
+    color: rgba(0, 0, 0, 0.87);
+    font-weight: 500;
+
+    &:hover {
+      background-color: #fafafa;
+      color: #00bfa5;
+    }
+  }
+}

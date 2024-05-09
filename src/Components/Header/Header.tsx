@@ -57,14 +57,33 @@ export default function Header() {
               </Popover>
             </li>
             <li className={cx('header-item')}>
-              <div className={cx('header-item__wrap')}>
+              <Popover
+                className={cx('header-item__wrap')}
+                renderProps={
+                  <ul className={cx('ppv-info__list')}>
+                    <li className={cx('ppv-info__item')}>
+                      <Link to='#' className={cx('ppv-info__link')}>
+                        tài khoản của tôi
+                      </Link>
+                    </li>
+                    <li className={cx('ppv-info__item')}>
+                      <Link to='#' className={cx('ppv-info__link')}>
+                        đơn mua
+                      </Link>
+                    </li>
+                    <li className={cx('ppv-info__item')}>
+                      <button className={cx('ppv-info__link')}>đăng xuất</button>
+                    </li>
+                  </ul>
+                }
+              >
                 <img
                   src='https://th.bing.com/th/id/OIP.msCrXt053LrpYCkTg4TMhQHaLQ?rs=1&pid=ImgDetMain'
                   alt='Cuc Tinh Y'
                   className={cx('header-item__avatar')}
                 />
                 <span className={cx('header-item__label')}>Rich Grimers</span>
-              </div>
+              </Popover>
             </li>
           </ul>
         </div>
