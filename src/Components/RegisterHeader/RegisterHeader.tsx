@@ -12,7 +12,7 @@ const cx = classNames.bind(style)
 export default function RegisterHeader() {
   // console.log(icons.logo)
   return (
-    <div className={cx('container')}>
+    <header className={cx('container')}>
       <div className={cx('header-wrapper')}>
         <nav className={cx('header-row')}>
           <Link to='/'>
@@ -32,6 +32,6 @@ export default function RegisterHeader() {
           </Link>
         </nav>
       </div>
-    </div>
+    </header>
   )
 }

@@ -11,6 +11,10 @@ import style from './Login.module.scss'
 // components
 // import { getRules } from 'src/utils/rules'
 import Input from 'src/Components/Input'
+import { useMutation } from '@tanstack/react-query'
+import { login } from 'src/apis/auth.api'
+import { isAxiosUnprocessableEntityError } from 'src/utils/util'
+import { ResponsiveApi } from 'src/types/util.type'
 
 const cx = classNames.bind(style)
 
@@ -20,6 +24,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
@@ -30,9 +35,31 @@ export default function Login() {
   })
 
   // const rules = getRules()
+  // react query
+  const loginMutation = useMutation({
+    mutationFn: (body: FormData) => login(body)
+  })
 
   // handler function
-  const onSubmit = handleSubmit((data) => console.log(data))
+  const onSubmit = handleSubmit((data) => {
+    loginMutation.mutate(data, {
+      onSuccess: (data) => console.log(data),
+      onError: (error) => {
+        // console.log(error)
+        if (isAxiosUnprocessableEntityError<ResponsiveApi<FormData>>(error)) {
+          const formError = error.response?.data.data
+          if (formError) {
+            Object.keys(formError).forEach((key) =>
+              setError(key as keyof FormData, {
+                message: formError[key as keyof FormData],
+                type: 'Server'
+              })
+            )
+          }
+        }
+      }
+    })
+  })
 
   return (
     <section className={cx('login')}>
