@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   useFloating,
   autoUpdate,
@@ -14,8 +14,11 @@ import {
   useRole,
   useFocus,
   FloatingPortal,
-  safePolygon
+  safePolygon,
+  arrow,
+  FloatingArrow
 } from '@floating-ui/react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 // scss
 import style from './header.module.scss'
@@ -24,15 +27,26 @@ const cx = classNames.bind(style)
 
 export default function Header() {
   // Dùng để đóng mở popover
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
+  const arrowRef = useRef<SVGSVGElement>(null)
   // tham chiếu đến div nhấn vào để đóng mở popover
-  const { refs, floatingStyles, context } = useFloating({
+  const data = useFloating({
     open: isOpen,
     onOpenChange: setIsOpen,
-    middleware: [offset(0), flip(), shift()],
+    middleware: [
+      offset(-1),
+      flip(),
+      shift(),
+      arrow({
+        element: arrowRef
+      })
+    ],
     whileElementsMounted: autoUpdate,
-    transform: false
+    transform: false,
+    placement: 'bottom-end'
   })
+
+  const { refs, floatingStyles, context } = data
 
   // tạo các hành động cho element
   const hover = useHover(context, {
@@ -91,16 +105,36 @@ export default function Header() {
                   />
                 </svg>
                 <FloatingPortal>
-                  {isOpen && (
-                    <div ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()}>
-                      <div className={cx('ppv-lang')}>
-                        <div className={cx('ppv-lang__row')}>
-                          <button className={cx('ppv-lang__btn')}>Tiếng Việt</button>
-                          <button className={cx('ppv-lang__btn')}>English</button>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        ref={refs.setFloating}
+                        style={{
+                          transformOrigin: `${data.middlewareData.arrow?.x}px top`,
+                          ...floatingStyles
+                        }}
+                        {...getFloatingProps()}
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className={cx('ppv-lang')}>
+                          <FloatingArrow
+                            ref={arrowRef}
+                            context={context}
+                            height={8}
+                            width={22}
+                            fill='white'
+                          />
+                          <div className={cx('ppv-lang__row')}>
+                            <button className={cx('ppv-lang__btn')}>Tiếng Việt</button>
+                            <button className={cx('ppv-lang__btn')}>English</button>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </FloatingPortal>
               </div>
             </li>
