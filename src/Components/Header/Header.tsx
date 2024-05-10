@@ -62,7 +62,7 @@ export default function Header() {
                 renderProps={
                   <ul className={cx('ppv-info__list')}>
                     <li className={cx('ppv-info__item')}>
-                      <Link to='#' className={cx('ppv-info__link')}>
+                      <Link to='/profile' className={cx('ppv-info__link')}>
                         tài khoản của tôi
                       </Link>
                     </li>
