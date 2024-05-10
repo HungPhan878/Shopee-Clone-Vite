@@ -1,6 +1,5 @@
 @use '../abstracts';
 
-
 *,
 ::after,
 ::before {
@@ -19,7 +18,7 @@ html {
 body {
   font-size: 1.6rem;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: var(--text-color);
+  color: rgba(0, 0, 0, 0.8);
   background-color: var(--bgd-body-color);
   -webkit-touch-callout: none;
   -webkit-user-select: none;

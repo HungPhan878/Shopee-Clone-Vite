@@ -32,6 +32,7 @@ interface Props {
   className?: string
   initialOpen?: boolean
   placement?: Placement
+  offsetFloating?: number
 }
 
 export default function Popover({
@@ -40,7 +41,8 @@ export default function Popover({
   as: Element = 'div',
   className,
   initialOpen,
-  placement = 'bottom-end'
+  placement = 'bottom-end',
+  offsetFloating = 0
 }: Props) {
   // Dùng để đóng mở popover
   const [isOpen, setIsOpen] = useState(initialOpen || false)
@@ -50,7 +52,7 @@ export default function Popover({
     open: isOpen,
     onOpenChange: setIsOpen,
     middleware: [
-      offset(-1),
+      offset(offsetFloating),
       flip(),
       shift(),
       arrow({
@@ -64,6 +66,7 @@ export default function Popover({
 
   const { refs, floatingStyles, context } = data
 
+  // Không cần sử dùng useId vẫn có thể tạo ra id mới
   // tạo các hành động cho element
   const hover = useHover(context, {
     move: false,
@@ -90,6 +93,7 @@ export default function Popover({
             <motion.div
               ref={refs.setFloating}
               style={{
+                // Điều chỉnh vị trí đóng mở the floating element
                 transformOrigin: `${data.middlewareData.arrow?.x}px top`,
                 ...floatingStyles
               }}

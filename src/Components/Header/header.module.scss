@@ -114,6 +114,11 @@
   }
 
   &-cart__inner {
+    display: flex;
+    justify-content: center;
+  }
+
+  &-cart__link {
     position: relative;
     &::after {
       content: '7';
@@ -122,7 +127,7 @@
       justify-content: center;
       position: absolute;
       top: 0;
-      left: 34px;
+      right: -12px;
       width: 25px;
       height: 20px;
 
@@ -137,10 +142,6 @@
   &-icon__cart {
     display: block;
     margin-top: 8px;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%);
 
     width: 28px;
     height: 28px;
@@ -183,6 +184,7 @@
   }
 }
 
+// info
 .ppv-info {
   &__link {
     display: flex;
@@ -198,6 +200,84 @@
     &:hover {
       background-color: #fafafa;
       color: #00bfa5;
+    }
+  }
+}
+
+// cart
+.ppv-cart {
+  &__wrap {
+    width: 400px;
+
+    background-color: #fff;
+  }
+
+  &__label {
+    padding: 10px;
+
+    text-transform: capitalize;
+    color: rgba(0, 0, 0, 0.26);
+    font-size: 1.4rem;
+    font-weight: 400;
+
+    cursor: text;
+  }
+
+  &__link {
+    display: flex;
+    padding: 13px 10px;
+
+    &:hover {
+      background-color: #f8f8f8;
+    }
+  }
+
+  &__img {
+    flex-shrink: 0;
+
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    height: 42px;
+    width: 42px;
+    object-fit: contain;
+  }
+
+  &__name {
+    flex-grow: 1;
+    margin-left: 10px;
+
+    font-size: 1.4rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__price {
+    flex-shrink: 0;
+    margin-left: auto;
+
+    color: #ee4d2d;
+    font-size: 1.4rem;
+  }
+
+  &__button {
+    padding: 10px;
+    display: flex;
+    justify-content: end;
+  }
+
+  &__btn {
+    padding: 10px 15px;
+
+    text-transform: capitalize;
+    font-size: 1.4rem;
+    color: #fff;
+    background-color: var(--primary-color);
+
+    border-radius: 2px;
+
+    &:hover {
+      background: #f05d40;
     }
   }
 }
