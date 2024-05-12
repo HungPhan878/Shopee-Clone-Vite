@@ -1,21 +1,27 @@
 /* eslint-disable react-refresh/only-export-components */
+import { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import RegisterLayout from 'src/layouts/RegisterLayout'
-import MainLayout from 'src/layouts/RegisterLayout/MainLayout'
 
 // components
+import MainLayout from 'src/layouts/RegisterLayout/MainLayout'
+import RegisterLayout from 'src/layouts/RegisterLayout'
+import { AppContext } from 'src/contexts/app.context'
 import Login from 'src/pages/Login'
 import ProductList from 'src/pages/ProductList'
 import Profile from 'src/pages/Profile'
 import Register from 'src/pages/Register'
 
-const isAuthenticated = true
+// const isAuthenticated = false
 // plugin routes when authenticated
 function ProtectedRoute() {
+  const { isAuthenticated } = useContext(AppContext)
+
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
 }
 
 function RejectedRoute() {
+  const { isAuthenticated } = useContext(AppContext)
+
   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 

@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useContext } from 'react'
 
 //scss
 import style from './Register.module.scss'
@@ -15,13 +16,16 @@ import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from 'src/apis/auth.api'
 import omit from 'lodash/omit'
 import { isAxiosUnprocessableEntityError } from 'src/utils/util'
-import { ResponsiveApi } from 'src/types/util.type'
+import { ErrorResponsiveApi } from 'src/types/util.type'
+import { AppContext } from 'src/contexts/app.context'
 
 const cx = classNames.bind(style)
 
 type FormData = SchemaType
 
 export default function Register() {
+  const navigate = useNavigate()
+  const { setAuthenticated } = useContext(AppContext)
   const {
     register,
     handleSubmit,
@@ -48,13 +52,14 @@ export default function Register() {
       const body = omit(data, ['confirm_password'])
 
       registerAccountMutation.mutate(body, {
-        onSuccess: (data) => {
-          console.log(data)
+        onSuccess: () => {
+          setAuthenticated(true)
+          navigate('/')
         },
         onError: (error) => {
           // console.log(error)
           if (
-            isAxiosUnprocessableEntityError<ResponsiveApi<Omit<FormData, 'confirm_password'>>>(
+            isAxiosUnprocessableEntityError<ErrorResponsiveApi<Omit<FormData, 'confirm_password'>>>(
               error
             )
           ) {

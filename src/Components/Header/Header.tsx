@@ -1,14 +1,33 @@
 /* eslint-disable prettier/prettier */
 import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
+import { useContext } from 'react'
+import { useMutation } from '@tanstack/react-query'
 
 // scss
 import style from './header.module.scss'
 import Popover from '../Popover'
+import { logout } from 'src/apis/auth.api'
+import { AppContext } from 'src/contexts/app.context'
 
 const cx = classNames.bind(style)
 
 export default function Header() {
+  const { isAuthenticated, setAuthenticated } = useContext(AppContext)
+  // const navigate = useNavigate()
+
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      setAuthenticated(false)
+    }
+  })
+
+  // handler funtion
+  const handleLogout = () => {
+    logoutMutation.mutate()
+  }
+
   return (
     <header className={cx('header-wrapper')}>
       <div className={cx('container')}>
@@ -57,33 +76,49 @@ export default function Header() {
               </Popover>
             </li>
             <li className={cx('header-item')}>
-              <Popover
-                className={cx('header-item__wrap')}
-                renderProps={
-                  <ul className={cx('ppv-info__list')}>
-                    <li className={cx('ppv-info__item')}>
-                      <Link to='/profile' className={cx('ppv-info__link')}>
-                        tài khoản của tôi
-                      </Link>
-                    </li>
-                    <li className={cx('ppv-info__item')}>
-                      <Link to='#' className={cx('ppv-info__link')}>
-                        đơn mua
-                      </Link>
-                    </li>
-                    <li className={cx('ppv-info__item')}>
-                      <button className={cx('ppv-info__link')}>đăng xuất</button>
-                    </li>
-                  </ul>
-                }
-              >
-                <img
-                  src='https://th.bing.com/th/id/OIP.msCrXt053LrpYCkTg4TMhQHaLQ?rs=1&pid=ImgDetMain'
-                  alt='Cuc Tinh Y'
-                  className={cx('header-item__avatar')}
-                />
-                <span className={cx('header-item__label')}>Rich Grimers</span>
-              </Popover>
+              {isAuthenticated && (
+                <Popover
+                  className={cx('header-item__wrap')}
+                  renderProps={
+                    <ul className={cx('ppv-info__list')}>
+                      <li className={cx('ppv-info__item')}>
+                        <Link to='/profile' className={cx('ppv-info__link')}>
+                          tài khoản của tôi
+                        </Link>
+                      </li>
+                      <li className={cx('ppv-info__item')}>
+                        <Link to='#' className={cx('ppv-info__link')}>
+                          đơn mua
+                        </Link>
+                      </li>
+                      <li className={cx('ppv-info__item')}>
+                        <button className={cx('ppv-info__link')} onClick={handleLogout}>
+                          đăng xuất
+                        </button>
+                      </li>
+                    </ul>
+                  }
+                >
+                  <img
+                    src='https://th.bing.com/th/id/OIP.msCrXt053LrpYCkTg4TMhQHaLQ?rs=1&pid=ImgDetMain'
+                    alt='Cuc Tinh Y'
+                    className={cx('header-item__avatar')}
+                  />
+                  <span className={cx('header-item__label')}>Rich Grimers</span>
+                </Popover>
+              )}
+
+              {!isAuthenticated && (
+                <div className={cx('header-item__btns-wrap')}>
+                  <Link to='/register' className={cx('header-item__btn')}>
+                    đăng ký
+                  </Link>
+                  <span className={cx('header-item__separate')}></span>
+                  <Link to='/login' className={cx('header-item__btn')}>
+                    đăng nhập
+                  </Link>
+                </div>
+              )}
             </li>
           </ul>
         </div>

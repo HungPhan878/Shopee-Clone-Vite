@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { LoginSchemaType, loginSchema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -14,13 +14,17 @@ import Input from 'src/Components/Input'
 import { useMutation } from '@tanstack/react-query'
 import { login } from 'src/apis/auth.api'
 import { isAxiosUnprocessableEntityError } from 'src/utils/util'
-import { ResponsiveApi } from 'src/types/util.type'
+import { ErrorResponsiveApi } from 'src/types/util.type'
+import { useContext } from 'react'
+import { AppContext } from 'src/contexts/app.context'
 
 const cx = classNames.bind(style)
 
 type FormData = LoginSchemaType
 
 export default function Login() {
+  const navigate = useNavigate()
+  const { setAuthenticated } = useContext(AppContext)
   const {
     register,
     handleSubmit,
@@ -43,10 +47,13 @@ export default function Login() {
   // handler function
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
-      onSuccess: (data) => console.log(data),
+      onSuccess: () => {
+        setAuthenticated(true)
+        navigate('/')
+      },
       onError: (error) => {
         // console.log(error)
-        if (isAxiosUnprocessableEntityError<ResponsiveApi<FormData>>(error)) {
+        if (isAxiosUnprocessableEntityError<ErrorResponsiveApi<FormData>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) =>

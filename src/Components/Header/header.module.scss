@@ -29,6 +29,30 @@
     }
   }
 
+  &-item__btns-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &-item__btn {
+    padding: 7px 0;
+
+    text-transform: capitalize;
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 300;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  &-item__separate {
+    border: 1px solid hsla(0, 0%, 100%, 0.4);
+    height: 13px;
+  }
+
   &-item__icon {
     width: 18px;
     height: 18px;

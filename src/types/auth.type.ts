@@ -1,7 +1,7 @@
 import { User } from './user.type.ts'
-import { ResponsiveApi } from './util.type.ts'
+import { SuccessResponsiveApi } from './util.type.ts'
 
-export type AuthResponsive = ResponsiveApi<{
+export type AuthResponsive = SuccessResponsiveApi<{
   access_token: string
   expires: number
   refresh_token: string

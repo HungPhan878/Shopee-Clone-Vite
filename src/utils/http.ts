@@ -4,10 +4,15 @@ import { toast } from 'react-toastify'
 
 // components
 import HttpStatusCode from 'src/constants/HttpStatusCode.enum'
+import { clearLocalStorage, getAccessTokenFromLS, setAccessTokenFromLS } from './auth'
+import { AuthResponsive } from 'src/types/auth.type'
 
 export class Http {
   instance: AxiosInstance
+  private access_token: string
+  // funtion constructor chỉ chạy một lần duy nhất khi được render f5 lại thì sẽ chạy lại
   constructor() {
+    this.access_token = getAccessTokenFromLS()
     this.instance = axios.create({
       baseURL: 'https://api-ecom.duthanhduoc.com/',
       timeout: 10000,
@@ -15,10 +20,32 @@ export class Http {
         'Content-Type': 'application/json'
       }
     })
+
+    this.instance.interceptors.request.use(
+      (config) => {
+        if (this.access_token && config.headers) {
+          config.headers.Authorization = this.access_token
+          return config
+        }
+        return config
+      },
+      function (error) {
+        // Do something with request error
+        return Promise.reject(error)
+      }
+    )
+
     this.instance.interceptors.response.use(
-      function (response) {
-        // Any status code that lie within the range of 2xx cause this function to trigger
-        // Do something with response data
+      (response) => {
+        console.log(response)
+        const { url } = response.config
+        if (url === '/login' || url === '/register') {
+          this.access_token = (response.data as AuthResponsive).data.access_token
+          setAccessTokenFromLS(this.access_token)
+        } else if (url === '/logout') {
+          this.access_token = ''
+          clearLocalStorage()
+        }
         return response
       },
       function (error) {

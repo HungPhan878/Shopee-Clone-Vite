@@ -2,7 +2,7 @@ import classNames from 'classnames/bind'
 
 //scss
 import style from './RegisterHeader.module.scss'
-import { Link } from 'react-router-dom'
+import { Link, useMatch } from 'react-router-dom'
 
 // components
 // import icons from '../../assets/images'
@@ -10,7 +10,10 @@ import { Link } from 'react-router-dom'
 const cx = classNames.bind(style)
 
 export default function RegisterHeader() {
-  // console.log(icons.logo)
+  // useMatch Dùng để kiểm tra url có match với một arg truyền vào hay không
+  const registerMatch = useMatch('/register')
+  const isRegisterMatch = Boolean(registerMatch)
+
   return (
     <header className={cx('container')}>
       <div className={cx('header-wrapper')}>
@@ -25,7 +28,7 @@ export default function RegisterHeader() {
             {/* <img src={icons.logo} alt='shopee' /> */}
           </Link>
 
-          <h1 className={cx('header-heading')}>Đăng Nhập</h1>
+          <h1 className={cx('header-heading')}>{isRegisterMatch ? 'Đăng Ký' : 'Đăng Nhập'}</h1>
 
           <Link to='/' className={cx('d-md-none', { 'header-link': true })}>
             <p className={cx('header-text')}>Bạn cần giúp đỡ?</p>
