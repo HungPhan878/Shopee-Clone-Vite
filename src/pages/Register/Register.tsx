@@ -18,6 +18,7 @@ import omit from 'lodash/omit'
 import { isAxiosUnprocessableEntityError } from 'src/utils/util'
 import { ErrorResponsiveApi } from 'src/types/util.type'
 import { AppContext } from 'src/contexts/app.context'
+import Button from 'src/Components/Button'
 
 const cx = classNames.bind(style)
 
@@ -120,7 +121,13 @@ export default function Register() {
                     errorMessage={errors.confirm_password?.message}
                   />
 
-                  <button className={cx('register-form__btn')}>đăng ký</button>
+                  <Button
+                    isLoading={registerAccountMutation.isPending}
+                    disabled={registerAccountMutation.isPending}
+                    className={cx('register-form__btn')}
+                  >
+                    đăng ký
+                  </Button>
                 </form>
 
                 <div className={cx('register-row')}>

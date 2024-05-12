@@ -17,6 +17,7 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/util'
 import { ErrorResponsiveApi } from 'src/types/util.type'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
+import Button from 'src/Components/Button'
 
 const cx = classNames.bind(style)
 
@@ -96,7 +97,13 @@ export default function Login() {
                     errorMessage={errors.password?.message}
                   />
 
-                  <button className={cx('login-form__btn')}>đăng nhập</button>
+                  <Button
+                    isLoading={loginMutation.isPending}
+                    disabled={loginMutation.isPending}
+                    className={cx('login-form__btn')}
+                  >
+                    đăng nhập
+                  </Button>
                 </form>
 
                 <div className={cx('login-row')}>
