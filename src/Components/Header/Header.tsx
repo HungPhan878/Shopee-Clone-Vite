@@ -14,13 +14,14 @@ import path from 'src/constants/path'
 const cx = classNames.bind(style)
 
 export default function Header() {
-  const { isAuthenticated, setAuthenticated } = useContext(AppContext)
+  const { isAuthenticated, setAuthenticated, setProfile, profile } = useContext(AppContext)
   // const navigate = useNavigate()
 
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: () => {
       setAuthenticated(false)
+      setProfile(null)
     }
   })
 
@@ -105,7 +106,7 @@ export default function Header() {
                     alt='Cuc Tinh Y'
                     className={cx('header-item__avatar')}
                   />
-                  <span className={cx('header-item__label')}>Rich Grimers</span>
+                  <span className={cx('header-item__label')}>{profile?.name}</span>
                 </Popover>
               )}
 

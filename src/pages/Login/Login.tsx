@@ -26,7 +26,7 @@ type FormData = LoginSchemaType
 
 export default function Login() {
   const navigate = useNavigate()
-  const { setAuthenticated } = useContext(AppContext)
+  const { setAuthenticated, setProfile } = useContext(AppContext)
   const {
     register,
     handleSubmit,
@@ -49,8 +49,9 @@ export default function Login() {
   // handler function
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         setAuthenticated(true)
+        setProfile(data.data.data.user)
         navigate('/')
       },
       onError: (error) => {

@@ -27,7 +27,7 @@ type FormData = SchemaType
 
 export default function Register() {
   const navigate = useNavigate()
-  const { setAuthenticated } = useContext(AppContext)
+  const { setAuthenticated, setProfile } = useContext(AppContext)
   const {
     register,
     handleSubmit,
@@ -54,8 +54,9 @@ export default function Register() {
       const body = omit(data, ['confirm_password'])
 
       registerAccountMutation.mutate(body, {
-        onSuccess: () => {
+        onSuccess: (data) => {
           setAuthenticated(true)
+          setProfile(data.data.data.user)
           navigate('/')
         },
         onError: (error) => {

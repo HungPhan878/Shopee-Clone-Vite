@@ -1,10 +1,16 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
 
 // components
 import HttpStatusCode from 'src/constants/HttpStatusCode.enum'
-import { clearLocalStorage, getAccessTokenFromLS, setAccessTokenFromLS } from './auth'
+import {
+  clearLocalStorage,
+  getAccessTokenFromLS,
+  setAccessTokenFromLS,
+  setProfileFromLS
+} from './auth'
 import { AuthResponsive } from 'src/types/auth.type'
 
 export class Http {
@@ -40,8 +46,10 @@ export class Http {
         console.log(response)
         const { url } = response.config
         if (url === '/login' || url === '/register') {
-          this.access_token = (response.data as AuthResponsive).data.access_token
+          const data = response.data as AuthResponsive
+          this.access_token = data.data.access_token
           setAccessTokenFromLS(this.access_token)
+          setProfileFromLS(data.data.user)
         } else if (url === '/logout') {
           this.access_token = ''
           clearLocalStorage()
