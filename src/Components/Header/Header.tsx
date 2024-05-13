@@ -9,6 +9,7 @@ import style from './header.module.scss'
 import Popover from '../Popover'
 import { logout } from 'src/apis/auth.api'
 import { AppContext } from 'src/contexts/app.context'
+import path from 'src/constants/path'
 
 const cx = classNames.bind(style)
 
@@ -110,11 +111,11 @@ export default function Header() {
 
               {!isAuthenticated && (
                 <div className={cx('header-item__btns-wrap')}>
-                  <Link to='/register' className={cx('header-item__btn')}>
+                  <Link to={path.register} className={cx('header-item__btn')}>
                     đăng ký
                   </Link>
                   <span className={cx('header-item__separate')}></span>
-                  <Link to='/login' className={cx('header-item__btn')}>
+                  <Link to={path.login} className={cx('header-item__btn')}>
                     đăng nhập
                   </Link>
                 </div>

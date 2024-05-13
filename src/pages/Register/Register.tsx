@@ -19,6 +19,7 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/util'
 import { ErrorResponsiveApi } from 'src/types/util.type'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/Components/Button'
+import path from 'src/constants/path'
 
 const cx = classNames.bind(style)
 
@@ -141,7 +142,7 @@ export default function Register() {
 
                 <div className={cx('register-link')}>
                   Bạn đã có tài khoản?{' '}
-                  <Link to='/login' className={cx('register-link__text')}>
+                  <Link to={path.login} className={cx('register-link__text')}>
                     Đăng Nhập
                   </Link>
                 </div>

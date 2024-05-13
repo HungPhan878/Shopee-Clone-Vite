@@ -3,6 +3,7 @@ import classNames from 'classnames/bind'
 //scss
 import style from './RegisterHeader.module.scss'
 import { Link, useMatch } from 'react-router-dom'
+import path from 'src/constants/path'
 
 // components
 // import icons from '../../assets/images'
@@ -11,7 +12,7 @@ const cx = classNames.bind(style)
 
 export default function RegisterHeader() {
   // useMatch Dùng để kiểm tra url có match với một arg truyền vào hay không
-  const registerMatch = useMatch('/register')
+  const registerMatch = useMatch(path.register)
   const isRegisterMatch = Boolean(registerMatch)
 
   return (

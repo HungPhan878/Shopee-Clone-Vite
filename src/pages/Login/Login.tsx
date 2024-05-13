@@ -18,6 +18,7 @@ import { ErrorResponsiveApi } from 'src/types/util.type'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/Components/Button'
+import path from 'src/constants/path'
 
 const cx = classNames.bind(style)
 
@@ -117,7 +118,7 @@ export default function Login() {
 
                 <div className={cx('login-link')}>
                   Bạn mới biết đến Shopee?{' '}
-                  <Link to='/register' className={cx('login-link__text')}>
+                  <Link to={path.register} className={cx('login-link__text')}>
                     Đăng ký
                   </Link>
                 </div>
