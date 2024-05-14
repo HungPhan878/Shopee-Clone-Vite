@@ -6,23 +6,24 @@ import classNames from 'classnames/bind'
 //scss
 import style from './Input.module.scss'
 import { RegisterOptions, UseFormRegister } from 'react-hook-form'
+import { InputHTMLAttributes } from 'react'
 
 const cx = classNames.bind(style)
 
-interface Props {
-  className?: string
-  placeholder?: string
-  type: string
-  name: string
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   rules?: RegisterOptions
-  register: UseFormRegister<any>
+  register?: UseFormRegister<any>
   errorMessage?: string
-  autoComplete?: string
+  name?: string
+  classNameInput?: string
+  classNameError?: string
 }
 
 // eslint-disable-next-line prettier/prettier
 export default function Input({
   className,
+  classNameInput,
+  classNameError,
   placeholder,
   type,
   name,
@@ -31,16 +32,20 @@ export default function Input({
   errorMessage,
   autoComplete
 }: Props) {
+  const registerResult = register && name ? register(name, rules) : {}
+  const newClassName = className ? cx(className, 'input-form__wrap') : cx('input-form__wrap')
+  const newClassInput = classNameInput ? classNameInput : cx('input-form__input')
+  const newClassError = classNameError ? classNameError : cx('input-form__msg')
   return (
-    <div className={cx('input-form__wrap')}>
+    <div className={newClassName}>
       <input
         type={type}
         placeholder={placeholder}
-        className={cx('input-form__input')}
+        className={newClassInput}
         autoComplete={autoComplete}
-        {...register(name, rules)}
+        {...registerResult}
       />
-      <p className={cx('input-form__msg')}>{errorMessage}</p>
+      <p className={newClassError}>{errorMessage}</p>
     </div>
   )
 }

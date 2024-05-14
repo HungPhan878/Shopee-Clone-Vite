@@ -7,13 +7,13 @@ import style from './Button.module.scss'
 const cx = classNames.bind(style)
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode
   isLoading?: boolean
 }
 
 export default function Button(props: ButtonProps) {
-  const { disabled, children, className, isLoading, ...rest } = props
+  const { disabled, children, className = cx('btn'), isLoading, ...rest } = props
   const newClassName = disabled ? cx(className, 'btn__disable') : className
+  // Nhu vay la them class cho cx nha
 
   return (
     <div>
