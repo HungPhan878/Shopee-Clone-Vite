@@ -43,10 +43,10 @@ export default function ProductList() {
               <SortProductList />
 
               <div className={cx('product-list__products')}>
-                <div className='row row-cols-5'>
+                <div className='row row-cols-5 gy-3'>
                   {/* tạo ra một mảng 30 phần tử nhưng empty thì phải cho fill vào để đổ đầy giá trị là 0 
                   và dùng index để render ra */}
-                  {Array(30)
+                  {Array(10)
                     .fill(0)
                     .map((_, index) => (
                       <div key={index}>
