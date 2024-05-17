@@ -8,6 +8,9 @@ import AsideFilter from './Components/AsideFilter'
 import SortProductList from './Components/SortProductList'
 import Product from './Components/Product'
 import Carousel from 'src/Components/Carousel'
+import { useQuery } from '@tanstack/react-query'
+import useQueryParams from 'src/hooks/useQueryParams'
+import productApi from 'src/apis/product.api'
 
 const cx = classNames.bind(style)
 
@@ -19,6 +22,16 @@ const slides = [
 ]
 
 export default function ProductList() {
+  const queryParams = useQueryParams()
+
+  //Get Products
+  const getProducts = useQuery({
+    queryKey: ['products', queryParams],
+    queryFn: () => productApi.getProductList(queryParams)
+  })
+
+  const products = getProducts.data?.data.data.products
+
   return (
     <div>
       <section className={cx('product-slides__wrap')}>
@@ -46,11 +59,10 @@ export default function ProductList() {
                 <div className='row row-cols-5 gy-3'>
                   {/* tạo ra một mảng 30 phần tử nhưng empty thì phải cho fill vào để đổ đầy giá trị là 0 
                   và dùng index để render ra */}
-                  {Array(10)
-                    .fill(0)
-                    .map((_, index) => (
-                      <div key={index}>
-                        <Product />
+                  {products &&
+                    products.map((product) => (
+                      <div key={product._id}>
+                        <Product product={product} />
                       </div>
                     ))}
                 </div>
