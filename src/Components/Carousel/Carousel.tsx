@@ -18,12 +18,17 @@ interface Props {
 export default function Carousel({ children: slides, autoSlides = false, timeout = 3000 }: Props) {
   const [curr, setCurr] = useState<number>(0)
 
+  // handler function
   const next = () => {
     setCurr((prev) => (prev >= slides.length - 1 ? 0 : prev + 1))
   }
 
   const prev = () => {
     setCurr((prev) => (prev < 0 ? slides.length - 1 : prev - 1))
+  }
+
+  const handleClick = (index: number) => () => {
+    setCurr(index)
   }
 
   useEffect(() => {
@@ -62,12 +67,13 @@ export default function Carousel({ children: slides, autoSlides = false, timeout
       </div>
       <div className={cx('slides-dots')}>
         {slides.map((_, index) => (
-          <div
+          <button
             className={cx('slides-dot', {
               'slides-dot--active': curr === index
             })}
             key={index}
-          ></div>
+            onClick={handleClick(index)}
+          ></button>
         ))}
       </div>
     </div>
