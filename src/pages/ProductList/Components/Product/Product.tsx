@@ -6,6 +6,7 @@ import style from './Product.module.scss'
 import { Link } from 'react-router-dom'
 import { Product as ProductType } from 'src/types/product.type'
 import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/util'
+import ProductRating from '../ProductRating'
 
 const cx = classNames.bind(style)
 
@@ -36,44 +37,14 @@ export default function Product({ product }: Props) {
           </div>
 
           <div className={cx('product-row')}>
-            <div className={cx('product-rating')}>
-              <div className={cx('product-star')}>
-                <svg
-                  enableBackground='new 0 0 15 15'
-                  viewBox='0 0 15 15'
-                  x={0}
-                  y={0}
-                  className={cx('product-star__icon')}
-                >
-                  <polygon
-                    points='7.5 .8 9.7 5.4 14.5 5.9 10.7 9.1 11.8 14.2 7.5 11.6 3.2 14.2 4.3 9.1 .5 5.9 5.3 5.4'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeMiterlimit={10}
-                  />
-                </svg>
-              </div>
-              <svg
-                enableBackground='new 0 0 15 15'
-                viewBox='0 0 15 15'
-                x={0}
-                y={0}
-                className={cx('product-star__icon--empty')}
-              >
-                <polygon
-                  points='7.5 .8 9.7 5.4 14.5 5.9 10.7 9.1 11.8 14.2 7.5 11.6 3.2 14.2 4.3 9.1 .5 5.9 5.3 5.4'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeMiterlimit={10}
-                />
-              </svg>
-            </div>
+            <ProductRating rating={product.rating} />
 
             <div className={cx('product-sold')}>
               <span>{formatNumberToSocialStyle(product.sold)}</span>
               <span>Đã bán</span>
             </div>
           </div>
+
           <div className={cx('product-national')}>US-UK</div>
         </section>
       </article>
