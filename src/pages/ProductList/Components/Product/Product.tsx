@@ -5,6 +5,7 @@ import classNames from 'classnames/bind'
 import style from './Product.module.scss'
 import { Link } from 'react-router-dom'
 import { Product as ProductType } from 'src/types/product.type'
+import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/util'
 
 const cx = classNames.bind(style)
 
@@ -25,12 +26,12 @@ export default function Product({ product }: Props) {
           <div className={cx('product-row')}>
             <div className={cx('product-price__old')}>
               <span>đ</span>
-              <span>{product.price_before_discount}</span>
+              <span>{formatCurrency(product.price_before_discount)}</span>
             </div>
 
             <div className={cx('product-price__curr')}>
               <span>đ</span>
-              <span>{product.price}</span>
+              <span>{formatCurrency(product.price)}</span>
             </div>
           </div>
 
@@ -69,7 +70,7 @@ export default function Product({ product }: Props) {
             </div>
 
             <div className={cx('product-sold')}>
-              <span>{product.sold}</span>
+              <span>{formatNumberToSocialStyle(product.sold)}</span>
               <span>Đã bán</span>
             </div>
           </div>
