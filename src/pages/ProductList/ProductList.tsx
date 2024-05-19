@@ -11,6 +11,8 @@ import Carousel from 'src/Components/Carousel'
 import { useQuery } from '@tanstack/react-query'
 import useQueryParams from 'src/hooks/useQueryParams'
 import productApi from 'src/apis/product.api'
+import Pagination from './Components/Pagination'
+import { useState } from 'react'
 
 const cx = classNames.bind(style)
 
@@ -22,6 +24,7 @@ const slides = [
 ]
 
 export default function ProductList() {
+  const [pageCurr, setPageCurr] = useState(1)
   const queryParams = useQueryParams()
 
   //Get Products
@@ -67,6 +70,8 @@ export default function ProductList() {
                     ))}
                 </div>
               </div>
+
+              <Pagination pageCurr={pageCurr} setPageCurr={setPageCurr} pageSize={20} />
             </div>
           </div>
         </div>
