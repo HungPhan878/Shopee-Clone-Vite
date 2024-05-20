@@ -13,8 +13,14 @@ import useQueryParams from 'src/hooks/useQueryParams'
 import productApi from 'src/apis/product.api'
 import Pagination from './Components/Pagination'
 import { useState } from 'react'
+import { ProductListConfig } from 'src/types/product.type'
+import { isUndefined, omitBy } from 'lodash'
 
 const cx = classNames.bind(style)
+
+export type QueryConfig = {
+  [key in keyof ProductListConfig]: string
+}
 
 const slides = [
   'https://cf.shopee.vn/file/vn-50009109-7a39522ed87cf07fc399dc600fb0587d_xxhdpi',
@@ -25,12 +31,30 @@ const slides = [
 
 export default function ProductList() {
   const [pageCurr, setPageCurr] = useState(1)
-  const queryParams = useQueryParams()
+  const queryParams: QueryConfig = useQueryParams()
+  // omitBy dùng để loại trừ giá trị undefine cho queryconfig
+  // tạo queryconfig để khi gán query params cho url thì vẫn giữ được những key value khác
+  // Khi một biến phụ thuộc một biến thì không cần tạo ra undefine
+  const queryConfig: QueryConfig = omitBy(
+    {
+      page: queryParams.page || '1',
+      limit: queryParams.limit || '1',
+      order: queryParams.order,
+      sort_by: queryParams.sort_by,
+      category: queryParams.category,
+      exclude: queryParams.exclude,
+      rating_filter: queryParams.rating_filter,
+      price_max: queryParams.price_max,
+      price_min: queryParams.price_min,
+      name: queryParams.name
+    },
+    isUndefined
+  )
 
   //Get Products
   const getProducts = useQuery({
-    queryKey: ['products', queryParams],
-    queryFn: () => productApi.getProductList(queryParams)
+    queryKey: ['products', queryConfig],
+    queryFn: () => productApi.getProductList(queryConfig as ProductListConfig)
   })
 
   const products = getProducts.data?.data.data.products
@@ -55,24 +79,25 @@ export default function ProductList() {
             <div className='col col-3'>
               <AsideFilter />
             </div>
-            <div className='col col-9'>
-              <SortProductList />
+            {products && (
+              <div className='col col-9'>
+                <SortProductList />
 
-              <div className={cx('product-list__products')}>
-                <div className='row row-cols-5 gy-3'>
-                  {/* tạo ra một mảng 30 phần tử nhưng empty thì phải cho fill vào để đổ đầy giá trị là 0 
+                <div className={cx('product-list__products')}>
+                  <div className='row row-cols-5 gy-3'>
+                    {/* tạo ra một mảng 30 phần tử nhưng empty thì phải cho fill vào để đổ đầy giá trị là 0 
                   và dùng index để render ra */}
-                  {products &&
-                    products.map((product) => (
+                    {products.map((product) => (
                       <div key={product._id}>
                         <Product product={product} />
                       </div>
                     ))}
+                  </div>
                 </div>
-              </div>
 
-              <Pagination pageCurr={pageCurr} setPageCurr={setPageCurr} pageSize={20} />
-            </div>
+                <Pagination pageCurr={pageCurr} setPageCurr={setPageCurr} pageSize={20} />
+              </div>
+            )}
           </div>
         </div>
       </div>
