@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
 
 // scss
@@ -8,11 +9,10 @@ import AsideFilter from './Components/AsideFilter'
 import SortProductList from './Components/SortProductList'
 import Product from './Components/Product'
 import Carousel from 'src/Components/Carousel'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import useQueryParams from 'src/hooks/useQueryParams'
 import productApi from 'src/apis/product.api'
 import Pagination from './Components/Pagination'
-import { useState } from 'react'
 import { ProductListConfig } from 'src/types/product.type'
 import { isUndefined, omitBy } from 'lodash'
 
@@ -30,7 +30,6 @@ const slides = [
 ]
 
 export default function ProductList() {
-  const [pageCurr, setPageCurr] = useState(1)
   const queryParams: QueryConfig = useQueryParams()
   // omitBy dùng để loại trừ giá trị undefine cho queryconfig
   // tạo queryconfig để khi gán query params cho url thì vẫn giữ được những key value khác
@@ -38,7 +37,7 @@ export default function ProductList() {
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || '1',
-      limit: queryParams.limit || '1',
+      limit: queryParams.limit || '10',
       order: queryParams.order,
       sort_by: queryParams.sort_by,
       category: queryParams.category,
@@ -54,11 +53,11 @@ export default function ProductList() {
   //Get Products
   const getProducts = useQuery({
     queryKey: ['products', queryConfig],
-    queryFn: () => productApi.getProductList(queryConfig as ProductListConfig)
+    queryFn: () => productApi.getProductList(queryConfig as ProductListConfig),
+    placeholderData: keepPreviousData
   })
 
-  const products = getProducts.data?.data.data.products
-
+  const products = getProducts.data?.data.data
   return (
     <div>
       <section className={cx('product-slides__wrap')}>
@@ -87,7 +86,7 @@ export default function ProductList() {
                   <div className='row row-cols-5 gy-3'>
                     {/* tạo ra một mảng 30 phần tử nhưng empty thì phải cho fill vào để đổ đầy giá trị là 0 
                   và dùng index để render ra */}
-                    {products.map((product) => (
+                    {products.products.map((product) => (
                       <div key={product._id}>
                         <Product product={product} />
                       </div>
@@ -95,7 +94,7 @@ export default function ProductList() {
                   </div>
                 </div>
 
-                <Pagination pageCurr={pageCurr} setPageCurr={setPageCurr} pageSize={20} />
+                <Pagination queryConfig={queryConfig} pageSize={products.pagination.page_size} />
               </div>
             )}
           </div>

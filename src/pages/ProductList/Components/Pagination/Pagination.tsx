@@ -1,91 +1,131 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
+import { Link, createSearchParams } from 'react-router-dom'
 
 // scss
 import style from './Pagination.module.scss'
+import { QueryConfig } from '../../ProductList'
+import path from 'src/constants/path'
 
 const cx = classNames.bind(style)
 
 interface Props {
-  pageCurr: number
-  setPageCurr: React.Dispatch<React.SetStateAction<number>>
+  queryConfig: QueryConfig
   pageSize: number
 }
 
 const RANGE = 2
 
-export default function Pagination({ pageCurr, setPageCurr, pageSize }: Props) {
+export default function Pagination({ queryConfig, pageSize }: Props) {
+  const pageCurr = Number(queryConfig.page)
+
   const renderPagination = () => {
     let dotAfter = false
     let dotBefore = false
+
+    const renderDotAfter = (index: number) => {
+      if (!dotAfter) {
+        dotAfter = true
+        return (
+          <span className={cx('pgt-btn')} key={index}>
+            ...
+          </span>
+        )
+      }
+      return null
+    }
+
+    const renderDotBefore = (index: number) => {
+      if (!dotBefore) {
+        dotBefore = true
+        return (
+          <span className={cx('pgt-btn')} key={index}>
+            ...
+          </span>
+        )
+      }
+      return null
+    }
 
     return Array(pageSize)
       .fill(0)
       .map((_, index) => {
         const pageNumber = index + 1
 
-        const renderDotAfter = () => {
-          if (!dotAfter) {
-            dotAfter = true
-            return (
-              <button className={cx('pgt-btn')} key={index}>
-                ...
-              </button>
-            )
-          }
-          return null
-        }
-
-        const renderDotBefore = () => {
-          if (!dotBefore) {
-            dotBefore = true
-            return (
-              <button className={cx('pgt-btn')} key={index}>
-                ...
-              </button>
-            )
-          }
-          return null
-        }
-
         if (
           pageCurr <= RANGE * 2 + 1 &&
           pageNumber > pageCurr + RANGE &&
           pageNumber < pageSize - RANGE + 1
         ) {
-          return renderDotAfter()
+          return renderDotAfter(index)
         } else if (pageCurr > RANGE * 2 + 1 && pageCurr < pageSize - RANGE * 2) {
           if (pageNumber < pageCurr - RANGE && pageNumber > RANGE) {
-            return renderDotBefore()
+            return renderDotBefore(index)
           } else if (pageNumber > pageCurr + RANGE && pageNumber < pageSize - RANGE + 1) {
-            return renderDotAfter()
+            return renderDotAfter(index)
           }
         } else if (
           pageCurr >= pageSize - RANGE * 2 &&
           pageNumber > RANGE &&
           pageNumber < pageCurr - RANGE
         ) {
-          return renderDotBefore()
+          return renderDotBefore(index)
         }
         return (
-          <button
+          <Link
+            to={{
+              pathname: '/',
+              search: createSearchParams({
+                ...queryConfig,
+                page: pageNumber.toString()
+              }).toString()
+            }}
             className={cx('pgt-btn', {
               'pgt-btn--active': pageCurr === pageNumber
             })}
             key={index}
-            onClick={() => setPageCurr(pageNumber)}
           >
             {pageNumber}
-          </button>
+          </Link>
         )
       })
   }
 
   return (
     <div className={cx('pgt-wrapper')}>
-      <button className={cx('pgt-btn')}>prev</button>
+      {pageCurr === 1 ? (
+        <span className={cx('pgt-btn', 'pgt-btn--disable')}>prev</span>
+      ) : (
+        <Link
+          to={{
+            pathname: '/',
+            search: createSearchParams({
+              ...queryConfig,
+              page: (pageCurr - 1).toString()
+            }).toString()
+          }}
+          className={cx('pgt-btn')}
+        >
+          prev
+        </Link>
+      )}
       {renderPagination()}
-      <button className={cx('pgt-btn')}>next</button>
+      {pageCurr === pageSize ? (
+        <span className={cx('pgt-btn', 'pgt-btn--disable')}>next</span>
+      ) : (
+        <Link
+          to={{
+            pathname: path.home,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (pageCurr + 1).toString()
+            }).toString()
+          }}
+          className={cx('pgt-btn')}
+        >
+          next
+        </Link>
+      )}
     </div>
   )
 }

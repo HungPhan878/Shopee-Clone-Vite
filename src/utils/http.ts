@@ -43,7 +43,6 @@ export class Http {
 
     this.instance.interceptors.response.use(
       (response) => {
-        console.log(response)
         const { url } = response.config
         if (url === '/login' || url === '/register') {
           const data = response.data as AuthResponsive
