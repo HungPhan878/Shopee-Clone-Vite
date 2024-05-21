@@ -15,6 +15,7 @@ import productApi from 'src/apis/product.api'
 import Pagination from './Components/Pagination'
 import { ProductListConfig } from 'src/types/product.type'
 import { isUndefined, omitBy } from 'lodash'
+import categoriesApi from 'src/apis/category.api'
 
 const cx = classNames.bind(style)
 
@@ -58,6 +59,15 @@ export default function ProductList() {
   })
 
   const products = getProducts.data?.data.data
+
+  // get categories
+  const getCategories = useQuery({
+    queryKey: ['categories'],
+    queryFn: categoriesApi.getCategories
+  })
+
+  const categories = getCategories.data?.data.data
+
   return (
     <div>
       <section className={cx('product-slides__wrap')}>
@@ -76,7 +86,7 @@ export default function ProductList() {
         <div className='container'>
           <div className='row'>
             <div className='col col-3'>
-              <AsideFilter />
+              <AsideFilter categories={categories || []} queryConfig={queryConfig} />
             </div>
             {products && (
               <div className='col col-9'>

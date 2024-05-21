@@ -7,7 +7,10 @@
     text-transform: capitalize;
     font-size: 1.6rem;
     font-weight: 700;
-    color: var(--primary-color);
+
+    &--active {
+      color: var(--primary-color);
+    }
   }
 
   &-icon {
@@ -96,10 +99,28 @@
 .category {
   &-item {
     padding: 8px 0 8px 8px;
+
+    &__icon {
+      position: absolute;
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+
+      fill: var(--primary-color);
+    }
   }
 
   &-link {
+    position: relative;
+
     text-transform: capitalize;
     font-size: 1.6rem;
+
+    &--active {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
   }
 }

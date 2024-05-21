@@ -1,18 +1,31 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
-import { Link } from 'react-router-dom'
+import { Link, createSearchParams } from 'react-router-dom'
 
 // scss
 import style from './AsideFilter.module.scss'
+
+// components
 import Input from 'src/Components/Input'
 import Button from 'src/Components/Button'
+import { Category } from 'src/types/category.type'
+import { QueryConfig } from '../../ProductList'
+import path from 'src/constants/path'
 
 const cx = classNames.bind(style)
 
-export default function AsideFilter() {
+interface Props {
+  categories: Category[]
+  queryConfig: QueryConfig
+}
+
+export default function AsideFilter(props: Props) {
+  const { categories, queryConfig } = props
+  const { category } = queryConfig
+
   return (
     <div className={cx('aside-inner')}>
-      <Link to='#' className={cx('aside-label')}>
+      <Link to={path.home} className={cx('aside-label', { 'aside-label--active': !category })}>
         <svg viewBox='0 0 12 10' className={cx('aside-icon')}>
           <g fillRule='evenodd' stroke='none' strokeWidth={1}>
             <g transform='translate(-373 -208)'>
@@ -32,21 +45,30 @@ export default function AsideFilter() {
       <div className={cx('aside-separate')}></div>
 
       <ul className={cx('category-list')}>
-        <li className={cx('category-item')}>
-          <Link to='#' className={cx('category-link')}>
-            đồng hồ
-          </Link>
-        </li>
-        <li className={cx('category-item')}>
-          <Link to='#' className={cx('category-link')}>
-            áo thun
-          </Link>
-        </li>
-        <li className={cx('category-item')}>
-          <Link to='#' className={cx('category-link')}>
-            điện thoại
-          </Link>
-        </li>
+        {categories.map((categoryItem) => {
+          const isActive = category === categoryItem._id
+          return (
+            <li className={cx('category-item')} key={categoryItem._id}>
+              <Link
+                to={{
+                  pathname: path.home,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    category: categoryItem._id
+                  }).toString()
+                }}
+                className={cx('category-link', { 'category-link--active': isActive })}
+              >
+                {isActive && (
+                  <svg viewBox='0 0 4 7' className={cx('category-item__icon')}>
+                    <polygon points='4 3.5 0 0 0 7' />
+                  </svg>
+                )}
+                <span>{categoryItem.name}</span>
+              </Link>
+            </li>
+          )
+        })}
       </ul>
 
       <div className={cx('aside-filter')}>
