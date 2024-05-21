@@ -62,6 +62,24 @@
     &:hover {
       background-color: rgb(241 245 249);
     }
+
+    &--active {
+      background-color: var(--primary-color);
+      color: #fff;
+
+      &:hover {
+        background-color: #ee4d2dcc;
+      }
+    }
+  }
+
+  &__option {
+    background-color: #fff;
+    color: #000;
+
+    &--disable {
+      color: #00000080;
+    }
   }
 
   &__name-page-current {
@@ -103,6 +121,7 @@
 
     &.disable {
       opacity: 0.3;
+      cursor: not-allowed;
     }
   }
 

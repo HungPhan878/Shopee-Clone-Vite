@@ -80,7 +80,10 @@ export default function ProductList() {
             </div>
             {products && (
               <div className='col col-9'>
-                <SortProductList />
+                <SortProductList
+                  queryConfig={queryConfig}
+                  pageSize={products.pagination.page_size}
+                />
 
                 <div className={cx('product-list__products')}>
                   <div className='row row-cols-5 gy-3'>
