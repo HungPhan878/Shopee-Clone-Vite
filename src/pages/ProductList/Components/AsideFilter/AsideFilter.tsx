@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
-import { Link, createSearchParams } from 'react-router-dom'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { ObjectSchema } from 'yup'
 
 // scss
 import style from './AsideFilter.module.scss'
@@ -14,6 +15,7 @@ import path from 'src/constants/path'
 import InputNumber from 'src/Components/InputNumber'
 import { Controller, useForm } from 'react-hook-form'
 import { SchemaType, schema } from 'src/utils/rules'
+import { NoUndefinedField } from 'src/types/util.type'
 
 const cx = classNames.bind(style)
 
@@ -22,7 +24,7 @@ interface Props {
   queryConfig: QueryConfig
 }
 
-type FormData = Pick<SchemaType, 'price_min' | 'price_max'>
+type FormData = NoUndefinedField<Pick<SchemaType, 'price_min' | 'price_max'>>
 
 const priceSchema = schema.pick(['price_min', 'price_max'])
 
@@ -33,29 +35,33 @@ const priceSchema = schema.pick(['price_min', 'price_max'])
 export default function AsideFilter(props: Props) {
   const { categories, queryConfig } = props
   const { category } = queryConfig
+  const navigate = useNavigate()
 
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
       price_min: '',
       price_max: ''
     },
-    resolver: yupResolver(priceSchema),
+    resolver: yupResolver<FormData>(priceSchema as ObjectSchema<FormData>),
     //  sự kiên này hoặc động khi ta truyền ref từ component vào react HF sẽ tự đông
     // focus vào một component nào đó.
     //mặc định là true
     shouldFocusError: false
   })
-  const priceForm = watch()
-  console.log(priceForm)
-  console.log(errors)
   // handler function
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        price_min: data.price_min,
+        price_max: data.price_max
+      }).toString()
+    })
   })
 
   return (

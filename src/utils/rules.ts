@@ -61,6 +61,15 @@ export const getRules = (getValues?: UseFormGetValues<any>): Rules => ({
   }
 })
 
+function testPriceMinMax(this: yup.TestContext<yup.AnyObject>) {
+  // this.parent giúp ta lấy ra được obj cha của price min and max và .min or .max
+  const { price_min, price_max } = this.parent as { price_min: string; price_max: string }
+  if (price_min !== '' && price_max !== '') {
+    return Number(price_max) >= Number(price_min)
+  }
+  return price_min !== '' || price_max !== ''
+}
+
 export const schema = yup.object().shape({
   email: yup
     .string()
@@ -82,28 +91,13 @@ export const schema = yup.object().shape({
   price_min: yup.string().test({
     name: 'price_not_allowed',
     message: 'Giá không phù hợp',
-    test: function (value) {
-      const price_min = value
-      const { price_max } = this.parent
-      if (price_min !== '' && price_max !== '') {
-        return Number(price_max) >= Number(price_min)
-      }
-      return price_min !== '' || price_max !== ''
-    }
+    test: testPriceMinMax
   }),
   price_max: yup.string().test({
     // dùng test để viết ra được rule phức tạp hơn
     name: 'price_not_allowed',
     message: 'Giá không phù hợp',
-    test: function (value) {
-      const price_max = value
-      // this.parent giúp ta lấy ra được obj cha của price min and max và .min or .max
-      const { price_min } = this.parent
-      if (price_min !== '' && price_max !== '') {
-        return Number(price_max) >= Number(price_min)
-      }
-      return price_min !== '' || price_max !== ''
-    }
+    test: testPriceMinMax
   })
 })
 export const loginSchema = schema.pick(['email', 'password'])
