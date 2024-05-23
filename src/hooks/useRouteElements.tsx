@@ -11,6 +11,7 @@ import ProductList from 'src/pages/ProductList'
 import Profile from 'src/pages/Profile'
 import Register from 'src/pages/Register'
 import path from 'src/constants/path'
+import ProductDetail from 'src/pages/ProductDetail'
 
 // const isAuthenticated = false
 // plugin routes when authenticated
@@ -72,6 +73,14 @@ export default function useRouteElements() {
           )
         }
       ]
+    },
+    {
+      path: path.product,
+      element: (
+        <MainLayout>
+          <ProductDetail />
+        </MainLayout>
+      )
     }
   ])
 

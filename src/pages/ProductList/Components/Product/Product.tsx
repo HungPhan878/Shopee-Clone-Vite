@@ -1,12 +1,15 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
+import { Link } from 'react-router-dom'
 
 // scss
 import style from './Product.module.scss'
-import { Link } from 'react-router-dom'
+
+// components
 import { Product as ProductType } from 'src/types/product.type'
 import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/util'
 import ProductRating from '../ProductRating'
+import path from 'src/constants/path'
 
 const cx = classNames.bind(style)
 
@@ -16,7 +19,7 @@ interface Props {
 
 export default function Product({ product }: Props) {
   return (
-    <Link to='#'>
+    <Link to={`${path.home}${product._id}`}>
       <article className={cx('product-wrap')}>
         <div className={cx('product-inner')}>
           <img src={product.image} alt={product.name} className={cx('product-img')} />
