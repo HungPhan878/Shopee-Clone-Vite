@@ -78,7 +78,33 @@ export const schema = yup.object().shape({
     .required('Vui lòng điền lại password')
     .min(6, 'Vui lòng nhập không dưới 6 kí tự')
     .max(160, 'Vui lòng nhập không quá 160 kí tự')
-    .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp')
+    .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp'),
+  price_min: yup.string().test({
+    name: 'price_not_allowed',
+    message: 'Gía không phù hợp',
+    test: function (value) {
+      const price_min = value
+      const { price_max } = this.parent
+      if (price_min !== '' && price_max !== '') {
+        return Number(price_max) >= Number(price_min)
+      }
+      return price_min !== '' || price_max !== ''
+    }
+  }),
+  price_max: yup.string().test({
+    // dùng test để viết ra được rule phức tạp hơn
+    name: 'price_not_allowed',
+    message: 'Gía không phù hợp',
+    test: function (value) {
+      const price_max = value
+      // this.parent giúp ta lấy ra được obj cha của price min and max và .min or .max
+      const { price_min } = this.parent
+      if (price_min !== '' && price_max !== '') {
+        return Number(price_max) >= Number(price_min)
+      }
+      return price_min !== '' || price_max !== ''
+    }
+  })
 })
 export const loginSchema = schema.pick(['email', 'password'])
 

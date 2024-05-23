@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
 import { Link, createSearchParams } from 'react-router-dom'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 // scss
 import style from './AsideFilter.module.scss'
@@ -12,6 +13,7 @@ import { QueryConfig } from '../../ProductList'
 import path from 'src/constants/path'
 import InputNumber from 'src/Components/InputNumber'
 import { Controller, useForm } from 'react-hook-form'
+import { SchemaType, schema } from 'src/utils/rules'
 
 const cx = classNames.bind(style)
 
@@ -20,20 +22,36 @@ interface Props {
   queryConfig: QueryConfig
 }
 
-type FormData = {
-  price_min: string
-  price_max: string
-}
+type FormData = Pick<SchemaType, 'price_min' | 'price_max'>
+
+const priceSchema = schema.pick(['price_min', 'price_max'])
+
+// Rule validates of price
+// th1: nếu có cả hai giá trị price(min and max) thì max > min
+// th2: nếu chỉ có một giá trị min or max thì được(min or max !== '')
 
 export default function AsideFilter(props: Props) {
   const { categories, queryConfig } = props
   const { category } = queryConfig
 
-  const { control } = useForm<FormData>({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm<FormData>({
     defaultValues: {
       price_min: '',
       price_max: ''
-    }
+    },
+    resolver: yupResolver(priceSchema)
+  })
+  const priceForm = watch()
+  console.log(priceForm)
+  console.log(errors)
+  // handler function
+  const onSubmit = handleSubmit((data) => {
+    console.log(data)
   })
 
   return (
@@ -108,7 +126,7 @@ export default function AsideFilter(props: Props) {
       <div className={cx('aside-filter__wrap')}>
         <div className={cx('aside-filter__price')}>
           <div>Khoảng giá</div>
-          <form className={cx('aside-form')}>
+          <form className={cx('aside-form')} onSubmit={onSubmit}>
             <div className={cx('aside-form__row')}>
               <Controller
                 control={control}
@@ -121,7 +139,8 @@ export default function AsideFilter(props: Props) {
                     classNameInput={cx('aside-form__input')}
                     // truyền event của input vào react hook form để quản lý data
                     onChange={field.onChange}
-                    // lấy value của react hf ta đã truyền từ trước qua event để truyền vào lại input để có giữ liệu 
+                    // lấy value của react hf ta đã truyền từ trước qua event để
+                    // truyền vào lại input để có giữ liệu
                     // cho form
                     value={field.value}
                   />
@@ -143,8 +162,7 @@ export default function AsideFilter(props: Props) {
                 )}
               />
             </div>
-
-            <Button>Áp Dụng</Button>
+            <Button type='submit'>Áp Dụng</Button>
           </form>
         </div>
       </div>
