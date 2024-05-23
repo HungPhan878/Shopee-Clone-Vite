@@ -6,11 +6,12 @@ import { Link, createSearchParams } from 'react-router-dom'
 import style from './AsideFilter.module.scss'
 
 // components
-import Input from 'src/Components/Input'
 import Button from 'src/Components/Button'
 import { Category } from 'src/types/category.type'
 import { QueryConfig } from '../../ProductList'
 import path from 'src/constants/path'
+import InputNumber from 'src/Components/InputNumber'
+import { Controller, useForm } from 'react-hook-form'
 
 const cx = classNames.bind(style)
 
@@ -19,9 +20,21 @@ interface Props {
   queryConfig: QueryConfig
 }
 
+type FormData = {
+  price_min: string
+  price_max: string
+}
+
 export default function AsideFilter(props: Props) {
   const { categories, queryConfig } = props
   const { category } = queryConfig
+
+  const { control } = useForm<FormData>({
+    defaultValues: {
+      price_min: '',
+      price_max: ''
+    }
+  })
 
   return (
     <div className={cx('aside-inner')}>
@@ -97,20 +110,37 @@ export default function AsideFilter(props: Props) {
           <div>Khoảng giá</div>
           <form className={cx('aside-form')}>
             <div className={cx('aside-form__row')}>
-              <Input
-                type='text'
-                name='from'
-                placeholder='₫ TỪ'
-                className={cx('aside-form__input-wrap')}
-                classNameInput={cx('aside-form__input')}
+              <Controller
+                control={control}
+                name='price_min'
+                render={({ field }) => (
+                  <InputNumber
+                    type='text'
+                    placeholder='₫ TỪ'
+                    className={cx('aside-form__input-wrap')}
+                    classNameInput={cx('aside-form__input')}
+                    // truyền event của input vào react hook form để quản lý data
+                    onChange={field.onChange}
+                    // lấy value của react hf ta đã truyền từ trước qua event để truyền vào lại input để có giữ liệu 
+                    // cho form
+                    value={field.value}
+                  />
+                )}
               />
               <div className={cx('aside-form__separate')}>-</div>
-              <Input
-                type='text'
-                name='to'
-                placeholder='₫ ĐẾN'
-                className={cx('aside-form__input-wrap')}
-                classNameInput={cx('aside-form__input')}
+              <Controller
+                control={control}
+                name='price_max'
+                render={({ field }) => (
+                  <InputNumber
+                    type='text'
+                    placeholder='₫ ĐẾN'
+                    className={cx('aside-form__input-wrap')}
+                    classNameInput={cx('aside-form__input')}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                )}
               />
             </div>
 
