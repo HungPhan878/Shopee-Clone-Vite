@@ -81,7 +81,7 @@ export const schema = yup.object().shape({
     .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp'),
   price_min: yup.string().test({
     name: 'price_not_allowed',
-    message: 'Gía không phù hợp',
+    message: 'Giá không phù hợp',
     test: function (value) {
       const price_min = value
       const { price_max } = this.parent
@@ -94,7 +94,7 @@ export const schema = yup.object().shape({
   price_max: yup.string().test({
     // dùng test để viết ra được rule phức tạp hơn
     name: 'price_not_allowed',
-    message: 'Gía không phù hợp',
+    message: 'Giá không phù hợp',
     test: function (value) {
       const price_max = value
       // this.parent giúp ta lấy ra được obj cha của price min and max và .min or .max

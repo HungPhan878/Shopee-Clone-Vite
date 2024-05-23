@@ -141,13 +141,16 @@ export default function AsideFilter(props: Props) {
                     placeholder='₫ TỪ'
                     className={cx('aside-form__input-wrap')}
                     classNameInput={cx('aside-form__input')}
+                    classNameError={cx('aside-form__err')}
+                    // value={field.value}
+                    // ref={field.ref}
+                    // 2 props ở trên rút gọn = prop ở dưới
+                    {...field}
                     // truyền event của input vào react hook form để quản lý data
                     onChange={field.onChange}
                     // lấy value của react hf ta đã truyền từ trước qua event để
                     // truyền vào lại input để có giữ liệu
                     // cho form
-                    value={field.value}
-                    ref={field.ref}
                   />
                 )}
               />
@@ -161,13 +164,17 @@ export default function AsideFilter(props: Props) {
                     placeholder='₫ ĐẾN'
                     className={cx('aside-form__input-wrap')}
                     classNameInput={cx('aside-form__input')}
+                    classNameError={cx('aside-form__err')}
+                    {...field}
                     onChange={field.onChange}
-                    value={field.value}
-                    ref={field.ref}
+                    // Về vấn đề trigger mặc định chỉ validate một form khi nhập thì đã hủy ở version mới
+                    // thay vào đó nếu hai input có liên kết name với nhau thì sẽ validate chung
+                    // mà không cần dùng đến trigger
                   />
                 )}
               />
             </div>
+            <p className={cx('aside-form__input-err')}>{errors.price_min?.message}</p>
             <Button type='submit'>Áp Dụng</Button>
           </form>
         </div>
