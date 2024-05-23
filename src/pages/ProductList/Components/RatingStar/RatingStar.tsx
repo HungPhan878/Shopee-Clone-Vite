@@ -1,8 +1,13 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
+import { createSearchParams, useNavigate } from 'react-router-dom'
 
 // scss
 import style from './RatingStar.module.scss'
+
+// components
+import path from 'src/constants/path'
+import { QueryConfig } from '../../ProductList'
 
 const cx = classNames.bind(style)
 
@@ -15,14 +20,40 @@ index 4: có 1 ngôi sao màu vàng from indexStar 0
 =>indexStar < 5 - index sẽ có ngôi sao vàng
 */
 
-export default function RatingStar() {
+interface Props {
+  queryConfig: QueryConfig
+}
+
+export default function RatingStar({ queryConfig }: Props) {
+  const navigate = useNavigate()
+
+  // handler function
+  const handleClick = (ratingStars: number) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        rating_filter: String(ratingStars)
+      }).toString()
+    })
+  }
+
   return (
     <ul className={cx('aside-stars')}>
       {Array(5)
         .fill(0)
         .map((_, index) => (
           <li className={cx('aside-star')} key={index}>
-            <div className={cx('aside-star__link')}>
+            <div
+              className={cx('aside-star__link')}
+              onClick={() => handleClick(5 - index)}
+              // là thẻ div nhưng có vai trò như button
+              role='button'
+              // phim có thể tương tác được tăng SEO
+              tabIndex={0}
+              // để eslint không kiểm tra element này
+              aria-hidden='true'
+            >
               {Array(5)
                 .fill(0)
                 .map((_, indexStar) => {

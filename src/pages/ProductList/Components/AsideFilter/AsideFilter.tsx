@@ -17,6 +17,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { SchemaType, schema } from 'src/utils/rules'
 import { NoUndefinedField } from 'src/types/util.type'
 import RatingStar from '../RatingStar'
+import { omit } from 'lodash'
 
 const cx = classNames.bind(style)
 
@@ -64,6 +65,20 @@ export default function AsideFilter(props: Props) {
       }).toString()
     })
   })
+
+  const handleRemoveAll = () => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(
+        omit(
+          {
+            ...queryConfig
+          },
+          ['price_min', 'price_max', 'category', 'rating_filter']
+        )
+      ).toString()
+    })
+  }
 
   return (
     <div className={cx('aside-inner')}>
@@ -192,10 +207,10 @@ export default function AsideFilter(props: Props) {
       <div className={cx('aside-filter__label')}>đánh giá</div>
 
       {/* RatingStar */}
-      <RatingStar />
+      <RatingStar queryConfig={queryConfig} />
       <div className={cx('aside-separate')}></div>
 
-      <Button>Xóa tất cả</Button>
+      <Button onClick={handleRemoveAll}>Xóa tất cả</Button>
     </div>
   )
 }
