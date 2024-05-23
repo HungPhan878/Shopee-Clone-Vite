@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames/bind'
-import { InputHTMLAttributes } from 'react'
+import { InputHTMLAttributes, forwardRef } from 'react'
 
 //scss
 import style from './InputNumber.module.scss'
@@ -16,14 +16,10 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 // eslint-disable-next-line prettier/prettier
-export default function InputNumber({
-  className,
-  classNameInput,
-  classNameError,
-  errorMessage,
-  onChange,
-  ...rest
-}: Props) {
+const InputNumber = forwardRef<HTMLInputElement, Props>(function InputNumber(
+  { className, classNameInput, classNameError, errorMessage, onChange, ...rest },
+  ref
+) {
   const newClassName = className ? cx(className, 'input-form__wrap') : cx('input-form__wrap')
   const newClassInput = classNameInput ? classNameInput : cx('input-form__input')
   const newClassError = classNameError ? classNameError : cx('input-form__msg')
@@ -37,8 +33,10 @@ export default function InputNumber({
 
   return (
     <div className={newClassName}>
-      <input className={newClassInput} {...rest} onChange={handleChange} />
+      <input className={newClassInput} {...rest} onChange={handleChange} ref={ref} />
       <p className={newClassError}>{errorMessage}</p>
     </div>
   )
-}
+})
+
+export default InputNumber

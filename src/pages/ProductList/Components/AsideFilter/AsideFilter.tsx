@@ -44,7 +44,11 @@ export default function AsideFilter(props: Props) {
       price_min: '',
       price_max: ''
     },
-    resolver: yupResolver(priceSchema)
+    resolver: yupResolver(priceSchema),
+    //  sự kiên này hoặc động khi ta truyền ref từ component vào react HF sẽ tự đông
+    // focus vào một component nào đó.
+    //mặc định là true
+    shouldFocusError: false
   })
   const priceForm = watch()
   console.log(priceForm)
@@ -143,6 +147,7 @@ export default function AsideFilter(props: Props) {
                     // truyền vào lại input để có giữ liệu
                     // cho form
                     value={field.value}
+                    ref={field.ref}
                   />
                 )}
               />
@@ -158,6 +163,7 @@ export default function AsideFilter(props: Props) {
                     classNameInput={cx('aside-form__input')}
                     onChange={field.onChange}
                     value={field.value}
+                    ref={field.ref}
                   />
                 )}
               />
