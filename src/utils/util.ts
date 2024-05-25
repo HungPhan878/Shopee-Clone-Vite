@@ -27,3 +27,7 @@ export function formatNumberToSocialStyle(value: number) {
     .replace('.', ',')
     .toLowerCase()
 }
+
+export function percentDiscount(priceOriginal: number, priceCurr: number) {
+  return Math.round(((priceOriginal - priceCurr) / priceOriginal) * 100) + '%'
+}

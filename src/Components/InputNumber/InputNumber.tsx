@@ -20,7 +20,7 @@ const InputNumber = forwardRef<HTMLInputElement, Props>(function InputNumber(
   { className, classNameInput, classNameError, errorMessage, onChange, ...rest },
   ref
 ) {
-  const newClassName = className ? cx(className, 'input-form__wrap') : cx('input-form__wrap')
+  const newClassName = className ? cx('input-form__wrap', className) : cx('input-form__wrap')
   const newClassInput = classNameInput ? classNameInput : cx('input-form__input')
   const newClassError = classNameError ? classNameError : cx('input-form__msg')
 

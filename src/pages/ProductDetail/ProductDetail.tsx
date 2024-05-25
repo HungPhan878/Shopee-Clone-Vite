@@ -1,15 +1,28 @@
+/* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
+import { useEffect, useMemo, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 
 // scss
 import style from './ProductDetail.module.scss'
-import { useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+
+// components
 import productApi from 'src/apis/product.api'
+import ProductRating from '../ProductList/Components/ProductRating'
+import { formatCurrency, formatNumberToSocialStyle, percentDiscount } from 'src/utils/util'
+import InputNumber from 'src/Components/InputNumber'
+import DOMPurify from 'dompurify'
+import { Product } from 'src/types/product.type'
 
 const cx = classNames.bind(style)
 
 export default function ProductDetail() {
   const { id } = useParams()
+  // Để khi next prev thay đổi được đoạn slice để hiển thị ảnh
+  const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
+  // Dùng để khi hover vào hiện ảnh ra và active
+  const [activeImage, setActiveImage] = useState('')
 
   // Get productDetail
   const productDetail = useQuery({
@@ -18,7 +31,249 @@ export default function ProductDetail() {
   })
   const product = productDetail?.data?.data.data
 
-  console.log(product)
+  const currentImages = useMemo(
+    () => (product ? product.images.slice(...currentIndexImages) : []),
+    [product, currentIndexImages]
+  )
+  // Khi lần đầu vào sẽ luôn ở tấm ảnh đầu của đoan slides
+  useEffect(() => {
+    if (product && product?.images.length > 0) {
+      setActiveImage(product?.images[0])
+    }
+  }, [product])
 
-  return <section className={cx('product-wrap')}>ProductDetail</section>
+  // handler function
+  const handleSwitch = (img: string) => {
+    setActiveImage(img)
+  }
+
+  const handleNext = () => {
+    if (currentIndexImages[1] < (product as Product)?.images.length) {
+      setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
+    }
+  }
+
+  const handlePrev = () => {
+    if (currentIndexImages[0] > 0) {
+      setCurrentIndexImages((prev) => [prev[0] - 1, prev[1] - 1])
+    }
+  }
+
+  if (!product) return null
+
+  return (
+    <section className={cx('product-wrap')}>
+      <div className='container'>
+        <div className={cx('product-inner')}>
+          <div className={cx('row')}>
+            <div className='col-5'>
+              <figure className={cx('product-image__inner')}>
+                <img src={activeImage} alt={product.name} className={cx('product-img')} />
+              </figure>
+
+              <div className={cx('product-slides__wrap')}>
+                <button className={cx('product-btn__switch')} onClick={handlePrev}>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth='1.5'
+                    stroke='currentColor'
+                    className={cx('product-icon__chevron')}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M15.75 19.5L8.25 12l7.5-7.5'
+                    />
+                  </svg>
+                </button>
+
+                {currentImages.map((img, index) => (
+                  <div
+                    className={cx('product-thumb__wrap')}
+                    key={index}
+                    onMouseEnter={() => handleSwitch(img)}
+                  >
+                    <img src={img} alt={product.name} className={cx('product-thumb')} />
+                    {img === activeImage && <div className={cx('product-thumb--active')}></div>}
+                  </div>
+                ))}
+
+                <button className={cx('product-btn__switch')} onClick={handleNext}>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth='1.5'
+                    stroke='currentColor'
+                    className={cx('product-icon__chevron')}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M8.25 4.5l7.5 7.5-7.5 7.5'
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className='col-7'>
+              <h1 className={cx('product-heading')}>{product.name}</h1>
+
+              <div className={cx('product-row')}>
+                <div className={cx('product-rating')}>
+                  <span className={cx('product-rating__number')}>{product.rating}</span>
+                  <ProductRating
+                    activeClass={cx('product-rating__star')}
+                    noActiveClass={cx('product-rating__star--empty')}
+                    rating={product.rating}
+                  />
+                </div>
+
+                <div className={cx('product-separate')}></div>
+
+                <div className={cx('product-sold')}>
+                  <span className={cx('product-sold__quantity')}>
+                    {formatNumberToSocialStyle(product.sold)}
+                  </span>
+                  <span className={cx('product-sold__label')}>Đã bán</span>
+                </div>
+              </div>
+
+              <div className={cx('product-row')}>
+                <div className={cx('product-sell__wrap')}>
+                  <div className={cx('product-sell__discount')}>
+                    <span>₫</span>
+                    <span>{formatCurrency(product.price_before_discount)}</span>
+                  </div>
+
+                  <div className={cx('product-sell__price-curr')}>
+                    <span>₫</span>
+                    <span>{formatCurrency(product.price)}</span>
+                  </div>
+
+                  <div className={cx('product-sell__percent-discount')}>
+                    <span>{percentDiscount(product.price_before_discount, product.price)}</span>
+                    <span>giảm</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={cx('product-row')}>
+                <p className={cx('product-qty__label')}>Số Lượng</p>
+
+                <div className={cx('product-qty__btns')}>
+                  <button className={cx('product-qty__btn-minos')}>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      strokeWidth='1.5'
+                      stroke='currentColor'
+                      className={cx('product-qty__btn-icon')}
+                    >
+                      <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 12h-15' />
+                    </svg>
+                  </button>
+
+                  <InputNumber
+                    value={1}
+                    className={cx('product-qty__input-wrap')}
+                    classNameInput={cx('product-qty__input')}
+                    classNameError={cx('product-qty__input-err')}
+                  />
+
+                  <button className={cx('product-qty__btn-plus')}>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      strokeWidth='1.5'
+                      stroke='currentColor'
+                      className={cx('product-qty__btn-icon')}
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M12 4.5v15m7.5-7.5h-15'
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className={cx('product-qty__number')}>
+                  <span>{product.quantity}</span>
+                  <span>sản phẩm có sẵn</span>
+                </div>
+              </div>
+
+              <div className={cx('product-btns')}>
+                <button className={cx('product-btn__add-cart')}>
+                  <svg
+                    enableBackground='new 0 0 15 15'
+                    viewBox='0 0 15 15'
+                    x={0}
+                    y={0}
+                    className={cx('product-btn__add-cart-icon')}
+                  >
+                    <g>
+                      <g>
+                        <polyline
+                          fill='none'
+                          points='.5 .5 2.7 .5 5.2 11 12.4 11 14.5 3.5 3.7 3.5'
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          strokeMiterlimit={10}
+                        />
+                        <circle cx={6} cy='13.5' r={1} stroke='none' />
+                        <circle cx='11.5' cy='13.5' r={1} stroke='none' />
+                      </g>
+                      <line
+                        fill='none'
+                        strokeLinecap='round'
+                        strokeMiterlimit={10}
+                        x1='7.5'
+                        x2='10.5'
+                        y1={7}
+                        y2={7}
+                      />
+                      <line
+                        fill='none'
+                        strokeLinecap='round'
+                        strokeMiterlimit={10}
+                        x1={9}
+                        x2={9}
+                        y1='8.5'
+                        y2='5.5'
+                      />
+                    </g>
+                  </svg>
+
+                  <span>Thêm vào giỏ hàng</span>
+                </button>
+
+                <button className={cx('product-btn__buy-now')}>mua ngay</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={cx('product-inner', 'mt-8')}>
+          <div className={cx('product-title__wrap')}>
+            <p className={cx('product-title')}>Mô tả sản phẩm</p>
+          </div>
+<div className={cx('product-desc__wrap')}>
+  
+            <div
+              className={cx('product-desc')}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(product.description)
+              }}
+            ></div>
+</div>
+        </div>
+      </div>
+    </section>
+  )
 }

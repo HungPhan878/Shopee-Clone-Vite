@@ -29,7 +29,7 @@ $gutters: (
 );
 
 $grid-column: 12;
-$grid-spacer-width: 10px !default;
+$grid-spacer-width: 30px !default;
 
 %gutter-padding {
   padding-left: calc(var(--grid-gutter-x) * 0.5);
