@@ -208,52 +208,54 @@ export default function ProductDetail() {
                 </div>
               </div>
 
-              <div className={cx('product-btns')}>
-                <button className={cx('product-btn__add-cart')}>
-                  <svg
-                    enableBackground='new 0 0 15 15'
-                    viewBox='0 0 15 15'
-                    x={0}
-                    y={0}
-                    className={cx('product-btn__add-cart-icon')}
-                  >
-                    <g>
+              <div className={cx('product-row')}>
+                <div className={cx('product-btns')}>
+                  <button className={cx('product-btn__add-cart')}>
+                    <svg
+                      enableBackground='new 0 0 15 15'
+                      viewBox='0 0 15 15'
+                      x={0}
+                      y={0}
+                      className={cx('product-btn__add-cart-icon')}
+                    >
                       <g>
-                        <polyline
+                        <g>
+                          <polyline
+                            fill='none'
+                            points='.5 .5 2.7 .5 5.2 11 12.4 11 14.5 3.5 3.7 3.5'
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            strokeMiterlimit={10}
+                          />
+                          <circle cx={6} cy='13.5' r={1} stroke='none' />
+                          <circle cx='11.5' cy='13.5' r={1} stroke='none' />
+                        </g>
+                        <line
                           fill='none'
-                          points='.5 .5 2.7 .5 5.2 11 12.4 11 14.5 3.5 3.7 3.5'
                           strokeLinecap='round'
-                          strokeLinejoin='round'
                           strokeMiterlimit={10}
+                          x1='7.5'
+                          x2='10.5'
+                          y1={7}
+                          y2={7}
                         />
-                        <circle cx={6} cy='13.5' r={1} stroke='none' />
-                        <circle cx='11.5' cy='13.5' r={1} stroke='none' />
+                        <line
+                          fill='none'
+                          strokeLinecap='round'
+                          strokeMiterlimit={10}
+                          x1={9}
+                          x2={9}
+                          y1='8.5'
+                          y2='5.5'
+                        />
                       </g>
-                      <line
-                        fill='none'
-                        strokeLinecap='round'
-                        strokeMiterlimit={10}
-                        x1='7.5'
-                        x2='10.5'
-                        y1={7}
-                        y2={7}
-                      />
-                      <line
-                        fill='none'
-                        strokeLinecap='round'
-                        strokeMiterlimit={10}
-                        x1={9}
-                        x2={9}
-                        y1='8.5'
-                        y2='5.5'
-                      />
-                    </g>
-                  </svg>
+                    </svg>
 
-                  <span>Thêm vào giỏ hàng</span>
-                </button>
+                    <span>Thêm vào giỏ hàng</span>
+                  </button>
 
-                <button className={cx('product-btn__buy-now')}>mua ngay</button>
+                  <button className={cx('product-btn__buy-now')}>mua ngay</button>
+                </div>
               </div>
             </div>
           </div>
@@ -263,15 +265,14 @@ export default function ProductDetail() {
           <div className={cx('product-title__wrap')}>
             <p className={cx('product-title')}>Mô tả sản phẩm</p>
           </div>
-<div className={cx('product-desc__wrap')}>
-  
+          <div className={cx('product-desc__wrap')}>
             <div
               className={cx('product-desc')}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(product.description)
               }}
             ></div>
-</div>
+          </div>
         </div>
       </div>
     </section>
