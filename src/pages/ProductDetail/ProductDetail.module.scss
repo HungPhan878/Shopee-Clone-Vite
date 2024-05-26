@@ -28,7 +28,8 @@
     padding-top: 100%;
     width: 100%;
 
-    overflow: hidden;
+    overflow: hidden; //để ảnh không bị tràn ra ngoài thẻ cha
+    cursor: zoom-in;
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
       var(--tw-shadow);
   }
@@ -36,8 +37,9 @@
   &-img {
     position: absolute;
     inset: 0;
-    width: 100%;
+    max-width: 100%;
 
+    // để khi hover vào thẻ cha không bị nổi bọt (bubble event) qua thẻ con
     pointer-events: none;
     object-fit: cover;
   }

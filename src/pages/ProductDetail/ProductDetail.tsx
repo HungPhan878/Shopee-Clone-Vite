@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
@@ -23,6 +23,7 @@ export default function ProductDetail() {
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   // Dùng để khi hover vào hiện ảnh ra và active
   const [activeImage, setActiveImage] = useState('')
+  const imageRef = useRef<HTMLImageElement>(null)
 
   // Get productDetail
   const productDetail = useQuery({
@@ -59,6 +60,44 @@ export default function ProductDetail() {
     }
   }
 
+  const handleZoom = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    // b3:lấy ra tọa độ của thẻ figure
+    const rect = event.currentTarget.getBoundingClientRect()
+    const image = imageRef.current as HTMLImageElement
+    
+    // b1:Lấy ra kích thước gốc của ảnh
+    const { naturalWidth, naturalHeight } = image
+
+    // b3: lấy ra tọa độ x y của con trỏ chuột khi hover vào thẻ figure đầu gốc trái trên
+    // của thẻ figure là x=o y=o
+    //C1:lấy tọa độ khi hover vào thẻ figure nhưng bị event nổi bọt
+    const { offsetX, offsetY } = event.nativeEvent
+
+    //c2:lấy tọa độ nhưng bất chấp sự kiện nổi bọt
+    // const offsetX = event.pageX - (rect.x + window.scrollX)
+    // const offsetY = event.pageY - (rect.y + window.scrollY)
+
+    // b3:tính ra position của bức ảnh khi tỷ lệ với thẻ figure(ảnh / thẻ cha vì ảnh > thẻ cha) và tính ra giá trị âm
+    // để đẩy bức hình ra đúng tọa độ mà thuật toán đã tính.
+    // khi hover vào thẻ cha
+    const left = offsetX * (1 - naturalWidth / rect.width)
+    const top = offsetY * (1 - naturalHeight / rect.height)
+
+    // b1: thay đổi kich thước image về kich thước original của img
+    image.style.height = naturalHeight + 'px'
+    image.style.width = naturalWidth + 'px'
+
+    // b2:Cho ảnh không bị giới hạn width nữa
+    image.style.maxWidth = 'unset'
+
+    // b4: set top và left cho img
+    image.style.top = top + 'px'
+    image.style.left = left + 'px'
+  }
+
+  const handleRemoveImage = () => {
+    ;(imageRef.current as HTMLImageElement).removeAttribute('style')
+  }
   if (!product) return null
 
   return (
@@ -67,8 +106,17 @@ export default function ProductDetail() {
         <div className={cx('product-inner')}>
           <div className={cx('row')}>
             <div className='col-5'>
-              <figure className={cx('product-image__inner')}>
-                <img src={activeImage} alt={product.name} className={cx('product-img')} />
+              <figure
+                className={cx('product-image__inner')}
+                onMouseMove={handleZoom}
+                onMouseLeave={handleRemoveImage}
+              >
+                <img
+                  src={activeImage}
+                  alt={product.name}
+                  ref={imageRef}
+                  className={cx('product-img')}
+                />
               </figure>
 
               <div className={cx('product-slides__wrap')}>
