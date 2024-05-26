@@ -10,7 +10,12 @@ import style from './ProductDetail.module.scss'
 // components
 import productApi from 'src/apis/product.api'
 import ProductRating from '../ProductList/Components/ProductRating'
-import { formatCurrency, formatNumberToSocialStyle, percentDiscount } from 'src/utils/util'
+import {
+  formatCurrency,
+  formatNumberToSocialStyle,
+  getIdFromNameId,
+  percentDiscount
+} from 'src/utils/util'
 import InputNumber from 'src/Components/InputNumber'
 import DOMPurify from 'dompurify'
 import { Product } from 'src/types/product.type'
@@ -18,7 +23,8 @@ import { Product } from 'src/types/product.type'
 const cx = classNames.bind(style)
 
 export default function ProductDetail() {
-  const { id } = useParams()
+  const { nameId } = useParams()
+  const id = getIdFromNameId(nameId as string)
   // Để khi next prev thay đổi được đoạn slice để hiển thị ảnh
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   // Dùng để khi hover vào hiện ảnh ra và active
@@ -64,7 +70,7 @@ export default function ProductDetail() {
     // b3:lấy ra tọa độ của thẻ figure
     const rect = event.currentTarget.getBoundingClientRect()
     const image = imageRef.current as HTMLImageElement
-    
+
     // b1:Lấy ra kích thước gốc của ảnh
     const { naturalWidth, naturalHeight } = image
 

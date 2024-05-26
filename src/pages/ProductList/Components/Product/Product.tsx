@@ -7,7 +7,7 @@ import style from './Product.module.scss'
 
 // components
 import { Product as ProductType } from 'src/types/product.type'
-import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/util'
+import { formatCurrency, formatNumberToSocialStyle, generateNameId } from 'src/utils/util'
 import ProductRating from '../ProductRating'
 import path from 'src/constants/path'
 
@@ -19,7 +19,7 @@ interface Props {
 
 export default function Product({ product }: Props) {
   return (
-    <Link to={`${path.home}${product._id}`}>
+    <Link to={`${path.home}${generateNameId({ name: product.name, id: product._id })}`}>
       <article className={cx('product-wrap')}>
         <div className={cx('product-inner')}>
           <img src={product.image} alt={product.name} className={cx('product-img')} />
