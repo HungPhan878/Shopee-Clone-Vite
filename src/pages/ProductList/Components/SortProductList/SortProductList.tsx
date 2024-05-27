@@ -3,12 +3,13 @@ import classNames from 'classnames/bind'
 
 //scss
 import style from './SortProductList.module.scss'
-import { QueryConfig } from '../../ProductList'
+
 import { sortBy, order as orderConstant } from 'src/constants/product'
 import { ProductListConfig } from 'src/types/product.type'
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import path from 'src/constants/path'
 import { omit } from 'lodash'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 
 const cx = classNames.bind(style)
 

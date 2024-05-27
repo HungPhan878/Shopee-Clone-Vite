@@ -10,7 +10,6 @@ import style from './AsideFilter.module.scss'
 // components
 import Button from 'src/Components/Button'
 import { Category } from 'src/types/category.type'
-import { QueryConfig } from '../../ProductList'
 import path from 'src/constants/path'
 import InputNumber from 'src/Components/InputNumber'
 import { Controller, useForm } from 'react-hook-form'
@@ -18,6 +17,7 @@ import { SchemaType, schema } from 'src/utils/rules'
 import { NoUndefinedField } from 'src/types/util.type'
 import RatingStar from '../RatingStar'
 import { omit } from 'lodash'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 
 const cx = classNames.bind(style)
 

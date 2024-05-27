@@ -7,7 +7,7 @@ import style from './RatingStar.module.scss'
 
 // components
 import path from 'src/constants/path'
-import { QueryConfig } from '../../ProductList'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 
 const cx = classNames.bind(style)
 

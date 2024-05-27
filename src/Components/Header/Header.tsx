@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Link } from 'react-router-dom'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import { useContext } from 'react'
 import { useMutation } from '@tanstack/react-query'
@@ -10,12 +10,27 @@ import Popover from '../Popover'
 import { logout } from 'src/apis/auth.api'
 import { AppContext } from 'src/contexts/app.context'
 import path from 'src/constants/path'
+import { useForm } from 'react-hook-form'
+import { SchemaType, schema } from 'src/utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { omit } from 'lodash'
+import useQueryConfig from 'src/hooks/useQueryConfig'
 
+type FormData = Pick<SchemaType, 'name'>
+
+const searchSchema = schema.pick(['name'])
 const cx = classNames.bind(style)
 
 export default function Header() {
   const { isAuthenticated, setAuthenticated, setProfile, profile } = useContext(AppContext)
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
+  const queryConfig = useQueryConfig()
+  const { register, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      name: ''
+    },
+    resolver: yupResolver(searchSchema)
+  })
 
   const logoutMutation = useMutation({
     mutationFn: logout,
@@ -24,11 +39,30 @@ export default function Header() {
       setProfile(null)
     }
   })
-
   // handler funtion
   const handleLogout = () => {
     logoutMutation.mutate()
   }
+
+  const handleSubmitSearch = handleSubmit((data) => {
+    const config = queryConfig.order
+      ? omit(
+          {
+            ...queryConfig,
+            name: data.name
+          },
+          ['order', 'sort_by']
+        )
+      : {
+          ...queryConfig,
+          name: data.name
+        }
+
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(config).toString()
+    })
+  })
 
   return (
     <header className={cx('header-wrapper')}>
@@ -137,15 +171,16 @@ export default function Header() {
                 </svg>
               </Link>
             </div>
+            {/* search bar */}
             <div className='col-9'>
-              <form role='search' className={cx('header-search')}>
+              <form role='search' className={cx('header-search')} onSubmit={handleSubmitSearch}>
                 <input
                   type='text'
-                  name='search'
                   placeholder='ADIAS SĂN VOUCHER 1.000.000Đ'
                   className={cx('header-search__input')}
+                  {...register('name')}
                 />
-                <button className={cx('header-search__btn')}>
+                <button className={cx('header-search__btn')} type='submit'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'

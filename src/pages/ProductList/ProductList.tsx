@@ -10,18 +10,13 @@ import SortProductList from './Components/SortProductList'
 import Product from './Components/Product'
 import Carousel from 'src/Components/Carousel'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import useQueryParams from 'src/hooks/useQueryParams'
 import productApi from 'src/apis/product.api'
 import Pagination from './Components/Pagination'
 import { ProductListConfig } from 'src/types/product.type'
-import { isUndefined, omitBy } from 'lodash'
 import categoriesApi from 'src/apis/category.api'
+import useQueryConfig from 'src/hooks/useQueryConfig'
 
 const cx = classNames.bind(style)
-
-export type QueryConfig = {
-  [key in keyof ProductListConfig]: string
-}
 
 const slides = [
   'https://cf.shopee.vn/file/vn-50009109-7a39522ed87cf07fc399dc600fb0587d_xxhdpi',
@@ -31,25 +26,7 @@ const slides = [
 ]
 
 export default function ProductList() {
-  const queryParams: QueryConfig = useQueryParams()
-  // omitBy dùng để loại trừ giá trị undefine cho queryconfig
-  // tạo queryconfig để khi gán query params cho url thì vẫn giữ được những key value khác
-  // Khi một biến phụ thuộc một biến thì không cần tạo ra undefine
-  const queryConfig: QueryConfig = omitBy(
-    {
-      page: queryParams.page || '1',
-      limit: queryParams.limit || '10',
-      order: queryParams.order,
-      sort_by: queryParams.sort_by,
-      category: queryParams.category,
-      exclude: queryParams.exclude,
-      rating_filter: queryParams.rating_filter,
-      price_max: queryParams.price_max,
-      price_min: queryParams.price_min,
-      name: queryParams.name
-    },
-    isUndefined
-  )
+  const queryConfig = useQueryConfig()
 
   //Get Products
   const getProducts = useQuery({
@@ -96,7 +73,7 @@ export default function ProductList() {
                 />
 
                 <div className={cx('product-list__products')}>
-                  <div className='row row-cols-5 gy-3 gx-2'>
+                  <div className='row row-cols-5 row-cols-xxl-4 gy-1 gx-1'>
                     {/* tạo ra một mảng 30 phần tử nhưng empty thì phải cho fill vào để đổ đầy giá trị là 0 
                   và dùng index để render ra */}
                     {products.products.map((product) => (
