@@ -32,7 +32,11 @@ export default function ProductList() {
   const getProducts = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => productApi.getProductList(queryConfig as ProductListConfig),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    // để fix th khi gọi cùng một query nhưng ở hai component khác nhau
+    // thì data đã có trong cached thì lấy ra use lại thôi đỡ phải get api lần nữa
+    // đây là cơ chế caching của querytanstack (có quên thì đọc lại docs của react query nha.)
+    staleTime: 3 * 60 * 1000
   })
 
   const products = getProducts.data?.data.data

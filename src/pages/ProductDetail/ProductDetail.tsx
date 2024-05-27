@@ -2,7 +2,7 @@
 import classNames from 'classnames/bind'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 // scss
 import style from './ProductDetail.module.scss'
@@ -18,7 +18,8 @@ import {
 } from 'src/utils/util'
 import InputNumber from 'src/Components/InputNumber'
 import DOMPurify from 'dompurify'
-import { Product } from 'src/types/product.type'
+import { Product as ProductType, ProductListConfig } from 'src/types/product.type'
+import Product from '../ProductList/Components/Product'
 
 const cx = classNames.bind(style)
 
@@ -42,6 +43,20 @@ export default function ProductDetail() {
     () => (product ? product.images.slice(...currentIndexImages) : []),
     [product, currentIndexImages]
   )
+
+  const queryConfig: ProductListConfig = { page: '1', limit: '20', category: product?.category._id }
+  // Get data of the same products
+  const getProducts = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => productApi.getProductList(queryConfig),
+    placeholderData: keepPreviousData,
+    // để fix th chưa có product mà get api
+    // enable = true thì mới gọi api
+    enabled: Boolean(product),
+    staleTime: 3 * 60 * 1000
+  })
+  const products = getProducts.data?.data.data
+
   // Khi lần đầu vào sẽ luôn ở tấm ảnh đầu của đoan slides
   useEffect(() => {
     if (product && product?.images.length > 0) {
@@ -55,7 +70,7 @@ export default function ProductDetail() {
   }
 
   const handleNext = () => {
-    if (currentIndexImages[1] < (product as Product)?.images.length) {
+    if (currentIndexImages[1] < (product as ProductType)?.images.length) {
       setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
     }
   }
@@ -327,6 +342,21 @@ export default function ProductDetail() {
               }}
             ></div>
           </div>
+        </div>
+
+        <div className={cx('mt-8')}>
+          <p className={cx('product-list__title')}>CÓ THỂ BẠN CŨNG THÍCH</p>
+          {products && (
+            <div className='row row-cols-6 row-cols-xxl-5 gy-1 gx-1'>
+              {/* tạo ra một mảng 30 phần tử nhưng empty thì phải cho fill vào để đổ đầy giá trị là 0 
+                  và dùng index để render ra */}
+              {products.products.map((product) => (
+                <div key={product._id}>
+                  <Product product={product} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
