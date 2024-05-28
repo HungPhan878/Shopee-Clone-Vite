@@ -199,59 +199,8 @@
     color: rgb(107 114 128);
   }
 
-  &-qty__btns {
+  &-qty__wrap {
     margin-left: 40px;
-    display: flex;
-  }
-
-  &-qty__btn-minos {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: 1px solid rgb(209 213 219);
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
-
-    color: rgb(75 85 99);
-  }
-
-  &-qty__btn-icon {
-    width: 16px;
-    height: 16px;
-  }
-
-  &-qty__btn-plus {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: 1px solid rgb(209 213 219);
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-
-    color: rgb(75 85 99);
-  }
-
-  &-qty__input {
-    width: 56px;
-    height: 32px;
-    border-top: 1px solid;
-    border-bottom: 1px solid;
-    border-color: rgb(209 213 219);
-    padding: 4px;
-
-    text-align: center;
-
-    &-wrap {
-      margin-bottom: 0;
-    }
-
-    &-err {
-      display: none;
-    }
   }
 
   &-qty__number {

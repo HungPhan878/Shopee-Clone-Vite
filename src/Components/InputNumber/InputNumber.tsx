@@ -9,14 +9,14 @@ import style from './InputNumber.module.scss'
 
 const cx = classNames.bind(style)
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputNumberProps extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string
   classNameInput?: string
   classNameError?: string
 }
 
 // eslint-disable-next-line prettier/prettier
-const InputNumber = forwardRef<HTMLInputElement, Props>(function InputNumber(
+const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(function InputNumber(
   { className, classNameInput, classNameError, errorMessage, onChange, ...rest },
   ref
 ) {

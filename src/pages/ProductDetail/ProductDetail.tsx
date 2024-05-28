@@ -16,10 +16,10 @@ import {
   getIdFromNameId,
   percentDiscount
 } from 'src/utils/util'
-import InputNumber from 'src/Components/InputNumber'
 import DOMPurify from 'dompurify'
 import { Product as ProductType, ProductListConfig } from 'src/types/product.type'
 import Product from '../ProductList/Components/Product'
+import QuantityController from 'src/Components/QuantityController'
 
 const cx = classNames.bind(style)
 
@@ -31,6 +31,11 @@ export default function ProductDetail() {
   // Dùng để khi hover vào hiện ảnh ra và active
   const [activeImage, setActiveImage] = useState('')
   const imageRef = useRef<HTMLImageElement>(null)
+  // state cua QuantityController duoc manager boi component cha
+  // de de quan ly data truyen cho cac component khac
+  // trừ khi đk kiên chỉ test trong component con đó thôi ex:InputNumber
+  // thì mới viết logic trong nó nha
+  const [buyCount, setBuyCount] = useState(1)
 
   // Get productDetail
   const productDetail = useQuery({
@@ -119,6 +124,11 @@ export default function ProductDetail() {
   const handleRemoveImage = () => {
     ;(imageRef.current as HTMLImageElement).removeAttribute('style')
   }
+
+  const handleBuyCount = (value: number) => {
+    setBuyCount(value)
+  }
+
   if (!product) return null
 
   return (
@@ -232,44 +242,15 @@ export default function ProductDetail() {
               <div className={cx('product-row')}>
                 <p className={cx('product-qty__label')}>Số Lượng</p>
 
-                <div className={cx('product-qty__btns')}>
-                  <button className={cx('product-qty__btn-minos')}>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      strokeWidth='1.5'
-                      stroke='currentColor'
-                      className={cx('product-qty__btn-icon')}
-                    >
-                      <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 12h-15' />
-                    </svg>
-                  </button>
-
-                  <InputNumber
-                    value={1}
-                    className={cx('product-qty__input-wrap')}
-                    classNameInput={cx('product-qty__input')}
-                    classNameError={cx('product-qty__input-err')}
-                  />
-
-                  <button className={cx('product-qty__btn-plus')}>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      strokeWidth='1.5'
-                      stroke='currentColor'
-                      className={cx('product-qty__btn-icon')}
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M12 4.5v15m7.5-7.5h-15'
-                      />
-                    </svg>
-                  </button>
-                </div>
+                {/* quantity controller */}
+                <QuantityController
+                  classNameWrap={cx('product-qty__wrap')}
+                  max={product.quantity}
+                  onDecrease={handleBuyCount}
+                  onIncrease={handleBuyCount}
+                  onType={handleBuyCount}
+                  value={buyCount}
+                />
 
                 <div className={cx('product-qty__number')}>
                   <span>{product.quantity}</span>
