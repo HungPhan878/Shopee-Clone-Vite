@@ -2,7 +2,7 @@
 import classNames from 'classnames/bind'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 
 // scss
@@ -21,11 +21,13 @@ import { Product as ProductType, ProductListConfig } from 'src/types/product.typ
 import Product from '../ProductList/Components/Product'
 import QuantityController from 'src/Components/QuantityController'
 import purchasesApi from 'src/apis/purchases.api'
+import { purchasesStatus } from 'src/constants/purchases'
 
 const cx = classNames.bind(style)
 
 export default function ProductDetail() {
   const { nameId } = useParams()
+  const queryClient = useQueryClient()
   const id = getIdFromNameId(nameId as string)
   // Để khi next prev thay đổi được đoạn slice để hiển thị ảnh
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
@@ -134,10 +136,21 @@ export default function ProductDetail() {
   }
 
   const handleAddToCart = () => {
-    addPurchasesMutation.mutate({
-      product_id: product?._id as string,
-      buy_count: buyCount
-    })
+    addPurchasesMutation.mutate(
+      {
+        product_id: product?._id as string,
+        buy_count: buyCount
+      },
+      {
+        onSuccess: () => {
+          // Hàm này sẽ kiểm tra nếu lần call api query key không hợp lệ nữa (kết quả cho về không đúng nữa)
+          // thì sẽ call lại api get purchases
+          queryClient.invalidateQueries({
+            queryKey: ['purchases', { status: purchasesStatus.inCart }]
+          })
+        }
+      }
+    )
   }
 
   if (!product) return null
