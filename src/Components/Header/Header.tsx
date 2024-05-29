@@ -47,6 +47,13 @@ export default function Header() {
   const getPurchasesList = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
     queryFn: () => purchasesApi.getPurchasesList({ status: purchasesStatus.inCart })
+    //  Khi chuyển từ productList sang productDetail thì có cần thêm staleTime để tối ưu hiệu suất
+    // để không gọi lại api hay không ?
+    //=>Không cần vì
+    //+detail và list là hai route khác nhau nhưng cùng chung một component MainLayout
+    //+react query sẽ tự hiểu và chỉ re-render lai Header trong MainLayout mà thôi.
+    //+mà re-render thì không unmount  vì vậy staleTime sẽ không được kích hoạt và sẽ không gọi lại query này
+    //+nên không cần cho staleTime vào getPurchases nha.
   })
   const purchasesList = getPurchasesList.data?.data.data
   console.log(purchasesList)
