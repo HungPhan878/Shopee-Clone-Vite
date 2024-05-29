@@ -2,7 +2,7 @@
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import { useContext } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 // scss
 import style from './header.module.scss'
@@ -15,6 +15,8 @@ import { SchemaType, schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
 import useQueryConfig from 'src/hooks/useQueryConfig'
+import { purchasesStatus } from 'src/constants/purchases'
+import purchasesApi from 'src/apis/purchases.api'
 
 type FormData = Pick<SchemaType, 'name'>
 
@@ -32,6 +34,7 @@ export default function Header() {
     resolver: yupResolver(searchSchema)
   })
 
+  // [POST] LOG OUT
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: () => {
@@ -39,6 +42,15 @@ export default function Header() {
       setProfile(null)
     }
   })
+
+  // [GET] Purchases List
+  const getPurchasesList = useQuery({
+    queryKey: ['purchases', { status: purchasesStatus.inCart }],
+    queryFn: () => purchasesApi.getPurchasesList({ status: purchasesStatus.inCart })
+  })
+  const purchasesList = getPurchasesList.data?.data.data
+  console.log(purchasesList)
+
   // handler funtion
   const handleLogout = () => {
     logoutMutation.mutate()

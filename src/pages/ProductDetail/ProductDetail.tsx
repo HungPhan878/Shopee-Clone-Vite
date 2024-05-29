@@ -2,7 +2,8 @@
 import classNames from 'classnames/bind'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
+import DOMPurify from 'dompurify'
 
 // scss
 import style from './ProductDetail.module.scss'
@@ -16,10 +17,10 @@ import {
   getIdFromNameId,
   percentDiscount
 } from 'src/utils/util'
-import DOMPurify from 'dompurify'
 import { Product as ProductType, ProductListConfig } from 'src/types/product.type'
 import Product from '../ProductList/Components/Product'
 import QuantityController from 'src/Components/QuantityController'
+import purchasesApi from 'src/apis/purchases.api'
 
 const cx = classNames.bind(style)
 
@@ -50,7 +51,7 @@ export default function ProductDetail() {
   )
 
   const queryConfig: ProductListConfig = { page: '1', limit: '20', category: product?.category._id }
-  // Get data of the same products
+  // GET DATA of the same products
   const getProducts = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => productApi.getProductList(queryConfig),
@@ -61,6 +62,9 @@ export default function ProductDetail() {
     staleTime: 3 * 60 * 1000
   })
   const products = getProducts.data?.data.data
+
+  // ADD PURCHASES IN CART
+  const addPurchasesMutation = useMutation({ mutationFn: purchasesApi.addToCart })
 
   // Khi lần đầu vào sẽ luôn ở tấm ảnh đầu của đoan slides
   useEffect(() => {
@@ -127,6 +131,13 @@ export default function ProductDetail() {
 
   const handleBuyCount = (value: number) => {
     setBuyCount(value)
+  }
+
+  const handleAddToCart = () => {
+    addPurchasesMutation.mutate({
+      product_id: product?._id as string,
+      buy_count: buyCount
+    })
   }
 
   if (!product) return null
@@ -260,7 +271,7 @@ export default function ProductDetail() {
 
               <div className={cx('product-row')}>
                 <div className={cx('product-btns')}>
-                  <button className={cx('product-btn__add-cart')}>
+                  <button className={cx('product-btn__add-cart')} onClick={handleAddToCart}>
                     <svg
                       enableBackground='new 0 0 15 15'
                       viewBox='0 0 15 15'
