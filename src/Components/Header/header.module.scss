@@ -236,6 +236,25 @@
     background-color: #fff;
   }
 
+  &__no-product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+  }
+
+  &__no-product-img {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+  }
+
+  &__no-product-label {
+    font-size: 1.4rem;
+    text-transform: capitalize;
+  }
+
   &__label {
     padding: 10px;
 
@@ -287,7 +306,8 @@
   &__button {
     padding: 10px;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+    align-items: center;
   }
 
   &__btn {
@@ -303,5 +323,12 @@
     &:hover {
       background: #f05d40;
     }
+  }
+
+  &__label-add {
+    text-transform: capitalize;
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+    color: rgb(107 114 128);
   }
 }

@@ -5,7 +5,9 @@ import { useContext } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 // scss
-import style from './header.module.scss'
+import style from './Header.module.scss'
+
+// components
 import Popover from '../Popover'
 import { logout } from 'src/apis/auth.api'
 import { AppContext } from 'src/contexts/app.context'
@@ -17,12 +19,13 @@ import { omit } from 'lodash'
 import useQueryConfig from 'src/hooks/useQueryConfig'
 import { purchasesStatus } from 'src/constants/purchases'
 import purchasesApi from 'src/apis/purchases.api'
-import { formatCurrency } from 'src/utils/util'
-// import noProduct from 'src/assets/images/no-product.png'
+import { formatCurrency, generateNameId } from 'src/utils/util'
+import noProduct from 'src/assets/images/no-product.png'
 
 type FormData = Pick<SchemaType, 'name'>
 
 const searchSchema = schema.pick(['name'])
+const MAX_PURCHASES = 5
 const cx = classNames.bind(style)
 
 export default function Header() {
@@ -225,31 +228,52 @@ export default function Header() {
                 className={cx('header-cart__inner')}
                 offsetFloating={4}
                 renderProps={
-                  <section className={cx('ppv-cart__wrap')}>
-                    <h3 className={cx('ppv-cart__label')}> sản phẩm mới thêm</h3>
+                  purchasesList ? (
+                    <section className={cx('ppv-cart__wrap')}>
+                      <h3 className={cx('ppv-cart__label')}> sản phẩm mới thêm</h3>
 
-                    <ul className={cx('ppv-cart__list')}>
-                      {purchasesList?.map((purchasesItem) => (
-                        <li className={'ppv-cart__item'} key={purchasesItem._id}>
-                          <Link to='#' className={cx('ppv-cart__link')}>
-                            <img
-                              src={purchasesItem.product.image}
-                              alt={purchasesItem.product.name}
-                              className={cx('ppv-cart__img')}
-                            />
-                            <p className={cx('ppv-cart__name')}>{purchasesItem.product.name}</p>
-                            <p className={cx('ppv-cart__price')}>
-                              đ{formatCurrency(purchasesItem.product.price)}
-                            </p>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                      <ul className={cx('ppv-cart__list')}>
+                        {purchasesList?.slice(0, MAX_PURCHASES).map((purchasesItem) => (
+                          <li className={'ppv-cart__item'} key={purchasesItem._id}>
+                            <Link
+                              to={`${path.home}${generateNameId({ name: purchasesItem.product.name, id: purchasesItem.product._id })}`}
+                              className={cx('ppv-cart__link')}
+                            >
+                              <img
+                                src={purchasesItem.product.image}
+                                alt={purchasesItem.product.name}
+                                className={cx('ppv-cart__img')}
+                              />
+                              <p className={cx('ppv-cart__name')}>{purchasesItem.product.name}</p>
+                              <p className={cx('ppv-cart__price')}>
+                                đ{formatCurrency(purchasesItem.product.price)}
+                              </p>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
 
-                    <div className={cx('ppv-cart__button')}>
-                      <button className={cx('ppv-cart__btn')}>Xem giỏ hàng</button>
-                    </div>
-                  </section>
+                      <div className={cx('ppv-cart__button')}>
+                        <p className={cx('ppv-cart__label-add')}>
+                          {purchasesList && purchasesList?.length > MAX_PURCHASES
+                            ? purchasesList?.length - MAX_PURCHASES + ' Thêm vào giỏ hàng'
+                            : ''}
+                        </p>
+                        <button className={cx('ppv-cart__btn')}>Xem giỏ hàng</button>
+                      </div>
+                    </section>
+                  ) : (
+                    <section className={cx('ppv-cart__wrap')}>
+                      <div className={cx('ppv-cart__no-product')}>
+                        <img
+                          src={noProduct}
+                          alt='no product'
+                          className={cx('ppv-cart__no-product-img')}
+                        />
+                        <p className={cx('ppv-cart__no-product-label')}>chưa có sản phẩm</p>
+                      </div>
+                    </section>
+                  )
                 }
               >
                 <Link to='#' className={cx('header-cart__link')}>

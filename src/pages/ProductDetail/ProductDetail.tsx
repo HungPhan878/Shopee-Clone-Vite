@@ -22,6 +22,7 @@ import Product from '../ProductList/Components/Product'
 import QuantityController from 'src/Components/QuantityController'
 import purchasesApi from 'src/apis/purchases.api'
 import { purchasesStatus } from 'src/constants/purchases'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(style)
 
@@ -142,7 +143,11 @@ export default function ProductDetail() {
         buy_count: buyCount
       },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
+          toast.success(data.data.message, {
+            autoClose: 1000
+            // position: 'top-center'
+          })
           // Hàm này sẽ kiểm tra nếu lần call api query key không hợp lệ nữa (kết quả cho về không đúng nữa)
           // thì sẽ call lại api get purchases
           queryClient.invalidateQueries({
