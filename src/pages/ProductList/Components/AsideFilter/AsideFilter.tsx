@@ -176,7 +176,9 @@ export default function AsideFilter(props: Props) {
                   />
                 )}
               />
+
               <div className={cx('aside-form__separate')}>-</div>
+
               <Controller
                 control={control}
                 name='price_max'

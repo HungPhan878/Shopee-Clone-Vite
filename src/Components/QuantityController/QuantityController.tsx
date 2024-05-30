@@ -7,6 +7,7 @@ import style from './QuantityController.module.scss'
 
 // components
 import InputNumber, { InputNumberProps } from 'src/Components/InputNumber'
+import { useState } from 'react'
 
 const cx = classNames.bind(style)
 
@@ -31,6 +32,7 @@ export default function QuantityController({
   const newClassName = classNameWrap
     ? cx('product-qty__btns', classNameWrap)
     : cx('product-qty__btns')
+  const [locationValue, setLocalValue] = useState<number>(Number(value || 0))
 
   // handler function
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,29 +44,35 @@ export default function QuantityController({
     }
 
     onType && onType(_value)
+
+    setLocalValue(_value)
   }
 
   const handleIncrease = () => {
-    let _value = Number(value) + 1
+    let _value = Number(value || locationValue) + 1
 
     if (max !== undefined && _value > max) {
       _value = max
     }
 
     onIncrease && onIncrease(_value)
+
+    setLocalValue(_value)
   }
 
   // chỉ có input có handle thì dùng event lấy ra value thoi
   // còn button thì onClick thì lấy ra đầu value mà truyền vào input nên
   // dùng state nha.
   const handleDecrease = () => {
-    let _value = Number(value) - 1
+    let _value = Number(value || locationValue) - 1
 
     if (_value < 1) {
       _value = 1
     }
 
     onDecrease && onDecrease(_value)
+
+    setLocalValue(_value)
   }
 
   return (
@@ -89,7 +97,7 @@ export default function QuantityController({
         classNameError={cx('product-qty__input-err')}
         // chúng ta không truyền từ react hf thì truyền f tự custom thôi
         onChange={handleChange}
-        value={value}
+        value={value || locationValue}
         {...rest}
       />
 

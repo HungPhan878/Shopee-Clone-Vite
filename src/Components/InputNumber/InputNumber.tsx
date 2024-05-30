@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames/bind'
-import { InputHTMLAttributes, forwardRef } from 'react'
+import { InputHTMLAttributes, forwardRef, useState } from 'react'
 
 //scss
 import style from './InputNumber.module.scss'
@@ -17,23 +17,33 @@ export interface InputNumberProps extends InputHTMLAttributes<HTMLInputElement> 
 
 // eslint-disable-next-line prettier/prettier
 const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(function InputNumber(
-  { className, classNameInput, classNameError, errorMessage, onChange, ...rest },
+  { className, classNameInput, classNameError, errorMessage, value = '', onChange, ...rest },
   ref
 ) {
   const newClassName = className ? cx('input-form__wrap', className) : cx('input-form__wrap')
   const newClassInput = classNameInput ? classNameInput : cx('input-form__input')
   const newClassError = classNameError ? classNameError : cx('input-form__msg')
+  const [localValue, setLocalValue] = useState<string>(value as string)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     if (/^\d+$/.test(value) || value === '') {
+      // on change voi react hook form
       onChange && onChange(event)
+      // on change local state
+      setLocalValue(value)
     }
   }
 
   return (
     <div className={newClassName}>
-      <input className={newClassInput} {...rest} onChange={handleChange} ref={ref} />
+      <input
+        className={newClassInput}
+        {...rest}
+        onChange={handleChange}
+        value={value || localValue}
+        ref={ref}
+      />
       <p className={newClassError}>{errorMessage}</p>
     </div>
   )
