@@ -2,7 +2,7 @@
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import { useContext } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 // scss
 import style from './Header.module.scss'
@@ -32,6 +32,7 @@ export default function Header() {
   const { isAuthenticated, setAuthenticated, setProfile, profile } = useContext(AppContext)
   const navigate = useNavigate()
   const queryConfig = useQueryConfig()
+  const queryClient = useQueryClient()
   const { register, handleSubmit } = useForm<FormData>({
     defaultValues: {
       name: ''
@@ -45,13 +46,17 @@ export default function Header() {
     onSuccess: () => {
       setAuthenticated(false)
       setProfile(null)
+      // => cho vào để khi logout không còn data purchases nữa nha
+      queryClient.removeQueries({
+        queryKey: ['purchases', { status: purchasesStatus.inCart }]
+      })
     }
   })
 
   // [GET] Purchases List
   const getPurchasesList = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
-    queryFn: () => purchasesApi.getPurchasesList({ status: purchasesStatus.inCart })
+    queryFn: () => purchasesApi.getPurchasesList({ status: purchasesStatus.inCart }),
     //  Khi chuyển từ productList sang productDetail thì có cần thêm staleTime để tối ưu hiệu suất
     // để không gọi lại api hay không ?
     //=>Không cần vì
@@ -59,6 +64,8 @@ export default function Header() {
     //+react query sẽ tự hiểu và chỉ re-render lai Header trong MainLayout mà thôi.
     //+mà re-render thì không unmount  vì vậy staleTime sẽ không được kích hoạt và sẽ không gọi lại query này
     //+nên không cần cho staleTime vào getPurchases nha.
+    enabled: isAuthenticated
+    // =>cho vào để khi logout không call api
   })
   const purchasesList = getPurchasesList.data?.data.data
   console.log(purchasesList)
@@ -259,7 +266,9 @@ export default function Header() {
                             ? purchasesList?.length - MAX_PURCHASES + ' Thêm vào giỏ hàng'
                             : ''}
                         </p>
-                        <button className={cx('ppv-cart__btn')}>Xem giỏ hàng</button>
+                        <Link to={path.cart} className={cx('ppv-cart__btn')}>
+                          Xem giỏ hàng
+                        </Link>
                       </div>
                     </section>
                   ) : (
@@ -291,7 +300,9 @@ export default function Header() {
                       d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
                     />
                   </svg>
-                  <span className={cx('header-cart__link-message')}>{purchasesList?.length}</span>
+                  {purchasesList && (
+                    <span className={cx('header-cart__link-message')}>{purchasesList?.length}</span>
+                  )}
                 </Link>
               </Popover>
             </div>

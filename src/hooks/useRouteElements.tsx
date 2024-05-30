@@ -12,6 +12,7 @@ import Profile from 'src/pages/Profile'
 import Register from 'src/pages/Register'
 import path from 'src/constants/path'
 import ProductDetail from 'src/pages/ProductDetail'
+import Cart from 'src/pages/Cart'
 
 // const isAuthenticated = false
 // plugin routes when authenticated
@@ -47,6 +48,14 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <Profile />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.cart,
+          element: (
+            <MainLayout>
+              <Cart />
             </MainLayout>
           )
         }
