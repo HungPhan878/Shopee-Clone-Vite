@@ -68,7 +68,6 @@ export default function Header() {
     // =>cho vào để khi logout không call api
   })
   const purchasesList = getPurchasesList.data?.data.data
-  console.log(purchasesList)
 
   // handler funtion
   const handleLogout = () => {

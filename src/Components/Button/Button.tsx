@@ -8,6 +8,7 @@ const cx = classNames.bind(style)
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean
+  classNameWrap?: string
 }
 
 export default function Button(props: ButtonProps) {
