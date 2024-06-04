@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { produce } from 'immer'
 import { useEffect, useState } from 'react'
 import { keyBy } from 'lodash'
+import { Flip, toast } from 'react-toastify'
 
 // scss
 import style from './Cart.module.scss'
@@ -34,19 +35,43 @@ export default function Cart() {
   const [extendedPurchases, setExtendedPurchases] = useState<ExtendedPurchases[]>([])
   // b2
   const isCheckAll = extendedPurchases.every((purchases) => purchases.checked)
+  const checkedPurchases = extendedPurchases.filter((purchases) => purchases.checked)
+  const checkedPurchasesCount = checkedPurchases.length
 
-  // [GET] Purchases List
+  // [GET] /purchases
   const getPurchasesList = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
     queryFn: () => purchasesApi.getPurchasesList({ status: purchasesStatus.inCart })
   })
   const purchasesList = getPurchasesList.data?.data.data
 
+  // [PUT] /purchases/update-purchase
   const updatePurchasesMutation = useMutation({
     mutationFn: purchasesApi.updatePurchases,
     onSuccess: () => {
       // Call lại getPurchases list để làm mất đi disable khi update thành công
       getPurchasesList.refetch()
+    }
+  })
+
+  // [DELETE] /purchases
+  const deletePurchasesMutation = useMutation({
+    mutationFn: purchasesApi.deletePurchases,
+    onSuccess: () => {
+      getPurchasesList.refetch()
+    }
+  })
+
+  // [POST] /purchases/buy-products
+  const buyPurchasesMutation = useMutation({
+    mutationFn: purchasesApi.buyPurchases,
+    onSuccess: (data) => {
+      getPurchasesList.refetch()
+      toast.success(data.data.message, {
+        position: 'top-center',
+        autoClose: 1000,
+        transition: Flip
+      })
     }
   })
 
@@ -67,6 +92,14 @@ export default function Cart() {
   }, [purchasesList])
 
   // handler function
+  const totalCheckedPurchasesPrice = checkedPurchases.reduce((result, purchases) => {
+    return result + purchases.price * purchases.buy_count
+  }, 0)
+
+  const totalCheckedPurchasesSavingPrice = checkedPurchases.reduce((result, purchases) => {
+    return result + (purchases.price_before_discount - purchases.price) * purchases.buy_count
+  }, 0)
+
   const handleChecked =
     (purchasesIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setExtendedPurchases(
@@ -107,6 +140,31 @@ export default function Cart() {
       })
     )
   }
+
+  const handleDeletePurchases = (purchasesIndex: number) => {
+    const purchasesId = extendedPurchases[purchasesIndex]._id
+    deletePurchasesMutation.mutate([purchasesId])
+  }
+
+  const handleDeletePurchasesList = () => {
+    if (checkedPurchasesCount > 0) {
+      const purchasesIds = checkedPurchases.map((purchases) => purchases._id)
+      deletePurchasesMutation.mutate(purchasesIds)
+    }
+  }
+
+  const handleBuyPurchases = () => {
+    if (checkedPurchasesCount > 0) {
+      const purchasesList = checkedPurchases.map((purchases) => ({
+        product_id: purchases.product._id,
+        buy_count: purchases.buy_count
+      }))
+
+      buyPurchasesMutation.mutate(purchasesList)
+    }
+  }
+
+  if (extendedPurchases.length === 0) return null
 
   return (
     <section className={cx('cart__wrapper')}>
@@ -227,7 +285,12 @@ export default function Cart() {
                               </span>
                             </div>
                             <div className='col'>
-                              <button className={cx('cart-item__btn-delete')}>Xóa</button>
+                              <button
+                                className={cx('cart-item__btn-delete')}
+                                onClick={() => handleDeletePurchases(index)}
+                              >
+                                Xóa
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -255,23 +318,34 @@ export default function Cart() {
               <button className={cx('cart-btn')} onClick={handleCheckedAll}>
                 Chọn tất cả ({purchasesList?.length})
               </button>
-              <button className={cx('cart-btn')}>Xóa Tất Cả </button>
+              <button className={cx('cart-btn')} onClick={handleDeletePurchasesList}>
+                Xóa Tất Cả({checkedPurchasesCount})
+              </button>
             </div>
 
             <div className={cx('cart-buy__purchases')}>
               <div>
                 <div className={cx('cart-buy__purchases-total')}>
                   <span>Tổng thanh toán :</span>
-                  <span className={cx('cart-buy__purchases-price-total')}>₫0</span>
+                  <span className={cx('cart-buy__purchases-price-total')}>
+                    ₫{formatCurrency(totalCheckedPurchasesPrice)}
+                  </span>
                 </div>
 
                 <div className={cx('cart-buy__purchases-price-saving')}>
                   <span>Tiết kiệm</span>
-                  <span className={cx('cart-buy__purchases-number')}>₫0</span>
+                  <span className={cx('cart-buy__purchases-number')}>
+                    ₫{formatCurrency(totalCheckedPurchasesSavingPrice)}
+                  </span>
                 </div>
               </div>
 
-              <Button className={cx('cart-buy_purchases-btn')}>
+              <Button
+                className={cx('cart-buy_purchases-btn')}
+                onClick={handleBuyPurchases}
+                disabled={buyPurchasesMutation.isPending}
+                isLoading={buyPurchasesMutation.isPending}
+              >
                 <span>Mua hàng</span>
               </Button>
             </div>
