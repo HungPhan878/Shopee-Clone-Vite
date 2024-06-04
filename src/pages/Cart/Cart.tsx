@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { produce } from 'immer'
 import { useEffect, useState } from 'react'
+import { keyBy } from 'lodash'
 
 // scss
 import style from './Cart.module.scss'
@@ -26,7 +27,7 @@ const cx = classNames.bind(style)
 
 interface ExtendedPurchases extends Purchases {
   checked: boolean
-  disable: boolean
+  disabled: boolean
 }
 
 export default function Cart() {
@@ -41,15 +42,27 @@ export default function Cart() {
   })
   const purchasesList = getPurchasesList.data?.data.data
 
+  const updatePurchasesMutation = useMutation({
+    mutationFn: purchasesApi.updatePurchases,
+    onSuccess: () => {
+      // Call lại getPurchases list để làm mất đi disable khi update thành công
+      getPurchasesList.refetch()
+    }
+  })
+
   useEffect(() => {
     if (purchasesList) {
-      setExtendedPurchases(
-        purchasesList.map((purchases) => ({
-          ...purchases,
-          checked: false,
-          disable: false
-        })) || []
-      )
+      setExtendedPurchases((prev) => {
+        // Dùng để bảo lưu checked lúc trước
+        const objectId = keyBy(prev, '_id')
+        return (
+          purchasesList.map((purchases) => ({
+            ...purchases,
+            checked: Boolean(objectId[purchases._id]?.checked),
+            disabled: false
+          })) || []
+        )
+      })
     }
   }, [purchasesList])
 
@@ -70,6 +83,28 @@ export default function Cart() {
         ...purchases,
         checked: !isCheckAll
       }))
+    )
+  }
+
+  const handleChangeQuantity = (purchasesIndex: number, value: number, enable: boolean) => {
+    if (enable) {
+      const purchases = extendedPurchases[purchasesIndex]
+
+      setExtendedPurchases(
+        produce((draft) => {
+          draft[purchasesIndex].disabled = true
+        })
+      )
+
+      updatePurchasesMutation.mutate({ product_id: purchases.product._id, buy_count: value })
+    }
+  }
+
+  const handleTypeQuantity = (purchasesIndex: number, value: number) => {
+    setExtendedPurchases(
+      produce((draft) => {
+        draft[purchasesIndex].buy_count = value
+      })
     )
   }
 
@@ -153,6 +188,34 @@ export default function Cart() {
                               <QuantityController
                                 max={purchasesItem.product.quantity}
                                 value={purchasesItem.buy_count}
+                                onDecrease={(value) =>
+                                  handleChangeQuantity(
+                                    index,
+                                    value,
+                                    value >= 1 &&
+                                      // để không phải call api vơi buy count trùng với lần trước nó
+                                      value !== (purchasesList && purchasesList[index])?.buy_count
+                                  )
+                                }
+                                onIncrease={(value) =>
+                                  handleChangeQuantity(
+                                    index,
+                                    value,
+                                    value <= purchasesItem.product.quantity &&
+                                      value !== (purchasesList && purchasesList[index])?.buy_count
+                                  )
+                                }
+                                onType={(value) => handleTypeQuantity(index, value)}
+                                onFocusOut={(value) =>
+                                  handleChangeQuantity(
+                                    index,
+                                    value,
+                                    value <= purchasesItem.product.quantity &&
+                                      value >= 1 &&
+                                      value !== (purchasesList && purchasesList[index])?.buy_count
+                                  )
+                                }
+                                disabled={purchasesItem.disabled}
                               />
                             </div>
                             <div className='col'>

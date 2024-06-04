@@ -14,6 +14,7 @@ const cx = classNames.bind(style)
 interface Props extends InputNumberProps {
   onDecrease?: (value: number) => void
   onIncrease?: (value: number) => void
+  onFocusOut?: (value: number) => void
   // Đặt type không đặt change vì sẽ trùng với tên type bên inputNumber
   onType?: (value: number) => void
   max?: number
@@ -24,9 +25,11 @@ export default function QuantityController({
   onDecrease,
   onIncrease,
   onType,
+  onFocusOut,
   value,
   max,
   classNameWrap,
+  disabled,
   ...rest
 }: Props) {
   const newClassName = classNameWrap
@@ -75,9 +78,23 @@ export default function QuantityController({
     setLocalValue(_value)
   }
 
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
+    const inputValue = Number(event.target.value)
+    onFocusOut && onFocusOut(inputValue)
+  }
+
+  const newClassNameInput = disabled
+    ? cx('product-qty__input', 'disabled')
+    : cx('product-qty__input')
+
   return (
     <div className={newClassName}>
-      <button className={cx('product-qty__btn-minos')} onClick={handleDecrease}>
+      <button
+        className={cx('product-qty__btn-minos')}
+        onClick={handleDecrease}
+        // optimize performance no call api too much when api running
+        disabled={disabled}
+      >
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
@@ -93,15 +110,16 @@ export default function QuantityController({
       <InputNumber
         // chỉ khi truyền value number vào thì hàm handleChange trong InputNumber mới hoạt động đúng nha
         className={cx('product-qty__input-wrap')}
-        classNameInput={cx('product-qty__input')}
+        classNameInput={newClassNameInput}
         classNameError={cx('product-qty__input-err')}
         // chúng ta không truyền từ react hf thì truyền f tự custom thôi
         onChange={handleChange}
+        onBlur={handleBlur}
         value={value || locationValue}
         {...rest}
       />
 
-      <button className={cx('product-qty__btn-plus')} onClick={handleIncrease}>
+      <button className={cx('product-qty__btn-plus')} onClick={handleIncrease} disabled={disabled}>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
