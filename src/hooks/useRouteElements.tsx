@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 
 // components
-import MainLayout from 'src/layouts/RegisterLayout/MainLayout'
+import MainLayout from 'src/layouts/MainLayout'
 import RegisterLayout from 'src/layouts/RegisterLayout'
 import { AppContext } from 'src/contexts/app.context'
 import Login from 'src/pages/Login'
@@ -13,6 +13,7 @@ import Register from 'src/pages/Register'
 import path from 'src/constants/path'
 import ProductDetail from 'src/pages/ProductDetail'
 import Cart from 'src/pages/Cart'
+import CartLayout from 'src/layouts/CartLayout'
 
 // const isAuthenticated = false
 // plugin routes when authenticated
@@ -54,9 +55,9 @@ export default function useRouteElements() {
         {
           path: path.cart,
           element: (
-            <MainLayout>
+            <CartLayout>
               <Cart />
-            </MainLayout>
+            </CartLayout>
           )
         }
       ]
