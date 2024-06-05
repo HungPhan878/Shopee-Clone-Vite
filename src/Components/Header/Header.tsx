@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Link, createSearchParams, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import { useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
@@ -11,33 +11,20 @@ import style from './Header.module.scss'
 import Popover from '../Popover'
 import { AppContext } from 'src/contexts/app.context'
 import path from 'src/constants/path'
-import { useForm } from 'react-hook-form'
-import { SchemaType, schema } from 'src/utils/rules'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { omit } from 'lodash'
-import useQueryConfig from 'src/hooks/useQueryConfig'
+
 import { purchasesStatus } from 'src/constants/purchases'
 import purchasesApi from 'src/apis/purchases.api'
 import { formatCurrency, generateNameId } from 'src/utils/util'
 import noProduct from 'src/assets/images/no-product.png'
 import NavHeader from '../NavHeader'
+import useSearchProducts from 'src/hooks/useSearchProducts'
 
-type FormData = Pick<SchemaType, 'name'>
-
-const searchSchema = schema.pick(['name'])
 const MAX_PURCHASES = 5
 const cx = classNames.bind(style)
 
 export default function Header() {
   const { isAuthenticated } = useContext(AppContext)
-  const navigate = useNavigate()
-  const queryConfig = useQueryConfig()
-  const { register, handleSubmit } = useForm<FormData>({
-    defaultValues: {
-      name: ''
-    },
-    resolver: yupResolver(searchSchema)
-  })
+  const { register, handleSubmitSearch } = useSearchProducts()
 
   // [GET] /purchases
   const getPurchasesList = useQuery({
@@ -54,27 +41,6 @@ export default function Header() {
     // =>cho vào để khi logout không call api
   })
   const purchasesList = getPurchasesList.data?.data.data
-
-  // handler funtion
-  const handleSubmitSearch = handleSubmit((data) => {
-    const config = queryConfig.order
-      ? omit(
-          {
-            ...queryConfig,
-            name: data.name
-          },
-          ['order', 'sort_by']
-        )
-      : {
-          ...queryConfig,
-          name: data.name
-        }
-
-    navigate({
-      pathname: path.home,
-      search: createSearchParams(config).toString()
-    })
-  })
 
   return (
     <header className={cx('header-wrapper')}>

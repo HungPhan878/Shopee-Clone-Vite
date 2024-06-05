@@ -7,10 +7,13 @@ import style from './CartHeader.module.scss'
 
 // components
 import NavHeader from 'src/Components/NavHeader'
+import useSearchProducts from 'src/hooks/useSearchProducts'
 
 const cx = classNames.bind(style)
 
 export default function CartHeader() {
+  const { register, handleSubmitSearch } = useSearchProducts()
+
   return (
     <header className={cx('header-wrapper')}>
       {/* header top */}
@@ -38,12 +41,13 @@ export default function CartHeader() {
 
             {/* search bar */}
             <div className='col-9'>
-              <form role='search' className={cx('header-search')}>
+              <form role='search' className={cx('header-search')} onSubmit={handleSubmitSearch}>
                 <div className={cx('header-search__input-wrapper')}>
                   <input
                     type='text'
                     placeholder='Free ship đơn từ 0Đ'
                     className={cx('header-search__input')}
+                    {...register('name')}
                   />
                   <button className={cx('header-search__btn')} type='submit'>
                     <svg
