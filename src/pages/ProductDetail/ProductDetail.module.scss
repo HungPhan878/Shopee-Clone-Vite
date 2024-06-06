@@ -294,4 +294,11 @@
     font-size: 1.4rem;
     line-height: 2;
   }
+
+  &-list__title {
+    margin-bottom: 24px;
+
+    text-transform: uppercase;
+    color: rgb(156 163 175);
+  }
 }

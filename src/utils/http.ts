@@ -62,6 +62,14 @@ export class Http {
 
           toast.error(message)
         }
+
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          clearLocalStorage()
+          // c1: ta dùng trình lằng nghe sư kiên (EVENT TARGET) để set lại appcontext trả về UI khi chưa login
+          //c2: dùng window.location.reload() reload lại UI lấy từ LS thì sẽ trả về UI LOGIN
+          // Nhưng sẽ làm mất đi tính chất singlePage applicattion
+        }
+
         return Promise.reject(error)
       }
     )

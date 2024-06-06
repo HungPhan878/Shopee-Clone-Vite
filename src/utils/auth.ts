@@ -1,5 +1,12 @@
 import { User } from 'src/types/user.type'
 
+// handle when accesstoken expired
+//b1:xuất ra một sự kiện
+//b2: bên app lắng nghe sự kiện
+//b3:thay đổi trong app context => thay đổi giao diện
+
+export const localStorageEvenTarget = new EventTarget()
+
 export const setAccessTokenFromLS = (access_token: string) => {
   localStorage.setItem('access_token', access_token)
 }
@@ -9,8 +16,11 @@ export const getAccessTokenFromLS = () => {
 }
 
 export const clearLocalStorage = () => {
+  const clearLSEvent = new Event('clearLS')
   localStorage.removeItem('access_token')
   localStorage.removeItem('profile')
+  // phát ra một sự kiện
+  localStorageEvenTarget.dispatchEvent(clearLSEvent)
 }
 
 export const setProfileFromLS = (profile: User) => {
