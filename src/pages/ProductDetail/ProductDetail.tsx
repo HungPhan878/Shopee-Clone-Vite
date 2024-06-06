@@ -49,7 +49,7 @@ export default function ProductDetail() {
     queryFn: () => productApi.getProductDetail(id as string)
   })
   const product = productDetail?.data?.data.data
-
+  
   const currentImages = useMemo(
     () => (product ? product.images.slice(...currentIndexImages) : []),
     [product, currentIndexImages]
