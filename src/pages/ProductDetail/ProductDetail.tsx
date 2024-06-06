@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 
@@ -23,6 +23,7 @@ import QuantityController from 'src/Components/QuantityController'
 import purchasesApi from 'src/apis/purchases.api'
 import { purchasesStatus } from 'src/constants/purchases'
 import { toast } from 'react-toastify'
+import path from 'src/constants/path'
 
 const cx = classNames.bind(style)
 
@@ -40,6 +41,7 @@ export default function ProductDetail() {
   // trừ khi đk kiên chỉ test trong component con đó thôi ex:InputNumber
   // thì mới viết logic trong nó nha
   const [buyCount, setBuyCount] = useState(1)
+  const navigate = useNavigate()
 
   // Get productDetail
   const productDetail = useQuery({
@@ -156,6 +158,19 @@ export default function ProductDetail() {
         }
       }
     )
+  }
+
+  const handleBuyRightNow = async () => {
+    const res = await addPurchasesMutation.mutateAsync({
+      product_id: product?._id as string,
+      buy_count: buyCount
+    })
+    const purchases = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchasesId: purchases?._id
+      }
+    })
   }
 
   if (!product) return null
@@ -333,7 +348,9 @@ export default function ProductDetail() {
                     <span>Thêm vào giỏ hàng</span>
                   </button>
 
-                  <button className={cx('product-btn__buy-now')}>mua ngay</button>
+                  <button className={cx('product-btn__buy-now')} onClick={handleBuyRightNow}>
+                    mua ngay
+                  </button>
                 </div>
               </div>
             </div>

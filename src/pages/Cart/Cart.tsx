@@ -2,9 +2,10 @@
 import classNames from 'classnames/bind'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { produce } from 'immer'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { keyBy } from 'lodash'
 import { Flip, toast } from 'react-toastify'
+import { Link, useLocation } from 'react-router-dom'
 
 // scss
 import style from './Cart.module.scss'
@@ -12,11 +13,10 @@ import style from './Cart.module.scss'
 // components
 import purchasesApi from 'src/apis/purchases.api'
 import { purchasesStatus } from 'src/constants/purchases'
-import { Link } from 'react-router-dom'
 import { formatCurrency } from 'src/utils/util'
 import QuantityController from 'src/Components/QuantityController'
+import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/Components/Button'
-import { Purchases } from 'src/types/purchases.type'
 
 const cx = classNames.bind(style)
 
@@ -26,17 +26,15 @@ const cx = classNames.bind(style)
 // trong map đã check hết chưa nếu rùi isCheckAll = true
 // 3. khi click vào nut chọn tất cả sẽ !isCheckAll
 
-interface ExtendedPurchases extends Purchases {
-  checked: boolean
-  disabled: boolean
-}
-
 export default function Cart() {
-  const [extendedPurchases, setExtendedPurchases] = useState<ExtendedPurchases[]>([])
+  const { extendedPurchases, setExtendedPurchases } = useContext(AppContext)
+  const location = useLocation()
   // b2
   const isCheckAll = extendedPurchases.every((purchases) => purchases.checked)
   const checkedPurchases = extendedPurchases.filter((purchases) => purchases.checked)
   const checkedPurchasesCount = checkedPurchases.length
+  const choosePurchasesFromLocation = ((location.state as { purchasesId: string }) || null)
+    ?.purchasesId
 
   // [GET] /purchases
   const getPurchasesList = useQuery({
@@ -81,15 +79,25 @@ export default function Cart() {
         // Dùng để bảo lưu checked lúc trước
         const objectId = keyBy(prev, '_id')
         return (
-          purchasesList.map((purchases) => ({
-            ...purchases,
-            checked: Boolean(objectId[purchases._id]?.checked),
-            disabled: false
-          })) || []
+          purchasesList.map((purchases) => {
+            const isChooseCheckedPurchases = choosePurchasesFromLocation === purchases._id
+            return {
+              ...purchases,
+              checked: isChooseCheckedPurchases || Boolean(objectId[purchases._id]?.checked),
+              disabled: false
+            }
+          }) || []
         )
       })
     }
-  }, [purchasesList])
+  }, [purchasesList, choosePurchasesFromLocation, setExtendedPurchases])
+
+  useEffect(() => {
+    // khai báo trong cleanup fuction để khi unmount sẽ xóa bỏ state cũ đi
+    return () => {
+      history.replaceState(null, '')
+    }
+  }, [])
 
   // handler function
   const totalCheckedPurchasesPrice = checkedPurchases.reduce((result, purchases) => {
