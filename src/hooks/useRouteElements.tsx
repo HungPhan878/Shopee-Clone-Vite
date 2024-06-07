@@ -8,12 +8,15 @@ import RegisterLayout from 'src/layouts/RegisterLayout'
 import { AppContext } from 'src/contexts/app.context'
 import Login from 'src/pages/Login'
 import ProductList from 'src/pages/ProductList'
-import Profile from 'src/pages/Profile'
+import Profile from 'src/pages/User/pages/Profile'
 import Register from 'src/pages/Register'
 import path from 'src/constants/path'
 import ProductDetail from 'src/pages/ProductDetail'
 import Cart from 'src/pages/Cart'
 import CartLayout from 'src/layouts/CartLayout'
+import UserLayout from 'src/pages/User/layouts/UserLayout'
+import ChangePassword from 'src/pages/User/pages/ChangePassword'
+import HistoryPurchases from 'src/pages/User/pages/HistoryPurchases'
 
 // const isAuthenticated = false
 // plugin routes when authenticated
@@ -45,12 +48,26 @@ export default function useRouteElements() {
       element: <ProtectedRoute />,
       children: [
         {
-          path: path.profile,
+          path: path.user,
           element: (
             <MainLayout>
-              <Profile />
+              <UserLayout />
             </MainLayout>
-          )
+          ),
+          children: [
+            {
+              path: path.profile,
+              element: <Profile />
+            },
+            {
+              path: path.changePassword,
+              element: <ChangePassword />
+            },
+            {
+              path: path.historyPurchases,
+              element: <HistoryPurchases />
+            }
+          ]
         },
         {
           path: path.cart,
