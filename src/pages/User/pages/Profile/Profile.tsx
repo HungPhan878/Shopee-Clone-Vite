@@ -1,16 +1,63 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import { yupResolver } from '@hookform/resolvers/yup'
 import classNames from 'classnames/bind'
+import { Controller, useForm } from 'react-hook-form'
+import { useQuery } from '@tanstack/react-query'
 
 // scss
 import style from './Profile.module.scss'
+
 import Button from 'src/Components/Button'
+import userApi from 'src/apis/user.api'
+import { userSchema, userType } from 'src/utils/rules'
+import Input from 'src/Components/Input'
+import InputNumber from 'src/Components/InputNumber'
+import { useEffect } from 'react'
 
 // components
 
 const cx = classNames.bind(style)
 
+type FormData = Pick<userType, 'name' | 'address' | 'phone' | 'date_of_birth'>
+const profileSchema = userSchema.pick(['name', 'address', 'phone', 'date_of_birth'])
+
 export default function Profile() {
+  const {
+    register,
+    control,
+    formState: { errors },
+    setValue
+  } = useForm<FormData>({
+    defaultValues: {
+      name: '',
+      address: '',
+      phone: '',
+      date_of_birth: new Date(1990, 0, 1)
+    },
+    resolver: yupResolver(profileSchema)
+  })
+
+  //[GET] /me
+  const getProfile = useQuery({
+    queryKey: ['profile'],
+    queryFn: userApi.getProfile
+  })
+  const profile = getProfile.data?.data.data
+
+  // Cách để truyền data get from api to formData
+  useEffect(() => {
+    if (profile) {
+      setValue('name', profile.name)
+      setValue('phone', profile.phone)
+      setValue('address', profile.address)
+      setValue(
+        'date_of_birth',
+        // vì date api gửi về dạng Iso 8610 nên để chuyển thành date thì đưa vào giá trị thôi
+        profile.date_of_birth ? new Date(profile.date_of_birth) : new Date(1990, 0, 1)
+      )
+    }
+  }, [profile, setValue])
   return (
     <div className={cx('profile-wrap')}>
       <div className={cx('profile-info')}>
@@ -24,15 +71,22 @@ export default function Profile() {
             <div className={cx('profile-form__info')}>
               <div className={cx('profile-form__row')}>
                 <label className={cx('profile-label')}>Email</label>
-                <p className={cx('profile-email')}>HungPhan******8@gmail.com</p>
+                <p className={cx('profile-email')}>{profile?.email.slice(0, 4)}******@gmail.com</p>
               </div>
 
               <div className={cx('profile-form__row')}>
                 <label className={cx('profile-label')}>Tên</label>
                 <div className={cx('profile-input__wrap')}>
                   <div className={cx('profile-input__inner')}>
-                    <input type='text' placeholder='Tên' className={cx('profile-input')} />
-                    <p className={cx('profile-input__msg')}></p>
+                    <Input
+                      type='text'
+                      name='name'
+                      placeholder='Tên'
+                      classNameInput={cx('profile-input')}
+                      className={cx('mb-0')}
+                      register={register}
+                      errorMessage={errors.name?.message}
+                    />
                   </div>
                 </div>
               </div>
@@ -41,12 +95,21 @@ export default function Profile() {
                 <label className={cx('profile-label')}>Số điện thoại</label>
                 <div className={cx('profile-input__wrap')}>
                   <div className={cx('profile-input__inner')}>
-                    <input
-                      type='text'
-                      placeholder='Số điện thoại'
-                      className={cx('profile-input')}
+                    <Controller
+                      control={control}
+                      name='phone'
+                      render={({ field }) => (
+                        <InputNumber
+                          type='text'
+                          placeholder='Số điện thoại'
+                          classNameInput={cx('profile-input')}
+                          className={cx('mb-0')}
+                          errorMessage={errors.phone?.message}
+                          {...field}
+                          onChange={field.onChange}
+                        />
+                      )}
                     />
-                    <p className={cx('profile-input__msg')}></p>
                   </div>
                 </div>
               </div>
@@ -55,8 +118,15 @@ export default function Profile() {
                 <label className={cx('profile-label')}>Địa chỉ</label>
                 <div className={cx('profile-input__wrap')}>
                   <div className={cx('profile-input__inner')}>
-                    <input type='text' placeholder='Địa chỉ' className={cx('profile-input')} />
-                    <p className={cx('profile-input__msg')}></p>
+                    <Input
+                      type='text'
+                      name='address'
+                      placeholder='Địa chỉ'
+                      classNameInput={cx('profile-input')}
+                      className={cx('mb-0')}
+                      register={register}
+                      errorMessage={errors.address?.message}
+                    />
                   </div>
                 </div>
               </div>
@@ -65,19 +135,19 @@ export default function Profile() {
                 <label className={cx('profile-label')}>Date of Birth</label>
                 <div className={cx('profile-input__wrap')}>
                   <div className={cx('profile-select__inner')}>
-                    <select name='' id='' value='' className={cx('profile-select')}>
+                    <select name='' id='' defaultValue='' className={cx('profile-select')}>
                       <option value='' disabled>
                         Ngày
                       </option>
                     </select>
 
-                    <select name='' id='' value='' className={cx('profile-select')}>
+                    <select name='' id='' defaultValue='' className={cx('profile-select')}>
                       <option value='' disabled>
                         Tháng
                       </option>
                     </select>
 
-                    <select name='' id='' value='' className={cx('profile-select')}>
+                    <select name='' id='' defaultValue='' className={cx('profile-select')}>
                       <option value='' disabled>
                         Năm
                       </option>
