@@ -99,32 +99,11 @@
     }
   }
 
-  &-input__msg {
-    height: 20px;
+  // &-input__msg {
+  //   height: 20px;
 
-    color: rgb(220 38 38);
-  }
-
-  &-select__inner {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  &-select {
-    padding: 8px 12px;
-    border: 1px solid rgb(209 213 219);
-    border-radius: 2px;
-    width: 100%;
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-
-    text-transform: none;
-
-    &:hover {
-      border-color: var(--primary-color);
-    }
-  }
+  //   color: rgb(220 38 38);
+  // }
 
   &-btn__wrap {
     padding-left: 16px;

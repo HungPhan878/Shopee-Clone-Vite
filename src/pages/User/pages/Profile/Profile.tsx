@@ -3,7 +3,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import classNames from 'classnames/bind'
 import { Controller, useForm } from 'react-hook-form'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 // scss
 import style from './Profile.module.scss'
@@ -14,6 +14,7 @@ import { userSchema, userType } from 'src/utils/rules'
 import Input from 'src/Components/Input'
 import InputNumber from 'src/Components/InputNumber'
 import { useEffect } from 'react'
+import DateSelect from '../../Components/DateSelect'
 
 // components
 
@@ -26,6 +27,7 @@ export default function Profile() {
   const {
     register,
     control,
+    handleSubmit,
     formState: { errors },
     setValue
   } = useForm<FormData>({
@@ -45,6 +47,11 @@ export default function Profile() {
   })
   const profile = getProfile.data?.data.data
 
+  //[PUT] /user/update
+  const updateProfileMutation = useMutation({
+    mutationFn: userApi.updateProfile
+  })
+
   // Cách để truyền data get from api to formData
   useEffect(() => {
     if (profile) {
@@ -58,6 +65,12 @@ export default function Profile() {
       )
     }
   }, [profile, setValue])
+
+  // handler function
+  const onSubmit = handleSubmit(async (data) => {
+    console.log(data)
+  })
+
   return (
     <div className={cx('profile-wrap')}>
       <div className={cx('profile-info')}>
@@ -65,7 +78,7 @@ export default function Profile() {
         <p className={cx('profile-info__desc')}>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
       </div>
 
-      <form className={cx('profile-form')}>
+      <form className={cx('profile-form')} onSubmit={onSubmit}>
         <div className='row'>
           <div className='col col-8'>
             <div className={cx('profile-form__info')}>
@@ -131,31 +144,18 @@ export default function Profile() {
                 </div>
               </div>
 
-              <div className={cx('profile-form__row')}>
-                <label className={cx('profile-label')}>Date of Birth</label>
-                <div className={cx('profile-input__wrap')}>
-                  <div className={cx('profile-select__inner')}>
-                    <select name='' id='' defaultValue='' className={cx('profile-select')}>
-                      <option value='' disabled>
-                        Ngày
-                      </option>
-                    </select>
-
-                    <select name='' id='' defaultValue='' className={cx('profile-select')}>
-                      <option value='' disabled>
-                        Tháng
-                      </option>
-                    </select>
-
-                    <select name='' id='' defaultValue='' className={cx('profile-select')}>
-                      <option value='' disabled>
-                        Năm
-                      </option>
-                    </select>
-                  </div>
-                  <p className={cx('profile-input__msg')}></p>
-                </div>
-              </div>
+              <Controller
+                control={control}
+                name='date_of_birth'
+                render={({ field }) => (
+                  <DateSelect
+                    errorMessage={errors.date_of_birth?.message}
+                    value={field.value}
+                    // field nhan event nhung truyen vao value van hieu nha
+                    onChange={field.onChange}
+                  />
+                )}
+              />
 
               <div className={cx('profile-form__row')}>
                 <div className={cx('profile-btn__wrap')}>
