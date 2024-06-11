@@ -1,26 +1,31 @@
 import classNames from 'classnames/bind'
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
 
 // scss
 import style from './UserSideNav.module.scss'
-import { Link } from 'react-router-dom'
 
 // components
+import { AppContext } from 'src/contexts/app.context'
+import noAvatar from 'src/assets/images/no-avatar.svg'
 
 const cx = classNames.bind(style)
 
 export default function UserSideNav() {
+  const { profile } = useContext(AppContext)
+
   return (
     <div>
       <div className={cx('nav__row')}>
         <div className={cx('nav-img__wrap')}>
           <img
-            src='https://api-ecom.duthanhduoc.com/images/6a38bb64-32c2-492a-b729-bf0529bd7438.jpg'
-            alt='avatar'
+            src={`https://api-ecom.duthanhduoc.com/images/${profile?.avatar}` || noAvatar}
+            alt={profile?.name}
             className={cx('nav-img__avatar')}
           />
         </div>
         <div className={cx('nav-info')}>
-          <div className={cx('nav-info__name')}>Hungphanhung8@gmail.com</div>
+          <div className={cx('nav-info__name')}>{profile?.name}</div>
           <Link to='#' className={cx('nav-info__link')}>
             <svg
               width={12}

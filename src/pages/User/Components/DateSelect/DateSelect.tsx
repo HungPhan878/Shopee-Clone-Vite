@@ -5,7 +5,7 @@ import classNames from 'classnames/bind'
 // scss
 import style from './DateSelect.module.scss'
 import range from 'lodash/range'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const cx = classNames.bind(style)
 
@@ -23,11 +23,25 @@ export default function DateSelect({ onChange, value, errorMessage }: Props) {
     year: value?.getFullYear() || 1990
   })
 
+  // để đồng bộ hóa giữa value props và state local
+  useEffect(() => {
+    if (value) {
+      setDate({
+        date: value?.getDate(),
+        month: value?.getMonth(),
+        year: value?.getFullYear()
+      })
+    }
+  }, [value])
+
+  // handler function
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = event.target
+    const { name, value: valueFromSelect } = event.target
     const newDate = {
-      ...date,
-      [name]: value
+      date: value?.getDate() || date.date,
+      month: value?.getMonth() || date.month,
+      year: value?.getFullYear() || date.year,
+      [name]: Number(valueFromSelect)
     }
     setDate(newDate)
     onChange && onChange(new Date(newDate.year, newDate.month, newDate.date))

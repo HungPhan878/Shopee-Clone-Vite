@@ -4,6 +4,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import classNames from 'classnames/bind'
 import { Controller, useForm } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
+import { useContext, useEffect } from 'react'
 
 // scss
 import style from './Profile.module.scss'
@@ -13,8 +15,9 @@ import userApi from 'src/apis/user.api'
 import { userSchema, userType } from 'src/utils/rules'
 import Input from 'src/Components/Input'
 import InputNumber from 'src/Components/InputNumber'
-import { useEffect } from 'react'
 import DateSelect from '../../Components/DateSelect'
+import { setProfileFromLS } from 'src/utils/auth'
+import { AppContext } from 'src/contexts/app.context'
 
 // components
 
@@ -24,6 +27,8 @@ type FormData = Pick<userType, 'name' | 'address' | 'phone' | 'date_of_birth'>
 const profileSchema = userSchema.pick(['name', 'address', 'phone', 'date_of_birth'])
 
 export default function Profile() {
+  const { setProfile } = useContext(AppContext)
+
   const {
     register,
     control,
@@ -68,7 +73,17 @@ export default function Profile() {
 
   // handler function
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data)
+    const res = await updateProfileMutation.mutateAsync({
+      ...data,
+      date_of_birth: data.date_of_birth?.toISOString()
+    })
+
+    getProfile.refetch()
+    setProfileFromLS(res.data.data)
+    setProfile(res.data.data)
+    toast.success(res.data.message, {
+      autoClose: 1000
+    })
   })
 
   return (
@@ -176,10 +191,10 @@ export default function Profile() {
               </div>
               <input type='file' accept='.jpg,.jpeg,.png' hidden></input>
               <button className={cx('profile-image__btn')}>Chọn ảnh</button>
-              <p className={cx('profile-image__desc')}>
+              <div className={cx('profile-image__desc')}>
                 <div>Dụng lượng file tối đa 1 MB</div>
                 <div>Định dạng:.JPEG, .PNG</div>
-              </p>
+              </div>
             </div>
           </div>
         </div>

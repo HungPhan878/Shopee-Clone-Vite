@@ -12,6 +12,7 @@ import { AppContext } from 'src/contexts/app.context'
 import { logout } from 'src/apis/auth.api'
 import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchases'
+import noAvatar from 'src/assets/images/no-avatar.svg'
 
 const cx = classNames.bind(style)
 
@@ -101,8 +102,8 @@ export default function NavHeader() {
               }
             >
               <img
-                src='https://th.bing.com/th/id/OIP.msCrXt053LrpYCkTg4TMhQHaLQ?rs=1&pid=ImgDetMain'
-                alt='Cuc Tinh Y'
+                src={`https://api-ecom.duthanhduoc.com/images/${profile?.avatar}` || noAvatar}
+                alt={profile?.name}
                 className={cx('header-item__avatar')}
               />
               <span className={cx('header-item__label')}>{profile?.name}</span>
