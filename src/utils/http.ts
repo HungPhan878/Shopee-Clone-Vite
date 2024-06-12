@@ -59,7 +59,7 @@ export class Http {
       function (error) {
         if (error.response.status !== HttpStatusCode.UnprocessableEntity) {
           const data: any | undefined = error.response.data
-          const message = data.message || error.message
+          const message = data?.message || error.message
 
           toast.error(message)
         }

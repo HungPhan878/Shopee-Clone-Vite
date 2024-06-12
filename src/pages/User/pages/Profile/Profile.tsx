@@ -21,6 +21,7 @@ import { setProfileFromLS } from 'src/utils/auth'
 import { AppContext } from 'src/contexts/app.context'
 import { getAvatarName, isAxiosUnprocessableEntityError } from 'src/utils/util'
 import { ErrorResponsiveApi } from 'src/types/util.type'
+import config from 'src/constants/config'
 
 type FormData = Pick<userType, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 type FormDataError = Omit<FormData, 'date_of_birth'> & {
@@ -145,7 +146,18 @@ export default function Profile() {
 
   const onUploadChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileFromLocal = event.target.files?.[0]
-    setFile(fileFromLocal)
+    inputFileRef.current?.setAttribute('value', '')
+    if (
+      fileFromLocal &&
+      (fileFromLocal.size >= config.maxSizeImage || !fileFromLocal.type.includes('image'))
+    ) {
+      toast.error('Dung lượng file tối đa 1 MB và phải là định dạng:.JPEG, .PNG', {
+        autoClose: 1000,
+        position: 'top-center'
+      })
+    } else {
+      setFile(fileFromLocal)
+    }
   }
 
   return (
@@ -257,6 +269,9 @@ export default function Profile() {
                 type='file'
                 accept='.jpg,.jpeg,.png'
                 onChange={onUploadChange}
+                //  Dùng để loại bỏ giá trị cũ trong file để có thể toast err nếu chọn trùng ânh
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onClick={(event) => ((event.target as any).value = null)}
                 hidden
                 ref={inputFileRef}
               ></input>
