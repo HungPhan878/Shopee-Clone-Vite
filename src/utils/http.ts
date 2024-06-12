@@ -12,6 +12,7 @@ import {
   setProfileFromLS
 } from './auth'
 import { AuthResponsive } from 'src/types/auth.type'
+import config from 'src/constants/config'
 
 export class Http {
   instance: AxiosInstance
@@ -20,7 +21,7 @@ export class Http {
   constructor() {
     this.access_token = getAccessTokenFromLS()
     this.instance = axios.create({
-      baseURL: 'https://api-ecom.duthanhduoc.com/',
+      baseURL: config.baseURL,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'

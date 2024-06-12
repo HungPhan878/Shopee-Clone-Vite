@@ -107,6 +107,7 @@ export const userSchema = yup.object().shape({
   phone: yup.string().max(20, 'Vui lòng nhập không quá 20 kí tự'),
   address: yup.string().max(160, 'Vui lòng nhập không quá 160 kí tự'),
   date_of_birth: yup.date().max(new Date(), 'Hãy chọn một ngày trong quá khứ'),
+  avatar: yup.string(),
   password: schema.fields['password'],
   new_password: schema.fields['password'],
   confirm_password: schema.fields['confirm_password']

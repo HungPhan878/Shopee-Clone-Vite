@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
@@ -7,7 +8,7 @@ import style from './UserSideNav.module.scss'
 
 // components
 import { AppContext } from 'src/contexts/app.context'
-import noAvatar from 'src/assets/images/no-avatar.svg'
+import { getAvatarName } from 'src/utils/util'
 
 const cx = classNames.bind(style)
 
@@ -19,7 +20,7 @@ export default function UserSideNav() {
       <div className={cx('nav__row')}>
         <div className={cx('nav-img__wrap')}>
           <img
-            src={`https://api-ecom.duthanhduoc.com/images/${profile?.avatar}` || noAvatar}
+            src={getAvatarName(profile?.avatar)}
             alt={profile?.name}
             className={cx('nav-img__avatar')}
           />

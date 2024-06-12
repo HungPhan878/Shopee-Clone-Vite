@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useContext } from 'react'
@@ -12,7 +13,7 @@ import { AppContext } from 'src/contexts/app.context'
 import { logout } from 'src/apis/auth.api'
 import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchases'
-import noAvatar from 'src/assets/images/no-avatar.svg'
+import { getAvatarName } from 'src/utils/util'
 
 const cx = classNames.bind(style)
 
@@ -102,7 +103,7 @@ export default function NavHeader() {
               }
             >
               <img
-                src={`https://api-ecom.duthanhduoc.com/images/${profile?.avatar}` || noAvatar}
+                src={getAvatarName(profile?.avatar)}
                 alt={profile?.name}
                 className={cx('header-item__avatar')}
               />

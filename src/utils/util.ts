@@ -3,7 +3,11 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-named-as-default-member */
 import axios, { AxiosError } from 'axios'
+
+// components
 import HttpStatusCode from 'src/constants/HttpStatusCode.enum'
+import config from 'src/constants/config'
+import noAvatar from 'src/assets/images/no-avatar.svg'
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error)
@@ -47,3 +51,6 @@ export const getIdFromNameId = (nameId: string) => {
   const arr = nameId.split('-i,')
   return arr[arr.length - 1]
 }
+
+export const getAvatarName = (avatarName?: string) =>
+  avatarName ? `${config.baseURL}images/${avatarName}` : noAvatar
