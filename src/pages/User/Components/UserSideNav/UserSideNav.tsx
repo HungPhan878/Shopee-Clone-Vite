@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
 import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 // scss
 import style from './UserSideNav.module.scss'
@@ -9,6 +9,7 @@ import style from './UserSideNav.module.scss'
 // components
 import { AppContext } from 'src/contexts/app.context'
 import { getAvatarName } from 'src/utils/util'
+import path from 'src/constants/path'
 
 const cx = classNames.bind(style)
 
@@ -27,7 +28,7 @@ export default function UserSideNav() {
         </div>
         <div className={cx('nav-info')}>
           <div className={cx('nav-info__name')}>{profile?.name}</div>
-          <Link to='#' className={cx('nav-info__link')}>
+          <NavLink to={path.profile} className={cx('nav-info__link')}>
             <svg
               width={12}
               height={12}
@@ -42,13 +43,20 @@ export default function UserSideNav() {
               />
             </svg>
             Sửa hồ sơ
-          </Link>
+          </NavLink>
         </div>
       </div>
 
       <ul className={cx('nav__list')}>
         <li className={cx('nav-item')}>
-          <Link to='#' className={cx('nav-item__link')}>
+          <NavLink
+            to={path.profile}
+            className={({ isActive }) =>
+              cx('nav-item__link', {
+                'nav-item__link--active': isActive
+              })
+            }
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -64,10 +72,17 @@ export default function UserSideNav() {
               />
             </svg>
             Tài khoản của tôi
-          </Link>
+          </NavLink>
         </li>
         <li className={cx('nav-item')}>
-          <Link to='#' className={cx('nav-item__link')}>
+          <NavLink
+            to={path.changePassword}
+            className={({ isActive }) =>
+              cx('nav-item__link', {
+                'nav-item__link--active': isActive
+              })
+            }
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -83,10 +98,17 @@ export default function UserSideNav() {
               />
             </svg>
             Đổi mật khẩu
-          </Link>
+          </NavLink>
         </li>
         <li className={cx('nav-item')}>
-          <Link to='#' className={cx('nav-item__link')}>
+          <NavLink
+            to={path.historyPurchases}
+            className={({ isActive }) =>
+              cx('nav-item__link', {
+                'nav-item__link--active': isActive
+              })
+            }
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -102,7 +124,7 @@ export default function UserSideNav() {
               />
             </svg>
             Đơn mua
-          </Link>
+          </NavLink>
         </li>
       </ul>
     </div>

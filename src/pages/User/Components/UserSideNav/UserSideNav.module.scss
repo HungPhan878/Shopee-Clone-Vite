@@ -52,7 +52,6 @@
     margin-top: 28px;
   }
 
-
   &-item__link {
     margin-top: 16px;
     display: flex;
@@ -67,6 +66,10 @@
     transition-duration: 0.15s;
 
     &:hover {
+      color: var(--primary-color);
+    }
+
+    &--active {
       color: var(--primary-color);
     }
   }

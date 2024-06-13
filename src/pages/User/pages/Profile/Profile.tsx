@@ -5,7 +5,7 @@ import classNames from 'classnames/bind'
 import { Controller, useForm } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 
 // scss
 import style from './Profile.module.scss'
@@ -21,7 +21,7 @@ import { setProfileFromLS } from 'src/utils/auth'
 import { AppContext } from 'src/contexts/app.context'
 import { getAvatarName, isAxiosUnprocessableEntityError } from 'src/utils/util'
 import { ErrorResponsiveApi } from 'src/types/util.type'
-import config from 'src/constants/config'
+import InputFile from '../../Components/InputFile'
 
 type FormData = Pick<userType, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 type FormDataError = Omit<FormData, 'date_of_birth'> & {
@@ -39,7 +39,7 @@ const cx = classNames.bind(style)
 
 export default function Profile() {
   const { setProfile } = useContext(AppContext)
-  const inputFileRef = useRef<HTMLInputElement>(null)
+
   const [file, setFile] = useState<File>()
   // Nếu có một value state phụ thuộc state khác thì dùng biến thôi nha
   const previewAvatar = useMemo(() => {
@@ -139,25 +139,8 @@ export default function Profile() {
     }
   })
 
-  // Khi thực hiện nhấn vào btn chọn ảnh thì sẽ click vào input file
-  const handleUpload = () => {
-    inputFileRef.current?.click()
-  }
-
-  const onUploadChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileFromLocal = event.target.files?.[0]
-    inputFileRef.current?.setAttribute('value', '')
-    if (
-      fileFromLocal &&
-      (fileFromLocal.size >= config.maxSizeImage || !fileFromLocal.type.includes('image'))
-    ) {
-      toast.error('Dung lượng file tối đa 1 MB và phải là định dạng:.JPEG, .PNG', {
-        autoClose: 1000,
-        position: 'top-center'
-      })
-    } else {
-      setFile(fileFromLocal)
-    }
+  const handleChangeFile = (value?: File) => {
+    setFile(value)
   }
 
   return (
@@ -265,19 +248,10 @@ export default function Profile() {
                   className={cx('profile-image__avatar')}
                 />
               </div>
-              <input
-                type='file'
-                accept='.jpg,.jpeg,.png'
-                onChange={onUploadChange}
-                //  Dùng để loại bỏ giá trị cũ trong file để có thể toast err nếu chọn trùng ânh
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onClick={(event) => ((event.target as any).value = null)}
-                hidden
-                ref={inputFileRef}
-              ></input>
-              <button className={cx('profile-image__btn')} type='button' onClick={handleUpload}>
-                Chọn ảnh
-              </button>
+
+              {/* Input file */}
+              <InputFile onChange={handleChangeFile} />
+
               <div className={cx('profile-image__desc')}>
                 <div>Dụng lượng file tối đa 1 MB</div>
                 <div>Định dạng:.JPEG, .PNG</div>
