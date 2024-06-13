@@ -2,10 +2,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { yupResolver } from '@hookform/resolvers/yup'
 import classNames from 'classnames/bind'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { Fragment, useContext, useEffect, useMemo, useState } from 'react'
 
 // scss
 import style from './Profile.module.scss'
@@ -37,6 +37,57 @@ const cx = classNames.bind(style)
 //     +Khi nhấn submit thì sẽ upload trước rồi lấy res name avatar gửi về để
 //      thực hiện update .
 
+function Info() {
+  const {
+    register,
+    control,
+    formState: { errors }
+  } = useFormContext<FormData>()
+  return (
+    <Fragment>
+      <div className={cx('profile-form__row')}>
+        <label className={cx('profile-label')}>Tên</label>
+        <div className={cx('profile-input__wrap')}>
+          <div className={cx('profile-input__inner')}>
+            <Input
+              type='text'
+              name='name'
+              placeholder='Tên'
+              classNameInput={cx('profile-input')}
+              className={cx('mb-0')}
+              register={register}
+              errorMessage={errors.name?.message}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className={cx('profile-form__row')}>
+        <label className={cx('profile-label')}>Số điện thoại</label>
+        <div className={cx('profile-input__wrap')}>
+          <div className={cx('profile-input__inner')}>
+            <Controller
+              control={control}
+              name='phone'
+              render={({ field }) => (
+                <InputNumber
+                  type='text'
+                  placeholder='Số điện thoại'
+                  classNameInput={cx('profile-input')}
+                  className={cx('mb-0')}
+                  errorMessage={errors.phone?.message}
+                  {...field}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  )
+}
+
 export default function Profile() {
   const { setProfile } = useContext(AppContext)
 
@@ -46,15 +97,7 @@ export default function Profile() {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    setError,
-    watch
-  } = useForm<FormData>({
+  const methods = useForm<FormData>({
     defaultValues: {
       name: '',
       address: '',
@@ -64,6 +107,15 @@ export default function Profile() {
     },
     resolver: yupResolver(profileSchema)
   })
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    setError,
+    watch
+  } = methods
   // dùng để lấy ra một giá trị của field nào đó trong form (or getValue)
   const avatar = watch('avatar')
 
@@ -150,116 +202,82 @@ export default function Profile() {
         <p className={cx('profile-info__desc')}>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
       </div>
 
-      <form className={cx('profile-form')} onSubmit={onSubmit}>
-        <div className='row'>
-          <div className='col col-8'>
-            <div className={cx('profile-form__info')}>
-              <div className={cx('profile-form__row')}>
-                <label className={cx('profile-label')}>Email</label>
-                <p className={cx('profile-email')}>{profile?.email.slice(0, 4)}******@gmail.com</p>
-              </div>
+      <FormProvider {...methods}>
+        <form className={cx('profile-form')} onSubmit={onSubmit}>
+          <div className='row'>
+            <div className='col col-8'>
+              <div className={cx('profile-form__info')}>
+                <div className={cx('profile-form__row')}>
+                  <label className={cx('profile-label')}>Email</label>
+                  <p className={cx('profile-email')}>
+                    {profile?.email.slice(0, 4)}******@gmail.com
+                  </p>
+                </div>
 
-              <div className={cx('profile-form__row')}>
-                <label className={cx('profile-label')}>Tên</label>
-                <div className={cx('profile-input__wrap')}>
-                  <div className={cx('profile-input__inner')}>
-                    <Input
-                      type='text'
-                      name='name'
-                      placeholder='Tên'
-                      classNameInput={cx('profile-input')}
-                      className={cx('mb-0')}
-                      register={register}
-                      errorMessage={errors.name?.message}
-                    />
+                <Info />
+
+                <div className={cx('profile-form__row')}>
+                  <label className={cx('profile-label')}>Địa chỉ</label>
+                  <div className={cx('profile-input__wrap')}>
+                    <div className={cx('profile-input__inner')}>
+                      <Input
+                        type='text'
+                        name='address'
+                        placeholder='Địa chỉ'
+                        classNameInput={cx('profile-input')}
+                        className={cx('mb-0')}
+                        register={register}
+                        errorMessage={errors.address?.message}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className={cx('profile-form__row')}>
-                <label className={cx('profile-label')}>Số điện thoại</label>
-                <div className={cx('profile-input__wrap')}>
-                  <div className={cx('profile-input__inner')}>
-                    <Controller
-                      control={control}
-                      name='phone'
-                      render={({ field }) => (
-                        <InputNumber
-                          type='text'
-                          placeholder='Số điện thoại'
-                          classNameInput={cx('profile-input')}
-                          className={cx('mb-0')}
-                          errorMessage={errors.phone?.message}
-                          {...field}
-                          onChange={field.onChange}
-                        />
-                      )}
+                <Controller
+                  control={control}
+                  name='date_of_birth'
+                  render={({ field }) => (
+                    <DateSelect
+                      errorMessage={errors.date_of_birth?.message}
+                      value={field.value}
+                      // field nhan event nhung truyen vao value van hieu nha
+                      onChange={field.onChange}
                     />
-                  </div>
-                </div>
-              </div>
-
-              <div className={cx('profile-form__row')}>
-                <label className={cx('profile-label')}>Địa chỉ</label>
-                <div className={cx('profile-input__wrap')}>
-                  <div className={cx('profile-input__inner')}>
-                    <Input
-                      type='text'
-                      name='address'
-                      placeholder='Địa chỉ'
-                      classNameInput={cx('profile-input')}
-                      className={cx('mb-0')}
-                      register={register}
-                      errorMessage={errors.address?.message}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <Controller
-                control={control}
-                name='date_of_birth'
-                render={({ field }) => (
-                  <DateSelect
-                    errorMessage={errors.date_of_birth?.message}
-                    value={field.value}
-                    // field nhan event nhung truyen vao value van hieu nha
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-
-              <div className={cx('profile-form__row')}>
-                <div className={cx('profile-btn__wrap')}>
-                  <Button className={cx('profile-btn__submit')} type='submit'>
-                    Lưu
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className='col col-4'>
-            <div className={cx('profile-form__image')}>
-              <div className={cx('profile-image__wrap')}>
-                <img
-                  src={previewAvatar || getAvatarName(avatar)}
-                  alt='avatar'
-                  className={cx('profile-image__avatar')}
+                  )}
                 />
+
+                <div className={cx('profile-form__row')}>
+                  <div className={cx('profile-btn__wrap')}>
+                    <Button className={cx('profile-btn__submit')} type='submit'>
+                      Lưu
+                    </Button>
+                  </div>
+                </div>
               </div>
+            </div>
 
-              {/* Input file */}
-              <InputFile onChange={handleChangeFile} />
+            <div className='col col-4'>
+              <div className={cx('profile-form__image')}>
+                <div className={cx('profile-image__wrap')}>
+                  <img
+                    src={previewAvatar || getAvatarName(avatar)}
+                    alt='avatar'
+                    className={cx('profile-image__avatar')}
+                  />
+                </div>
 
-              <div className={cx('profile-image__desc')}>
-                <div>Dụng lượng file tối đa 1 MB</div>
-                <div>Định dạng:.JPEG, .PNG</div>
+                {/* Input file */}
+                <InputFile onChange={handleChangeFile} />
+
+                <div className={cx('profile-image__desc')}>
+                  <div>Dụng lượng file tối đa 1 MB</div>
+                  <div>Định dạng:.JPEG, .PNG</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </FormProvider>
     </div>
   )
 }
