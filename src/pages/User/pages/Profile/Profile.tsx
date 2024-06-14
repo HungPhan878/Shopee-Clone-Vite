@@ -96,7 +96,6 @@ export default function Profile() {
   const previewAvatar = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
-
   const methods = useForm<FormData>({
     defaultValues: {
       name: '',

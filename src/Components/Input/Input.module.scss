@@ -1,3 +1,7 @@
+.relative {
+  position: relative;
+}
+
 .input {
   &-form__wrap {
     margin-bottom: 14px;
@@ -28,5 +32,18 @@
     height: 20px;
     font-size: 1.2rem;
     color: #ff424f;
+  }
+
+  &-form__icon-eye {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    height: 24px;
+    width: 24px;
+    object-fit: cover;
+
+    cursor: pointer;
   }
 }
