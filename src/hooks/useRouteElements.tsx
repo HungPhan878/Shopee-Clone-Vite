@@ -17,6 +17,7 @@ import CartLayout from 'src/layouts/CartLayout'
 import UserLayout from 'src/pages/User/layouts/UserLayout'
 import ChangePassword from 'src/pages/User/pages/ChangePassword'
 import HistoryPurchases from 'src/pages/User/pages/HistoryPurchases'
+import NotFound from 'src/pages/User/pages/NotFound'
 
 // const isAuthenticated = false
 // plugin routes when authenticated
@@ -108,6 +109,10 @@ export default function useRouteElements() {
           <ProductDetail />
         </MainLayout>
       )
+    },
+    {
+      path: '*',
+      element: <NotFound />
     }
   ])
 
