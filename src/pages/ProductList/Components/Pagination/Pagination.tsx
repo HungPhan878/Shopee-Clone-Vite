@@ -4,8 +4,8 @@ import { Link, createSearchParams } from 'react-router-dom'
 
 // scss
 import style from './Pagination.module.scss'
-import { QueryConfig } from '../../ProductList'
 import path from 'src/constants/path'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
 
 const cx = classNames.bind(style)
 

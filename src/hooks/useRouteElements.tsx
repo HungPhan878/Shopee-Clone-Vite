@@ -1,23 +1,28 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useContext } from 'react'
+import { useContext, lazy, Suspense } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 
 // components
 import MainLayout from 'src/layouts/MainLayout'
 import RegisterLayout from 'src/layouts/RegisterLayout'
 import { AppContext } from 'src/contexts/app.context'
-import Login from 'src/pages/Login'
-import ProductList from 'src/pages/ProductList'
-import Profile from 'src/pages/User/pages/Profile'
-import Register from 'src/pages/Register'
-import path from 'src/constants/path'
-import ProductDetail from 'src/pages/ProductDetail'
-import Cart from 'src/pages/Cart'
 import CartLayout from 'src/layouts/CartLayout'
 import UserLayout from 'src/pages/User/layouts/UserLayout'
-import ChangePassword from 'src/pages/User/pages/ChangePassword'
-import HistoryPurchases from 'src/pages/User/pages/HistoryPurchases'
-import NotFound from 'src/pages/User/pages/NotFound'
+import path from 'src/constants/path'
+
+// Dùng lighthouse của google để xem hiệu suất page
+// Dùng tải lười qua trang nào thì tải trang đấy
+// +Ưu điểm: lúc đầu nhanh hơn và đỡ tôn ram cho client hơn
+// +Nhươc điểm: lúc chuyển trang sẽ hơi chậm một chút.
+const Login = lazy(() => import('src/pages/Login'))
+const ProductList = lazy(() => import('src/pages/ProductList'))
+const Profile = lazy(() => import('src/pages/User/pages/Profile'))
+const Register = lazy(() => import('src/pages/Register'))
+const ProductDetail = lazy(() => import('src/pages/ProductDetail'))
+const Cart = lazy(() => import('src/pages/Cart'))
+const ChangePassword = lazy(() => import('src/pages/User/pages/ChangePassword'))
+const HistoryPurchases = lazy(() => import('src/pages/User/pages/HistoryPurchases'))
+const NotFound = lazy(() => import('src/pages/NotFound'))
 
 // const isAuthenticated = false
 // plugin routes when authenticated
@@ -40,7 +45,9 @@ export default function useRouteElements() {
       index: true,
       element: (
         <MainLayout>
-          <ProductList />
+          <Suspense>
+            <ProductList />
+          </Suspense>
         </MainLayout>
       )
     },
@@ -58,15 +65,27 @@ export default function useRouteElements() {
           children: [
             {
               path: path.profile,
-              element: <Profile />
+              element: (
+                <Suspense>
+                  <Profile />
+                </Suspense>
+              )
             },
             {
               path: path.changePassword,
-              element: <ChangePassword />
+              element: (
+                <Suspense>
+                  <ChangePassword />
+                </Suspense>
+              )
             },
             {
               path: path.historyPurchases,
-              element: <HistoryPurchases />
+              element: (
+                <Suspense>
+                  <HistoryPurchases />
+                </Suspense>
+              )
             }
           ]
         },
@@ -74,7 +93,9 @@ export default function useRouteElements() {
           path: path.cart,
           element: (
             <CartLayout>
-              <Cart />
+              <Suspense>
+                <Cart />
+              </Suspense>
             </CartLayout>
           )
         }
@@ -88,7 +109,9 @@ export default function useRouteElements() {
           path: path.login,
           element: (
             <RegisterLayout>
-              <Login />
+              <Suspense>
+                <Login />
+              </Suspense>
             </RegisterLayout>
           )
         },
@@ -96,7 +119,9 @@ export default function useRouteElements() {
           path: path.register,
           element: (
             <RegisterLayout>
-              <Register />
+              <Suspense>
+                <Register />
+              </Suspense>
             </RegisterLayout>
           )
         }
@@ -106,13 +131,19 @@ export default function useRouteElements() {
       path: path.product,
       element: (
         <MainLayout>
-          <ProductDetail />
+          <Suspense>
+            <ProductDetail />
+          </Suspense>
         </MainLayout>
       )
     },
     {
       path: '*',
-      element: <NotFound />
+      element: (
+        <Suspense>
+          <NotFound />
+        </Suspense>
+      )
     }
   ])
 
