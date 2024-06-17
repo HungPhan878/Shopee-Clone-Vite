@@ -8,18 +8,25 @@ import HttpStatusCode from 'src/constants/HttpStatusCode.enum'
 import {
   clearLocalStorage,
   getAccessTokenFromLS,
+  getRefreshTokenFromLS,
   setAccessTokenFromLS,
-  setProfileFromLS
+  setProfileFromLS,
+  setRefreshTokenFromLS
 } from './auth'
 import { AuthResponsive } from 'src/types/auth.type'
 import config from 'src/constants/config'
+import { URL_LOGIN, URL_LOGOUT, URL_REGISTER } from 'src/apis/auth.api'
 
 export class Http {
   instance: AxiosInstance
-  private access_token: string
+  private accessToken: string
+  private refreshToken: string
+  private refreshTokenRequest: Promise<string> | null
   // funtion constructor chỉ chạy một lần duy nhất khi được render f5 lại thì sẽ chạy lại
   constructor() {
-    this.access_token = getAccessTokenFromLS()
+    this.accessToken = getAccessTokenFromLS()
+    this.refreshToken = getRefreshTokenFromLS()
+    this.refreshTokenRequest = null
     this.instance = axios.create({
       baseURL: config.baseURL,
       timeout: 10000,
@@ -30,8 +37,8 @@ export class Http {
 
     this.instance.interceptors.request.use(
       (config) => {
-        if (this.access_token && config.headers) {
-          config.headers.Authorization = this.access_token
+        if (this.accessToken && config.headers) {
+          config.headers.Authorization = this.accessToken
           return config
         }
         return config
@@ -45,13 +52,16 @@ export class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
-        if (url === '/login' || url === '/register') {
+        if (url === URL_LOGIN || url === URL_REGISTER) {
           const data = response.data as AuthResponsive
-          this.access_token = data.data.access_token
-          setAccessTokenFromLS(this.access_token)
+          this.accessToken = data.data.access_token
+          this.refreshToken = data.data.refresh_token
+          setAccessTokenFromLS(this.accessToken)
+          setRefreshTokenFromLS(this.refreshToken)
           setProfileFromLS(data.data.user)
-        } else if (url === '/logout') {
-          this.access_token = ''
+        } else if (url === URL_LOGOUT) {
+          this.accessToken = ''
+          this.refreshToken = ''
           clearLocalStorage()
         }
         return response
