@@ -3,7 +3,10 @@ import classNames from 'classnames/bind'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { produce } from 'immer'
 import { Fragment, useContext, useEffect, useMemo } from 'react'
-import { keyBy } from 'lodash'
+// lodash không có tree-shaking nên phải import rõ ràng như vậy
+//tree-shaking là import prop nào thì chỉ lấy ra prop đó thôi không lấy ra cả framework
+//visualizer chi duoc lay ra khi npm run build thoi nha
+import keyBy from 'lodash/keyBy'
 import { Flip, toast } from 'react-toastify'
 import { Link, useLocation } from 'react-router-dom'
 

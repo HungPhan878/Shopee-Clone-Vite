@@ -1,6 +1,6 @@
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { omit } from 'lodash'
+import omit from 'lodash/omit'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // components
