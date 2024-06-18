@@ -90,7 +90,7 @@ export default function NavHeader() {
                     </Link>
                   </li>
                   <li className={cx('ppv-info__item')}>
-                    <Link to='#' className={cx('ppv-info__link')}>
+                    <Link to={path.historyPurchases} className={cx('ppv-info__link')}>
                       đơn mua
                     </Link>
                   </li>
