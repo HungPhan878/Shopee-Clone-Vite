@@ -13,7 +13,7 @@ export const locales = {
   vi: 'Tiếng Việt'
 } as const
 
-const resources = {
+export const resources = {
   en: {
     home: HOME_EN,
     product: PRODUCT_EN
