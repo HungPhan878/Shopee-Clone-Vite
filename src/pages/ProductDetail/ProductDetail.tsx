@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
+import { useTranslation } from 'react-i18next'
 
 // scss
 import style from './ProductDetail.module.scss'
@@ -28,6 +29,7 @@ import path from 'src/constants/path'
 const cx = classNames.bind(style)
 
 export default function ProductDetail() {
+  const { t } = useTranslation(['product'])
   const { nameId } = useParams()
   const queryClient = useQueryClient()
   const id = getIdFromNameId(nameId as string)
@@ -49,7 +51,7 @@ export default function ProductDetail() {
     queryFn: () => productApi.getProductDetail(id as string)
   })
   const product = productDetail?.data?.data.data
-  
+
   const currentImages = useMemo(
     () => (product ? product.images.slice(...currentIndexImages) : []),
     [product, currentIndexImages]
@@ -298,7 +300,7 @@ export default function ProductDetail() {
 
                 <div className={cx('product-qty__number')}>
                   <span>{product.quantity}</span>
-                  <span>sản phẩm có sẵn</span>
+                  <span>{t('available product')}</span>
                 </div>
               </div>
 
@@ -349,7 +351,7 @@ export default function ProductDetail() {
                   </button>
 
                   <button className={cx('product-btn__buy-now')} onClick={handleBuyRightNow}>
-                    mua ngay
+                    {t('buy now')}
                   </button>
                 </div>
               </div>

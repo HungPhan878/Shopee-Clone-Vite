@@ -3,6 +3,7 @@ import classNames from 'classnames/bind'
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ObjectSchema } from 'yup'
+import { useTranslation } from 'react-i18next'
 
 // scss
 import style from './AsideFilter.module.scss'
@@ -35,6 +36,7 @@ const priceSchema = schema.pick(['price_min', 'price_max'])
 // th2: nếu chỉ có một giá trị min or max thì được(min or max !== '')
 
 export default function AsideFilter(props: Props) {
+  const { t } = useTranslation(['home']) //dùng ns nào thì khai báo cụ thể ra
   const { categories, queryConfig } = props
   const { category } = queryConfig
   const navigate = useNavigate()
@@ -96,7 +98,7 @@ export default function AsideFilter(props: Props) {
             </g>
           </g>
         </svg>
-        tất cả danh mục
+        {t('aside filter.all categories')}
       </Link>
 
       <div className={cx('aside-separate')}></div>
@@ -146,7 +148,7 @@ export default function AsideFilter(props: Props) {
             />
           </g>
         </svg>
-        bộ lọc tìm kiếm
+        {t('aside filter.filter search')}
       </div>
 
       <div className={cx('aside-filter__wrap')}>
