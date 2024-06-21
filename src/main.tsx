@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
+import { HelmetProvider } from 'react-helmet-async'
 import GlobalStyles from './Components/GlobalStyles/'
 import { BrowserRouter } from 'react-router-dom'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -23,14 +24,16 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <GlobalStyles>
       <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <AppProvider>
-            <ErrorBoundary>
-              <App />
-            </ErrorBoundary>
-          </AppProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        <HelmetProvider>
+          <QueryClientProvider client={queryClient}>
+            <AppProvider>
+              <ErrorBoundary>
+                <App />
+              </ErrorBoundary>
+            </AppProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </HelmetProvider>
       </BrowserRouter>
     </GlobalStyles>
   </React.StrictMode>

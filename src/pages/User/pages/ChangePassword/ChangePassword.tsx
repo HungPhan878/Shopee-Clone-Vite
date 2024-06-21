@@ -17,6 +17,7 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/util'
 import { useMutation } from '@tanstack/react-query'
 import userApi from 'src/apis/user.api'
 import omit from 'lodash/omit'
+import { Helmet } from 'react-helmet-async'
 
 const cx = classNames.bind(style)
 
@@ -69,6 +70,10 @@ export default function ChangePassword() {
 
   return (
     <div className={cx('password-wrap')}>
+      <Helmet>
+        <title>Shopee Clone | Đổi Mật Khẩu</title>
+        <meta name='description' content='Trang thay đổi mật khẩu bảo mật của bạn' />
+      </Helmet>
       <div className={cx('password-info')}>
         <h1 className={cx('password-info__heading')}>Đổi mật khẩu</h1>
         <p className={cx('password-info__desc')}>Quản lý thông tin mật khẩu của tài khoản</p>

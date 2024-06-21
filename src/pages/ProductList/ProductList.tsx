@@ -15,6 +15,7 @@ import Pagination from './Components/Pagination'
 import { ProductListConfig } from 'src/types/product.type'
 import categoriesApi from 'src/apis/category.api'
 import useQueryConfig from 'src/hooks/useQueryConfig'
+import { Helmet } from 'react-helmet-async'
 
 const cx = classNames.bind(style)
 
@@ -51,6 +52,11 @@ export default function ProductList() {
 
   return (
     <div>
+      <Helmet>
+        <title>Shopee Clone | Trang chủ</title>
+        <meta name='description' content='Trang chủ, trang danh sách của Shopee Clone' />
+      </Helmet>
+
       <section className={cx('product-slides__wrap')}>
         <div className='container'>
           <div className={cx('product-slides__inner')}>

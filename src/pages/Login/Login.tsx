@@ -19,6 +19,7 @@ import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/Components/Button'
 import path from 'src/constants/path'
+import { Helmet } from 'react-helmet-async'
 
 const cx = classNames.bind(style)
 
@@ -73,6 +74,10 @@ export default function Login() {
 
   return (
     <section className={cx('login')}>
+      <Helmet>
+        <title>Shopee Clone | Đăng Nhập</title>
+        <meta name='description' content='Trang đăng nhập của Shopee Clone.' />
+      </Helmet>
       <div className={cx('container', { 'login-container': true })}>
         <div className={cx('login-wrap')}>
           <div className='row'>

@@ -22,6 +22,7 @@ import { AppContext } from 'src/contexts/app.context'
 import { getAvatarName, isAxiosUnprocessableEntityError } from 'src/utils/util'
 import { ErrorResponsiveApi } from 'src/types/util.type'
 import InputFile from '../../Components/InputFile'
+import { Helmet } from 'react-helmet-async'
 
 type FormData = Pick<userType, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 type FormDataError = Omit<FormData, 'date_of_birth'> & {
@@ -45,6 +46,10 @@ function Info() {
   } = useFormContext<FormData>()
   return (
     <Fragment>
+      <Helmet>
+        <title>Shopee Clone | Thông tin cá nhân</title>
+        <meta name='description' content='Trang điền thông tin hoặc chỉnh sửa thông tin cá nhân của bạn' />
+      </Helmet>
       <div className={cx('profile-form__row')}>
         <label className={cx('profile-label')}>Tên</label>
         <div className={cx('profile-input__wrap')}>

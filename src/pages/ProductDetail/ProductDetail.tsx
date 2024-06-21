@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { useTranslation } from 'react-i18next'
+import { convert } from 'html-to-text'
 
 // scss
 import style from './ProductDetail.module.scss'
@@ -25,6 +26,7 @@ import purchasesApi from 'src/apis/purchases.api'
 import { purchasesStatus } from 'src/constants/purchases'
 import { toast } from 'react-toastify'
 import path from 'src/constants/path'
+import { Helmet } from 'react-helmet-async'
 
 const cx = classNames.bind(style)
 
@@ -179,6 +181,17 @@ export default function ProductDetail() {
 
   return (
     <section className={cx('product-wrap')}>
+      <Helmet>
+        <title>{product.name} | Shopee Clone</title>
+        <meta
+          name='description'
+          content={convert(product.description, {
+            limits: {
+              maxInputLength: 200
+            }
+          })}
+        />
+      </Helmet>
       <div className='container'>
         <div className={cx('product-inner')}>
           <div className={cx('row')}>

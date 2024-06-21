@@ -20,6 +20,7 @@ import { ErrorResponsiveApi } from 'src/types/util.type'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/Components/Button'
 import path from 'src/constants/path'
+import { Helmet } from 'react-helmet-async'
 
 const cx = classNames.bind(style)
 
@@ -88,6 +89,10 @@ export default function Register() {
 
   return (
     <section className={cx('register')}>
+      <Helmet>
+        <title>Shopee Clone | Đăng Ký</title>
+        <meta name='description' content='Trang đăng ký của Shopee Clone.' />
+      </Helmet>
       <div className={cx('container', { 'register-container': true })}>
         <div className={cx('register-wrap')}>
           <div className='row'>

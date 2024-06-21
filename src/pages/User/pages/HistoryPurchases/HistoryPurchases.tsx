@@ -14,6 +14,7 @@ import { purchasesStatus } from 'src/constants/purchases'
 import { PurchasesListStatus } from 'src/types/purchases.type'
 import { formatCurrency, generateNameId } from 'src/utils/util'
 import noCart from 'src/assets/images/no-cart.png'
+import { Helmet } from 'react-helmet-async'
 
 const cx = classNames.bind(style)
 const purchasesTabs = [
@@ -58,6 +59,14 @@ export default function HistoryPurchases() {
 
   return (
     <div>
+      <Helmet>
+        <title>Shopee Clone | Theo Dõi Đơn Hàng</title>
+        <meta
+          name='description'
+          content='Tra Cứu và theo dõi đơn hàng của bạn.'
+        />
+      </Helmet>
+
       <nav className={cx('purchases-nav__wrap')}>{purchasesSideNav()}</nav>
 
       <ul className={cx('purchases-list')}>
