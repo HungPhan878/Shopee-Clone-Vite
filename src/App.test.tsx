@@ -1,24 +1,21 @@
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable prettier/prettier */
-import { render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { screen, waitFor } from '@testing-library/react'
 import * as matchers from '@testing-library/jest-dom/matchers'
 import { expect, describe, test } from 'vitest'
 
 // components
-import App from './App'
-import { BrowserRouter, MemoryRouter } from 'react-router-dom'
+import path from './constants/path'
+import { renderWithRoute } from './utils/testUtils'
 // import { logScreen } from './utils/testUtils'
 
 expect.extend(matchers)
 
 describe('App', () => {
   test('render app và chuyển trang', async () => {
-    const user = userEvent.setup()
+    // const user = userEvent.setup()
 
-    render(<App />, {
-      wrapper: BrowserRouter
-    })
+    const { user } = renderWithRoute()
 
     // Verify Trang chủ
     await waitFor(() => {
@@ -36,11 +33,9 @@ describe('App', () => {
 
   test('Not found', async () => {
     const badRoute = '/some/bad/route'
-    render(
-      <MemoryRouter initialEntries={[badRoute]}>
-        <App />
-      </MemoryRouter>
-    )
+
+    renderWithRoute({ route: badRoute })
+
     // Verify trang not found
     await waitFor(() => {
       expect(screen.getByText('The stuff you were looking for does not exist')).toBeInTheDocument()
@@ -49,5 +44,17 @@ describe('App', () => {
     // screen.debug(document.body.parentElement as HTMLElement, 888888)
 
     // await logScreen()
+  })
+
+  test('Page Register', async () => {
+    renderWithRoute({ route: path.register })
+
+    // Verify trang register khi enter
+    await waitFor(() => {
+      expect(document.querySelector('title')?.textContent).toBe('Shopee Clone | Đăng Ký')
+      expect(screen.getByText('Bạn đã có tài khoản?')).toBeInTheDocument()
+    })
+
+    screen.debug(document.body.parentElement as HTMLElement, 888888)
   })
 })
