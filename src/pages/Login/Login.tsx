@@ -108,6 +108,7 @@ export default function Login() {
                     isLoading={loginMutation.isPending}
                     disabled={loginMutation.isPending}
                     className={cx('login-form__btn')}
+                    type='submit'
                   >
                     đăng nhập
                   </Button>
