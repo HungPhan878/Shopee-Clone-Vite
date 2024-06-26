@@ -1,8 +1,11 @@
 import { render, screen, waitFor, type waitForOptions } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
-import App from 'src/App'
 import { expect } from 'vitest'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+
+// components
+import App from 'src/App'
 
 const delay = (time: number) => {
   return new Promise((resolve) => {
@@ -31,6 +34,28 @@ export const logScreen = async (
   screen.debug(body, 888888)
 }
 
+// Cấu hình queryClient riêng cho unittest
+const createWrapper = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false
+      },
+      mutations: {
+        retry: false
+      }
+    }
+  })
+
+  const Provider = ({ children }: { children: React.ReactNode }) => {
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  }
+
+  return Provider
+}
+
+const Provider = createWrapper()
+
 export const renderWithRoute = ({ route = '/' } = {}) => {
   // Dùng MemoryRoute mới truyền path vào được thì có cách hai là
   // Dùng pushState vào là ok
@@ -38,6 +63,11 @@ export const renderWithRoute = ({ route = '/' } = {}) => {
 
   return {
     user: userEvent.setup(),
-    ...render(<App />, { wrapper: BrowserRouter })
+    ...render(
+      <Provider>
+        <App />
+      </Provider>,
+      { wrapper: BrowserRouter }
+    )
   }
 }

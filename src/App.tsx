@@ -5,22 +5,11 @@ import { HelmetProvider } from 'react-helmet-async'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import AppProvider from './contexts/app.context.tsx'
 import ErrorBoundary from './Components/ErrorBoundary/ErrorBoundary.tsx'
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 // components
 import useRouteElements from './hooks/useRouteElements'
 import { localStorageEvenTarget } from './utils/auth'
 import { AppContext } from './contexts/app.context'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      // để khi accessToken hết hạn không call api quá nhiều lần
-      retry: 0
-    }
-  }
-})
 
 function App() {
   const routeElements = useRouteElements()
@@ -37,15 +26,13 @@ function App() {
 
   return (
     <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <AppProvider>
-          <ErrorBoundary>
-            {routeElements}
-            <ToastContainer />
-          </ErrorBoundary>
-        </AppProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <AppProvider>
+        <ErrorBoundary>
+          {routeElements}
+          <ToastContainer />
+        </ErrorBoundary>
+      </AppProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </HelmetProvider>
   )
 }

@@ -3,7 +3,7 @@ import * as matchers from '@testing-library/jest-dom/matchers'
 import { expect, describe, test, beforeAll } from 'vitest'
 
 // components
-import { renderWithRoute } from 'src/utils/testUtils'
+import { logScreen, renderWithRoute } from 'src/utils/testUtils'
 import path from 'src/constants/path'
 
 expect.extend(matchers)
@@ -43,13 +43,40 @@ describe('Login', () => {
       }
     })
     fireEvent.submit(submitForm)
-    // await logScreen()
     // Khi tìm text xác định không có thì nên dùng query
     // Vì khi không tìm thấy thì query chỉ trả về null không gây lỗi
     // Còn find và get sẽ báo lỗi
+    // Và query thì không có trả về promise nên không dùng await thì phải có
+    // waitFor để log ra kịp nha
+    // Khi test api nen dung mock service worker to khong anh huong den api chinh nha.
     await waitFor(() => {
       expect(screen.queryByText('Nhập email không đúng')).toBeTruthy()
       expect(screen.queryByText('Vui lòng nhập không dưới 6 kí tự')).toBeTruthy()
     })
+  })
+
+  test('Không hiển thị lỗi khi nhập value đúng', async () => {
+    fireEvent.input(emailForm, {
+      target: {
+        value: 'hungphan@gmail.com'
+      }
+    })
+    fireEvent.input(passwordForm, {
+      target: {
+        value: '789789789'
+      }
+    })
+    await waitFor(() => {
+      expect(screen.queryByText('Nhập email không đúng')).toBeFalsy()
+      expect(screen.queryByText('Vui lòng nhập không dưới 6 kí tự')).toBeFalsy()
+    })
+
+    fireEvent.submit(submitForm)
+
+    await waitFor(() => {
+      expect(document.querySelector('title')?.textContent).toBe('Shopee Clone | Trang chủ')
+    })
+
+    await logScreen()
   })
 })
