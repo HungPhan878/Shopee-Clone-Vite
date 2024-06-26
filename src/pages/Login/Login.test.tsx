@@ -1,6 +1,6 @@
-import { screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import * as matchers from '@testing-library/jest-dom/matchers'
-import { expect, describe, test } from 'vitest'
+import { expect, describe, test, beforeAll } from 'vitest'
 
 // components
 import { renderWithRoute } from 'src/utils/testUtils'
@@ -9,26 +9,47 @@ import path from 'src/constants/path'
 expect.extend(matchers)
 
 describe('Login', () => {
-  test('Hiển thị lỗi required when do not enter form', async () => {
-    const { user } = renderWithRoute({ route: path.login })
+  let submitForm: HTMLButtonElement
+  let emailForm: HTMLInputElement
+  let passwordForm: HTMLInputElement
 
-    // Hàm waiFor
-    // + Ngưng khi hết time out or expect pass
-    // + Đối số thứ 2 là một {timeout, interval}
-    // + Default timeout = 1000ms, interval = 50ms
-    // + Hàm expect sau mỗi 50ms sẽ chạy cho đến khi trả về true or hết timout
-    // + Trả về một promise nên dùng await
-
+  beforeAll(async () => {
+    renderWithRoute({ route: path.login })
     await waitFor(() => {
       expect(screen.queryByPlaceholderText('Email/Số điện thoại/Tên đăng nhập')).toBeInTheDocument()
-    })
 
-    const submitForm = document.querySelector('form button[type="submit"]') as Element
-    user.click(submitForm)
+      submitForm = document.querySelector('form button[type="submit"]') as HTMLButtonElement
+      emailForm = document.querySelector('form input[type="email"]') as HTMLInputElement
+      passwordForm = document.querySelector('form input[type="password"]') as HTMLInputElement
+    })
+  })
+
+  test('Hiển thị lỗi required when do not enter form', async () => {
+    fireEvent.submit(submitForm)
 
     expect(await screen.findByText('Vui lòng điền email')).toBeTruthy()
     expect(await screen.findByText('Vui lòng điền password')).toBeTruthy()
+  })
 
-    // await logScreen() : Dùng để debug có render ra được hay không
+  test('Hiển thị lỗi không đúng định dạng trên form', async () => {
+    fireEvent.input(emailForm, {
+      target: {
+        value: 'hung@'
+      }
+    })
+    fireEvent.input(passwordForm, {
+      target: {
+        value: '132'
+      }
+    })
+    fireEvent.submit(submitForm)
+    // await logScreen()
+    // Khi tìm text xác định không có thì nên dùng query
+    // Vì khi không tìm thấy thì query chỉ trả về null không gây lỗi
+    // Còn find và get sẽ báo lỗi
+    await waitFor(() => {
+      expect(screen.queryByText('Nhập email không đúng')).toBeTruthy()
+      expect(screen.queryByText('Vui lòng nhập không dưới 6 kí tự')).toBeTruthy()
+    })
   })
 })
