@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { Http } from '../http'
 import HttpStatusCode from 'src/constants/HttpStatusCode.enum'
 import { setAccessTokenFromLS, setRefreshTokenFromLS } from '../auth'
+import { access_token_1s, refresh_token_1000000 } from 'src/msw/auth.msw'
 
 //Note:
 //Khi test api
@@ -14,11 +15,6 @@ describe('http axios', () => {
     localStorage.clear()
     http = new Http().instance
   })
-
-  const access_token_1s =
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGRmYWU3YTcxYTZjMDI5ZGVjMzI1YiIsImVtYWlsIjoiaHVuZ3BoYW5AZ21haWwuY29tIiwicm9sZXMiOlsiVXNlciJdLCJjcmVhdGVkX2F0IjoiMjAyNC0wNi0yMlQxMzozMzo0MC44NjVaIiwiaWF0IjoxNzE5MDYzMjIwLCJleHAiOjE3MTkwNjMyMjF9.3r2eE0XL7sAy1_nRjyqPjJCr07IlcyrFJRrCwuZZn34'
-  const refresh_token_1000000 =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGRmYWU3YTcxYTZjMDI5ZGVjMzI1YiIsImVtYWlsIjoiaHVuZ3BoYW5AZ21haWwuY29tIiwicm9sZXMiOlsiVXNlciJdLCJjcmVhdGVkX2F0IjoiMjAyNC0wNi0yMlQxMzo1NDo0Ny4wODFaIiwiaWF0IjoxNzE5MDY0NDg3LCJleHAiOjE3MjkwNjQ0ODd9.vRmVUZJYS7DcSInMCur7wqi9U7Ohd_X4Y0xnRgFJuoc'
 
   it('Call api and get product', async () => {
     //Dùng async await ở đây để giải quyết quy tắc bất đồng bộ
