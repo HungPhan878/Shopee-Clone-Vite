@@ -5,6 +5,7 @@ import GlobalStyles from './Components/GlobalStyles/'
 import { BrowserRouter } from 'react-router-dom'
 import 'src/i18n/i18n'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import AppProvider from './contexts/app.context.tsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,7 +22,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <GlobalStyles>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-          <App />
+          <AppProvider>
+            <App />
+          </AppProvider>
         </QueryClientProvider>
       </BrowserRouter>
     </GlobalStyles>

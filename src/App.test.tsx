@@ -1,15 +1,12 @@
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable prettier/prettier */
 import { screen, waitFor } from '@testing-library/react'
-import * as matchers from '@testing-library/jest-dom/matchers'
 import { expect, describe, test } from 'vitest'
 
 // components
 import path from './constants/path'
 import { renderWithRoute } from './utils/testUtils'
 // import { logScreen } from './utils/testUtils'
-
-expect.extend(matchers)
 
 describe('App', () => {
   test('render app và chuyển trang', async () => {

@@ -6,6 +6,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 // components
 import App from 'src/App'
+import AppProvider, { getDefaultValueContext } from 'src/contexts/app.context'
 
 const delay = (time: number) => {
   return new Promise((resolve) => {
@@ -60,12 +61,15 @@ export const renderWithRoute = ({ route = '/' } = {}) => {
   // Dùng MemoryRoute mới truyền path vào được thì có cách hai là
   // Dùng pushState vào là ok
   window.history.pushState({}, 'Test page', route)
+  const valueContext = getDefaultValueContext()
 
   return {
     user: userEvent.setup(),
     ...render(
       <Provider>
-        <App />
+        <AppProvider defaultValue={valueContext}>
+          <App />
+        </AppProvider>
       </Provider>,
       { wrapper: BrowserRouter }
     )

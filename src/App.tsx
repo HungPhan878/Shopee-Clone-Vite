@@ -3,7 +3,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import { useContext, useEffect } from 'react'
 import { HelmetProvider } from 'react-helmet-async'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import AppProvider from './contexts/app.context.tsx'
 import ErrorBoundary from './Components/ErrorBoundary/ErrorBoundary.tsx'
 
 // components
@@ -26,12 +25,10 @@ function App() {
 
   return (
     <HelmetProvider>
-      <AppProvider>
-        <ErrorBoundary>
-          {routeElements}
-          <ToastContainer />
-        </ErrorBoundary>
-      </AppProvider>
+      <ErrorBoundary>
+        {routeElements}
+        <ToastContainer />
+      </ErrorBoundary>
       <ReactQueryDevtools initialIsOpen={false} />
     </HelmetProvider>
   )

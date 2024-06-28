@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable prettier/prettier */
 import { createContext, useState } from 'react'
 import { ExtendedPurchases } from 'src/types/purchases.type'
@@ -14,7 +15,7 @@ interface AppContextInterface {
   reset: () => void
 }
 
-const initialAppContext: AppContextInterface = {
+export const getDefaultValueContext: () => AppContextInterface = () => ({
   isAuthenticated: Boolean(getAccessTokenFromLS()),
   setAuthenticated: () => null,
   profile: getProfileFromLS(),
@@ -22,17 +23,26 @@ const initialAppContext: AppContextInterface = {
   extendedPurchases: [],
   setExtendedPurchases: () => null,
   reset: () => null
-}
+})
+
+const initialAppContext: AppContextInterface = getDefaultValueContext()
 
 export const AppContext = createContext<AppContextInterface>(initialAppContext)
 
-function AppProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
-  const [profile, setProfile] = useState<User | null>(initialAppContext.profile)
+function AppProvider({
+  children,
+  defaultValue = initialAppContext
+}: {
+  children: React.ReactNode
+  defaultValue?: AppContextInterface
+}) {
+  const [isAuthenticated, setAuthenticated] = useState<boolean>(defaultValue.isAuthenticated)
+  const [profile, setProfile] = useState<User | null>(defaultValue.profile)
   const [extendedPurchases, setExtendedPurchases] = useState<ExtendedPurchases[]>(
-    initialAppContext.extendedPurchases
+    defaultValue.extendedPurchases
   )
   // Tạo f để lấy ra ba set cho tiện
+  // Khi co ts thi nen gan ? in ts
   const reset = () => {
     setAuthenticated(false)
     setProfile(null)

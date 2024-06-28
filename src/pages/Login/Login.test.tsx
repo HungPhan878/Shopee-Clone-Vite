@@ -1,12 +1,12 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react'
-import * as matchers from '@testing-library/jest-dom/matchers'
+
 import { expect, describe, test, beforeAll } from 'vitest'
 
 // components
 import { logScreen, renderWithRoute } from 'src/utils/testUtils'
 import path from 'src/constants/path'
 
-expect.extend(matchers)
+
 
 describe('Login', () => {
   let submitForm: HTMLButtonElement
