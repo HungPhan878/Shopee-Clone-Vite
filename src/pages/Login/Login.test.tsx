@@ -3,10 +3,8 @@ import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { expect, describe, test, beforeAll } from 'vitest'
 
 // components
-import { logScreen, renderWithRoute } from 'src/utils/testUtils'
+import {  renderWithRoute } from 'src/utils/testUtils'
 import path from 'src/constants/path'
-
-
 
 describe('Login', () => {
   let submitForm: HTMLButtonElement
@@ -76,7 +74,5 @@ describe('Login', () => {
     await waitFor(() => {
       expect(document.querySelector('title')?.textContent).toBe('Shopee Clone | Trang chủ')
     })
-
-    await logScreen()
   })
 })
