@@ -3,7 +3,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { expect, describe, test, beforeAll } from 'vitest'
 
 // components
-import {  renderWithRoute } from 'src/utils/testUtils'
+import { renderWithRoute } from 'src/utils/testUtils'
 import path from 'src/constants/path'
 
 describe('Login', () => {

@@ -1,7 +1,6 @@
-import { render, screen, waitFor, type waitForOptions } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
-import { expect } from 'vitest'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 // components

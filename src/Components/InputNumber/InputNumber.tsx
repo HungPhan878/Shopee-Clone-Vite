@@ -17,7 +17,7 @@ export interface InputNumberProps extends InputHTMLAttributes<HTMLInputElement> 
 
 // eslint-disable-next-line prettier/prettier
 const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(function InputNumber(
-  { className, classNameInput, classNameError, errorMessage, value = '', onChange, ...rest },
+  { className, classNameInput, classNameError, errorMessage, value, onChange, ...rest },
   ref
 ) {
   const newClassName = className
@@ -43,7 +43,7 @@ const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(function Inpu
         className={newClassInput}
         {...rest}
         onChange={handleChange}
-        value={value || localValue}
+        value={value === undefined ? localValue : value}
         ref={ref}
       />
       <p className={newClassError}>{errorMessage}</p>
