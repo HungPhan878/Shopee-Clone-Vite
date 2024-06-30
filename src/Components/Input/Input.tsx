@@ -5,23 +5,24 @@ import classNames from 'classnames/bind'
 
 //scss
 import style from './Input.module.scss'
-import { RegisterOptions, UseFormRegister } from 'react-hook-form'
+import { FieldPath, FieldValues, RegisterOptions, UseFormRegister } from 'react-hook-form'
 import { InputHTMLAttributes, useState } from 'react'
 
 const cx = classNames.bind(style)
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+interface Props<TFieldValues extends FieldValues = FieldValues>
+  extends InputHTMLAttributes<HTMLInputElement> {
   rules?: RegisterOptions
-  register?: UseFormRegister<any>
+  register?: UseFormRegister<TFieldValues>
   errorMessage?: string
-  name?: string
+  name?: FieldPath<TFieldValues>
   classNameInput?: string
   classNameError?: string
   classNameEye?: string
 }
 
 // eslint-disable-next-line prettier/prettier
-export default function Input({
+export default function Input<TFieldValues extends FieldValues>({
   className,
   classNameInput,
   classNameError,
@@ -31,7 +32,7 @@ export default function Input({
   register,
   errorMessage,
   ...rest
-}: Props) {
+}: Props<TFieldValues>) {
   const [openEye, setOpenEye] = useState(false)
   const registerResult = register && name ? register(name, rules) : null
   const newClassName = className ? cx(className, 'input-form__wrap') : cx('input-form__wrap')
