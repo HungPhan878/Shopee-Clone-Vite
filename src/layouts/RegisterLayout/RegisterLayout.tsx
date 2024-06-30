@@ -1,17 +1,26 @@
 // components
+import { memo } from 'react'
+import { Outlet } from 'react-router-dom'
 import Footer from 'src/Components/Footer'
 import RegisterHeader from 'src/Components/RegisterHeader'
 
 interface Props {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
-export default function RegisterLayout({ children }: Props) {
+function RegisterLayoutInner({ children }: Props) {
   return (
     <div>
       <RegisterHeader />
-      <main>{children}</main>
+      <main>
+        {children}
+        <Outlet />
+      </main>
       <Footer />
     </div>
   )
 }
+
+const RegisterLayout = memo(RegisterLayoutInner)
+
+export default RegisterLayout

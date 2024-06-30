@@ -38,18 +38,38 @@ function RejectedRoute() {
   return !isAuthenticated ? <Outlet /> : <Navigate to={path.home} />
 }
 
+// Note: Tối ưu trong react router dom
+//+Khi sử dụng memo cho Component để kt xem prop có thay đổi không để re-render lại
+// component thì dùng outlet mới không bị ảnh hưởng, dùng children vẫn bị vì
+// children là props của component đó
+//+Lưu ý là <Outlet /> nên đặt ngay trong component `element` thì mới có tác dụng tối ưu
+//+Chứ không phải đặt bên trong children của component `element`
+//+Sử dụng memo và cả outlet thì mới không bị re-render nếu outlet bên trong thây đổi nha.
+
 export default function useRouteElements() {
   const routeElements = useRoutes([
     {
-      path: path.home,
-      index: true,
-      element: (
-        <MainLayout>
-          <Suspense>
-            <ProductList />
-          </Suspense>
-        </MainLayout>
-      )
+      path: '',
+      element: <MainLayout />,
+      children: [
+        {
+          path: path.home,
+          index: true,
+          element: (
+            <Suspense>
+              <ProductList />
+            </Suspense>
+          )
+        },
+        {
+          path: path.product,
+          element: (
+            <Suspense>
+              <ProductDetail />
+            </Suspense>
+          )
+        }
+      ]
     },
     {
       path: '',
@@ -57,35 +77,37 @@ export default function useRouteElements() {
       children: [
         {
           path: path.user,
-          element: (
-            <MainLayout>
-              <UserLayout />
-            </MainLayout>
-          ),
+          element: <MainLayout />,
           children: [
             {
-              path: path.profile,
-              element: (
-                <Suspense>
-                  <Profile />
-                </Suspense>
-              )
-            },
-            {
-              path: path.changePassword,
-              element: (
-                <Suspense>
-                  <ChangePassword />
-                </Suspense>
-              )
-            },
-            {
-              path: path.historyPurchases,
-              element: (
-                <Suspense>
-                  <HistoryPurchases />
-                </Suspense>
-              )
+              path: '',
+              element: <UserLayout />,
+              children: [
+                {
+                  path: path.profile,
+                  element: (
+                    <Suspense>
+                      <Profile />
+                    </Suspense>
+                  )
+                },
+                {
+                  path: path.changePassword,
+                  element: (
+                    <Suspense>
+                      <ChangePassword />
+                    </Suspense>
+                  )
+                },
+                {
+                  path: path.historyPurchases,
+                  element: (
+                    <Suspense>
+                      <HistoryPurchases />
+                    </Suspense>
+                  )
+                }
+              ]
             }
           ]
         },
@@ -106,36 +128,28 @@ export default function useRouteElements() {
       element: <RejectedRoute />,
       children: [
         {
-          path: path.login,
-          element: (
-            <RegisterLayout>
-              <Suspense>
-                <Login />
-              </Suspense>
-            </RegisterLayout>
-          )
-        },
-        {
-          path: path.register,
-          element: (
-            <RegisterLayout>
-              <Suspense>
-                <Register />
-              </Suspense>
-            </RegisterLayout>
-          )
+          path: '',
+          element: <RegisterLayout />,
+          children: [
+            {
+              path: path.login,
+              element: (
+                <Suspense>
+                  <Login />
+                </Suspense>
+              )
+            },
+            {
+              path: path.register,
+              element: (
+                <Suspense>
+                  <Register />
+                </Suspense>
+              )
+            }
+          ]
         }
       ]
-    },
-    {
-      path: path.product,
-      element: (
-        <MainLayout>
-          <Suspense>
-            <ProductDetail />
-          </Suspense>
-        </MainLayout>
-      )
     },
     {
       path: '*',

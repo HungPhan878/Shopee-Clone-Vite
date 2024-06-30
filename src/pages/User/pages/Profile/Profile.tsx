@@ -48,7 +48,10 @@ function Info() {
     <Fragment>
       <Helmet>
         <title>Shopee Clone | Thông tin cá nhân</title>
-        <meta name='description' content='Trang điền thông tin hoặc chỉnh sửa thông tin cá nhân của bạn' />
+        <meta
+          name='description'
+          content='Trang điền thông tin hoặc chỉnh sửa thông tin cá nhân của bạn'
+        />
       </Helmet>
       <div className={cx('profile-form__row')}>
         <label className={cx('profile-label')}>Tên</label>

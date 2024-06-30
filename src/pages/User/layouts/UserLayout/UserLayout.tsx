@@ -6,10 +6,11 @@ import style from './UserLayout.module.scss'
 
 // components
 import UserSideNav from '../../Components/UserSideNav'
+import { memo } from 'react'
 
 const cx = classNames.bind(style)
 
-export default function UserLayout() {
+function UserLayoutInner() {
   return (
     <main className={cx('wrapper')}>
       <div className='container'>
@@ -25,3 +26,7 @@ export default function UserLayout() {
     </main>
   )
 }
+
+const UserLayout = memo(UserLayoutInner)
+
+export default UserLayout
