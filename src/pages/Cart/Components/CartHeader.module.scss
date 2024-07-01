@@ -1,3 +1,5 @@
+@use 'src/Components/GlobalStyles/abstracts';
+
 .header {
   &-wrapper {
     border-bottom-color: #0000001a;
@@ -28,6 +30,16 @@
     height: 42px;
     width: 128px;
     fill: var(--primary-color);
+
+    @include abstracts.breakpoint(lg) {
+      width: 140px;
+      height: 35px;
+    }
+
+    @include abstracts.breakpoint(md) {
+      width: 120px;
+      height: 30px;
+    }
   }
 
   &-bottom__separate {
@@ -43,12 +55,28 @@
     font-size: 2rem;
     line-height: 2.8rem;
     color: var(--primary-color);
+    @include abstracts.breakpoint(lg) {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    @include abstracts.breakpoint(md) {
+      font-size: 1.4rem;
+    }
   }
 
   &-search {
     margin-left: auto;
     margin-top: 0;
     width: 66.8%;
+
+    @include abstracts.breakpoint(lg) {
+      width: 100%;
+    }
+
+    @include abstracts.breakpoint(md) {
+      width: 100%;
+    }
   }
 
   &-search__input-wrapper {

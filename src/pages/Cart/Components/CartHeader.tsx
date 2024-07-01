@@ -27,7 +27,7 @@ export default function CartHeader() {
       <div className={cx('header-bottom')}>
         <div className='container'>
           <nav className={cx('row', 'header-bottom__row')}>
-            <div className='col-3'>
+            <div className='col-3 col-xl-4 col-lg-5 col-md-12'>
               <Link to='/' className={cx('header-bottom__link')}>
                 <svg viewBox='0 0 192 65' className={cx('header-logo')}>
                   <g fillRule='evenodd'>
@@ -40,7 +40,7 @@ export default function CartHeader() {
             </div>
 
             {/* search bar */}
-            <div className='col-9'>
+            <div className='col-9 col-xl-8 col-lg-7 col-md-12 gy-md-2'>
               <form role='search' className={cx('header-search')} onSubmit={handleSubmitSearch}>
                 <div className={cx('header-search__input-wrapper')}>
                   <input

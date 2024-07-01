@@ -195,7 +195,7 @@ export default function ProductDetail() {
       <div className='container'>
         <div className={cx('product-inner')}>
           <div className={cx('row')}>
-            <div className='col-5'>
+            <div className='col-5 col-md-12'>
               <figure
                 className={cx('product-image__inner')}
                 onMouseMove={handleZoom}
@@ -256,7 +256,7 @@ export default function ProductDetail() {
                 </button>
               </div>
             </div>
-            <div className='col-7'>
+            <div className='col-7 col-md-12 gy-md-2'>
               <h1 className={cx('product-heading')}>{product.name}</h1>
 
               <div className={cx('product-row')}>
@@ -389,7 +389,7 @@ export default function ProductDetail() {
         <div className={cx('mt-8')}>
           <p className={cx('product-list__title')}>CÓ THỂ BẠN CŨNG THÍCH</p>
           {products && (
-            <div className='row row-cols-6 row-cols-xxl-5 gy-1 gx-1'>
+            <div className='row row-cols-6 row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 gy-1 gx-1'>
               {/* tạo ra một mảng 30 phần tử nhưng empty thì phải cho fill vào để đổ đầy giá trị là 0 
                   và dùng index để render ra */}
               {products.products.map((product) => (
