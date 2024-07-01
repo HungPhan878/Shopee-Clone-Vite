@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import './button.css';
 
 interface ButtonProps {

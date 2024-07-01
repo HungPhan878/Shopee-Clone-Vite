@@ -1,3 +1,5 @@
+@use 'src/Components/GlobalStyles/abstracts';
+
 .product-list {
   &__wrap {
     padding: 24px 0;
@@ -16,6 +18,9 @@
   }
 
   &__inner {
+    @include abstracts.breakpoint(md) {
+      margin-top: 12px;
+    }
   }
 
   &__img {

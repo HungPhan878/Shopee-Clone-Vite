@@ -16,6 +16,8 @@ import { ProductListConfig } from 'src/types/product.type'
 import categoriesApi from 'src/apis/category.api'
 import useQueryConfig from 'src/hooks/useQueryConfig'
 import { Helmet } from 'react-helmet-async'
+import SearchBar from 'src/Components/SearchBar'
+import useSearchProducts from 'src/hooks/useSearchProducts'
 
 const cx = classNames.bind(style)
 
@@ -28,6 +30,7 @@ const slides = [
 
 export default function ProductList() {
   const queryConfig = useQueryConfig()
+  const { register, handleSubmitSearch } = useSearchProducts()
 
   //Get Products
   const getProducts = useQuery({
@@ -58,6 +61,10 @@ export default function ProductList() {
       </Helmet>
 
       <section className={cx('product-slides__wrap')}>
+        <div className='container d-none d-md-block'>
+          <SearchBar register={register} handleSubmitSearch={handleSubmitSearch} />
+        </div>
+
         <div className='container'>
           <div className={cx('product-slides__inner')}>
             <Carousel autoSlides={true}>
@@ -72,18 +79,18 @@ export default function ProductList() {
       <div className={cx('product-list__wrap')}>
         <div className='container'>
           <div className='row'>
-            <div className='col col-3'>
+            <div className='col col-3 d-md-none'>
               <AsideFilter categories={categories || []} queryConfig={queryConfig} />
             </div>
             {products && (
-              <div className='col col-9'>
+              <div className='col col-9 col-md-12'>
                 <SortProductList
                   queryConfig={queryConfig}
                   pageSize={products.pagination.page_size}
                 />
 
                 <div className={cx('product-list__products')}>
-                  <div className='row row-cols-5 row-cols-xxl-4 gy-1 gx-1'>
+                  <div className='row row-cols-5 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-1 gy-1 gx-1'>
                     {/* tạo ra một mảng 30 phần tử nhưng empty thì phải cho fill vào để đổ đầy giá trị là 0 
                   và dùng index để render ra */}
                     {products.products.map((product) => (

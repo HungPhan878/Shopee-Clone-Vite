@@ -1,3 +1,5 @@
+@use 'src/Components/GlobalStyles/abstracts';
+
 .sort {
   &__wrap {
     padding: 16px 12px;
@@ -16,6 +18,12 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
+
+    &--mt-8 {
+      @include abstracts.breakpoint(lg) {
+        margin-top: 8px;
+      }
+    }
   }
 
   &__label {

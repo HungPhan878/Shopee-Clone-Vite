@@ -98,7 +98,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
           </select>
         </div>
 
-        <div className={cx('sort__row')}>
+        <div className={cx('sort__row', 'sort__row--mt-8')}>
           <div className={cx('sort__name-page')}>
             <span className={cx('sort__name-page-current')}>{page}</span>/{pageSize}
           </div>

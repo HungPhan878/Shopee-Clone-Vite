@@ -18,6 +18,7 @@ import { formatCurrency, generateNameId } from 'src/utils/util'
 import noProduct from 'src/assets/images/no-product.png'
 import NavHeader from '../NavHeader'
 import useSearchProducts from 'src/hooks/useSearchProducts'
+import SearchBar from '../SearchBar'
 
 const MAX_PURCHASES = 5
 const cx = classNames.bind(style)
@@ -51,7 +52,7 @@ export default function Header() {
         {/* header bottom */}
         <div className={cx('header-bottom')}>
           <div className={cx('row', 'header-bottom__row')}>
-            <div className='col-2'>
+            <div className='col-2 col-lg-3 col-md-10'>
               <Link to='/'>
                 <svg viewBox='0 0 192 65' className={cx('header-logo')}>
                   <g fillRule='evenodd'>
@@ -61,33 +62,10 @@ export default function Header() {
               </Link>
             </div>
             {/* search bar */}
-            <div className='col-9'>
-              <form role='search' className={cx('header-search')} onSubmit={handleSubmitSearch}>
-                <input
-                  type='text'
-                  placeholder='ADIAS SĂN VOUCHER 1.000.000Đ'
-                  className={cx('header-search__input')}
-                  {...register('name')}
-                />
-                <button className={cx('header-search__btn')} type='submit'>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth={1.5}
-                    stroke='currentColor'
-                    className={cx('header-search__icon')}
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
-                    />
-                  </svg>
-                </button>
-              </form>
+            <div className='col-9 col-lg-7 d-md-none'>
+              <SearchBar handleSubmitSearch={handleSubmitSearch} register={register} />
             </div>
-            <div className='col-1'>
+            <div className='col-1 col-lg-2 col-md-2'>
               {/* cart */}
               <Popover
                 className={cx('header-cart__inner')}
