@@ -209,7 +209,7 @@
     font-size: 3rem;
 
     @include abstracts.breakpoint(md) {
-      font-size: 2rem;
+      font-size: 1.8rem;
     }
   }
 
@@ -233,6 +233,7 @@
 
   &-qty__wrap {
     margin-left: 40px;
+    margin-right: 4px;
   }
 
   &-qty__number {
@@ -244,7 +245,7 @@
     font-size: 1.4rem;
     line-height: 2rem;
 
-    @include abstracts.breakpoint(md) {
+    @include abstracts.breakpoint(sm) {
       margin-top: 8px;
       margin-left: 0;
     }
