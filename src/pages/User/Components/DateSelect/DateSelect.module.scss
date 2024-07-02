@@ -1,8 +1,16 @@
+@use 'src/Components/GlobalStyles/abstracts';
+
 .date {
   &-form__row {
     margin-top: 8px;
     display: flex;
     gap: 20px;
+
+    @include abstracts.breakpoint(sm) {
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 0;
+    }
   }
 
   &-label {
@@ -15,10 +23,27 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    @include abstracts.breakpoint(lg) {
+      width: 30%;
+    }
+
+    @include abstracts.breakpoint(sm) {
+      width: 100%;
+      text-align: left;
+    }
   }
 
   &-input__wrap {
     width: 80%;
+
+    @include abstracts.breakpoint(lg) {
+      width: 70%;
+    }
+
+    @include abstracts.breakpoint(sm) {
+      width: 100%;
+    }
   }
 
   &-input__msg {

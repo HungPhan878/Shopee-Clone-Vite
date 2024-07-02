@@ -18,7 +18,7 @@ function UserLayoutInner() {
           <div className='col col-2 col-lg-3 col-md-12'>
             <UserSideNav />
           </div>
-          <div className='col col-10 col-lg-9 col-md-12'>
+          <div className='col col-10 col-lg-9 col-md-12 gy-md-3'>
             <Outlet />
           </div>
         </div>

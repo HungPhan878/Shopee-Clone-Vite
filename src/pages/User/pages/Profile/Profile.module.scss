@@ -1,6 +1,8 @@
+@use 'src/Components/GlobalStyles/abstracts';
+
 // common
 .mb-0 {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 
 .profile {
@@ -49,6 +51,18 @@
     margin-top: 8px;
     display: flex;
     gap: 20px;
+
+    @include abstracts.breakpoint(sm) {
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 0;
+    }
+
+    &--reverse {
+      @include abstracts.breakpoint(lg) {
+        flex-direction: column-reverse;
+      }
+    }
   }
 
   &-label {
@@ -61,15 +75,46 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    @include abstracts.breakpoint(xl) {
+      width: 25%;
+    }
+
+    @include abstracts.breakpoint(lg) {
+      width: 30%;
+    }
+
+    @include abstracts.breakpoint(sm) {
+      width: 100%;
+      padding-top: 0;
+      text-align: left;
+    }
   }
 
   &-email {
     padding-top: 12px;
     color: rgb(55 65 81);
+
+    @include abstracts.breakpoint(sm) {
+      padding-top: 0;
+      padding-bottom: 12px;
+    }
   }
 
   &-input__wrap {
     width: 80%;
+
+    @include abstracts.breakpoint(xl) {
+      width: 75%;
+    }
+
+    @include abstracts.breakpoint(lg) {
+      width: 70%;
+    }
+
+    @include abstracts.breakpoint(sm) {
+      width: 100%;
+    }
   }
 
   &-input__inner {
@@ -108,6 +153,15 @@
   &-btn__wrap {
     padding-left: 16px;
     margin-left: 20%;
+
+    @include abstracts.breakpoint(lg) {
+      margin-left: 30%;
+    }
+
+    @include abstracts.breakpoint(sm) {
+      padding-top: 15px;
+      margin: 0 15%;
+    }
   }
 
   &-btn__submit {
@@ -138,6 +192,10 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
+    @include abstracts.breakpoint(lg) {
+      border-left-color: transparent;
+    }
   }
 
   &-image__wrap {

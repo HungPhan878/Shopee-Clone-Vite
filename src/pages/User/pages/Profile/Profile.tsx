@@ -211,8 +211,8 @@ export default function Profile() {
 
       <FormProvider {...methods}>
         <form className={cx('profile-form')} onSubmit={onSubmit}>
-          <div className='row'>
-            <div className='col col-8'>
+          <div className={cx('row', 'profile-form__row--reverse')}>
+            <div className='col col-8 col-lg-12'>
               <div className={cx('profile-form__info')}>
                 <div className={cx('profile-form__row')}>
                   <label className={cx('profile-label')}>Email</label>
@@ -263,7 +263,7 @@ export default function Profile() {
               </div>
             </div>
 
-            <div className='col col-4'>
+            <div className='col col-4 col-lg-12'>
               <div className={cx('profile-form__image')}>
                 <div className={cx('profile-image__wrap')}>
                   <img
