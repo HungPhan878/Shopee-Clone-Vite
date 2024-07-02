@@ -94,7 +94,7 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
   return (
     <div className={cx('pgt-wrapper')}>
       {pageCurr === 1 ? (
-        <span className={cx('pgt-btn', 'pgt-btn--disable')}>prev</span>
+        <span className={cx('pgt-btn', 'pgt-btn--disable', 'd-sm-none')}>prev</span>
       ) : (
         <Link
           to={{
@@ -104,14 +104,14 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
               page: (pageCurr - 1).toString()
             }).toString()
           }}
-          className={cx('pgt-btn')}
+          className={cx('pgt-btn', 'd-sm-none')}
         >
           prev
         </Link>
       )}
       {renderPagination()}
       {pageCurr === pageSize ? (
-        <span className={cx('pgt-btn', 'pgt-btn--disable')}>next</span>
+        <span className={cx('pgt-btn', 'pgt-btn--disable', 'd-sm-none')}>next</span>
       ) : (
         <Link
           to={{
@@ -121,7 +121,7 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
               page: (pageCurr + 1).toString()
             }).toString()
           }}
-          className={cx('pgt-btn')}
+          className={cx('pgt-btn', 'd-sm-none')}
         >
           next
         </Link>
