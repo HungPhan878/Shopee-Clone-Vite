@@ -1,3 +1,5 @@
+@use 'src/Components/GlobalStyles/abstracts';
+
 .purchases {
   &-nav__wrap {
     --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -52,6 +54,10 @@
   &-item__link {
     display: flex;
     gap: 12px;
+
+    @include abstracts.breakpoint(lg) {
+      flex-direction: column;
+    }
   }
 
   &-item__thumb {
