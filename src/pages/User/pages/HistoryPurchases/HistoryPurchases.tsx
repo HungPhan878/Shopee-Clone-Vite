@@ -71,7 +71,9 @@ export default function HistoryPurchases() {
         <meta name='description' content='Tra Cứu và theo dõi đơn hàng của bạn.' />
       </Helmet>
 
-      <nav className={cx('purchases-nav__wrap')}>{purchasesSideNav()}</nav>
+      <div style={{ overflow: 'auto' }}>
+        <nav className={cx('purchases-nav__wrap')}>{purchasesSideNav()}</nav>
+      </div>
 
       <ul className={cx('purchases-list')}>
         {purchasesList && purchasesList.length > 0 ? (
