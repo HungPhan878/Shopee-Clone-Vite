@@ -3,6 +3,7 @@
 import classNames from 'classnames/bind'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useTranslation } from 'react-i18next'
 
 // scss
 import style from './ChangePassword.module.scss'
@@ -25,6 +26,7 @@ type FormData = Pick<userType, 'password' | 'confirm_password' | 'new_password'>
 const passwordSchema = userSchema.pick(['password', 'confirm_password', 'new_password'])
 
 export default function ChangePassword() {
+  const { t } = useTranslation(['profile']) //dùng ns nào thì khai báo cụ thể ra
   const {
     register,
     handleSubmit,
@@ -75,8 +77,10 @@ export default function ChangePassword() {
         <meta name='description' content='Trang thay đổi mật khẩu bảo mật của bạn' />
       </Helmet>
       <div className={cx('password-info')}>
-        <h1 className={cx('password-info__heading')}>Đổi mật khẩu</h1>
-        <p className={cx('password-info__desc')}>Quản lý thông tin mật khẩu của tài khoản</p>
+        <h1 className={cx('password-info__heading')}>{t('change password.change password')}</h1>
+        <p className={cx('password-info__desc')}>
+          {t('change password.Manage your password information')}
+        </p>
       </div>
 
       <form className={cx('password-form')} onSubmit={onSubmit}>
@@ -84,13 +88,13 @@ export default function ChangePassword() {
           <div className='col col-12'>
             <div className={cx('password-form__info')}>
               <div className={cx('password-form__row')}>
-                <label className={cx('password-label')}>Mật khẩu cũ</label>
+                <label className={cx('password-label')}>{t('change password.old password')}</label>
                 <div className={cx('password-input__wrap')}>
                   <div className={cx('password-input__inner')}>
                     <Input
                       type='password'
                       name='password'
-                      placeholder='Mật khẩu cũ'
+                      placeholder={t('change password.old password')}
                       classNameInput={cx('password-input')}
                       className={cx('mb-0')}
                       register={register}
@@ -101,13 +105,13 @@ export default function ChangePassword() {
               </div>
 
               <div className={cx('password-form__row')}>
-                <label className={cx('password-label')}>Mật khẩu mới</label>
+                <label className={cx('password-label')}>{t('change password.new password')}</label>
                 <div className={cx('password-input__wrap')}>
                   <div className={cx('password-input__inner')}>
                     <Input
                       type='password'
                       name='new_password'
-                      placeholder='Mật khẩu mới'
+                      placeholder={t('change password.new password')}
                       classNameInput={cx('password-input')}
                       className={cx('mb-0')}
                       register={register}
@@ -118,13 +122,15 @@ export default function ChangePassword() {
               </div>
 
               <div className={cx('password-form__row')}>
-                <label className={cx('password-label')}>Xác nhận lại mật khẩu</label>
+                <label className={cx('password-label')}>
+                  {t('change password.confirm password')}
+                </label>
                 <div className={cx('password-input__wrap')}>
                   <div className={cx('password-input__inner')}>
                     <Input
                       type='password'
                       name='confirm_password'
-                      placeholder='Xác nhận lại mật khẩu mới'
+                      placeholder={t('change password.confirm password')}
                       classNameInput={cx('password-input')}
                       className={cx('mb-0')}
                       register={register}
@@ -137,7 +143,7 @@ export default function ChangePassword() {
               <div className={cx('password-form__row')}>
                 <div className={cx('password-btn__wrap')}>
                   <Button className={cx('password-btn__submit')} type='submit'>
-                    Lưu
+                    {t('profile.save')}
                   </Button>
                 </div>
               </div>

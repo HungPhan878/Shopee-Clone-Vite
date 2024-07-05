@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 // scss
 import style from './Product.module.scss'
@@ -18,6 +19,8 @@ interface Props {
 }
 
 export default function Product({ product }: Props) {
+  const { t } = useTranslation(['product']) //dùng ns nào thì khai báo cụ thể ra
+
   return (
     <Link to={`${path.home}${generateNameId({ name: product.name, id: product._id })}`}>
       <article className={cx('product-wrap')}>
@@ -44,7 +47,7 @@ export default function Product({ product }: Props) {
 
             <div className={cx('product-sold')}>
               <span>{formatNumberToSocialStyle(product.sold)}</span>
-              <span>Đã bán</span>
+              <span>{t('sold')}</span>
             </div>
           </div>
 

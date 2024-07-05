@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
+import { useTranslation } from 'react-i18next'
 
 //scss
 import style from './SortProductList.module.scss'
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export default function SortProductList({ queryConfig, pageSize }: Props) {
+  const { t } = useTranslation(['home'])
   const { sort_by = sortBy.createdAt, order } = queryConfig
   const page = Number(queryConfig.page)
   const navigate = useNavigate()
@@ -58,24 +60,24 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
     <div className={cx('sort__wrap')}>
       <div className={cx('sort__inner')}>
         <div className={cx('sort__row')}>
-          <div className={cx('sort__label')}>sắp xếp theo</div>
+          <div className={cx('sort__label')}>{t('sort product list.sorted by')}</div>
           <button
             className={cx('sort__btn', { 'sort__btn--active': isActiveSortBy(sortBy.view) })}
             onClick={handleSortBy(sortBy.view)}
           >
-            phổ biến
+            {t('sort product list.popular')}
           </button>
           <button
             className={cx('sort__btn', { 'sort__btn--active': isActiveSortBy(sortBy.createdAt) })}
             onClick={handleSortBy(sortBy.createdAt)}
           >
-            mới nhất
+            {t('sort product list.newest')}
           </button>
           <button
             className={cx('sort__btn', { 'sort__btn--active': isActiveSortBy(sortBy.sold) })}
             onClick={handleSortBy(sortBy.sold)}
           >
-            bán chạy
+            {t('sort product list.best selling')}
           </button>
           <select
             className={cx('sort__section', {
@@ -87,13 +89,13 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
             }
           >
             <option value='' className={cx('sort__option', 'sort__option--disable')} disabled>
-              giá
+              {t('sort product list.price')}
             </option>
             <option value={orderConstant.asc} className={cx('sort__option')}>
-              giá: thấp đến cao
+              {t('sort product list.ascending')}
             </option>
             <option value={orderConstant.desc} className={cx('sort__option')}>
-              giá: cao đến thấp
+              {t('sort product list.decrease')}
             </option>
           </select>
         </div>

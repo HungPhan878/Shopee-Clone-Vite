@@ -275,7 +275,7 @@ export default function ProductDetail() {
                   <span className={cx('product-sold__quantity')}>
                     {formatNumberToSocialStyle(product.sold)}
                   </span>
-                  <span className={cx('product-sold__label')}>Đã bán</span>
+                  <span className={cx('product-sold__label')}>{t('sold')}</span>
                 </div>
               </div>
 
@@ -293,13 +293,13 @@ export default function ProductDetail() {
 
                   <div className={cx('product-sell__percent-discount')}>
                     <span>{percentDiscount(product.price_before_discount, product.price)}</span>
-                    <span>giảm</span>
+                    <span>{t('discount')}</span>
                   </div>
                 </div>
               </div>
 
               <div className={cx('product-row')}>
-                <p className={cx('product-qty__label')}>Số Lượng</p>
+                <p className={cx('product-qty__label')}>{t('quantity')}</p>
 
                 {/* quantity controller */}
                 <QuantityController
@@ -360,7 +360,7 @@ export default function ProductDetail() {
                       </g>
                     </svg>
 
-                    <span>Thêm vào giỏ hàng</span>
+                    <span>{t('add to cart')}</span>
                   </button>
 
                   <button className={cx('product-btn__buy-now')} onClick={handleBuyRightNow}>
@@ -374,7 +374,7 @@ export default function ProductDetail() {
 
         <div className={cx('product-inner', 'mt-8')}>
           <div className={cx('product-title__wrap')}>
-            <p className={cx('product-title')}>Mô tả sản phẩm</p>
+            <p className={cx('product-title')}>{t('product description')}</p>
           </div>
           <div className={cx('product-desc__wrap')}>
             <div
@@ -387,7 +387,7 @@ export default function ProductDetail() {
         </div>
 
         <div className={cx('mt-8')}>
-          <p className={cx('product-list__title')}>CÓ THỂ BẠN CŨNG THÍCH</p>
+          <p className={cx('product-list__title')}>{t('you may also like')}</p>
           {products && (
             <div className='row row-cols-6 row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-1 gy-1 gx-1'>
               {/* tạo ra một mảng 30 phần tử nhưng empty thì phải cho fill vào để đổ đầy giá trị là 0 

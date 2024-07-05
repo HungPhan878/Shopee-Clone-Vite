@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
 import { createSearchParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 // scss
 import style from './RatingStar.module.scss'
@@ -25,6 +26,7 @@ interface Props {
 }
 
 export default function RatingStar({ queryConfig }: Props) {
+  const { t } = useTranslation(['home'])
   const navigate = useNavigate()
 
   // handler function
@@ -129,7 +131,9 @@ export default function RatingStar({ queryConfig }: Props) {
                     </span>
                   )
                 })}
-              {index !== 0 && <span className={cx('aside-star__label')}>trở lên</span>}
+              {index !== 0 && (
+                <span className={cx('aside-star__label')}>{t('aside filter.above')}</span>
+              )}
             </div>
           </li>
         ))}

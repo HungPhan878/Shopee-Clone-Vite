@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 // scss
 import style from './CartHeader.module.scss'
@@ -13,6 +14,7 @@ const cx = classNames.bind(style)
 
 export default function CartHeader() {
   const { register, handleSubmitSearch } = useSearchProducts()
+  const { t } = useTranslation(['cart'])
 
   return (
     <header className={cx('header-wrapper')}>
@@ -35,7 +37,7 @@ export default function CartHeader() {
                   </g>
                 </svg>
                 <div className={cx('header-bottom__separate')}></div>
-                <p className={cx('header-bottom__title')}>Giỏ hàng</p>
+                <p className={cx('header-bottom__title')}>{t('register header.cart')}</p>
               </Link>
             </div>
 

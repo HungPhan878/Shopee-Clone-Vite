@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import { useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 // scss
 import style from './Header.module.scss'
@@ -24,6 +25,7 @@ const MAX_PURCHASES = 5
 const cx = classNames.bind(style)
 
 export default function Header() {
+  const { t } = useTranslation(['header']) //dùng ns nào thì khai báo cụ thể ra
   const { isAuthenticated } = useContext(AppContext)
   const { register, handleSubmitSearch } = useSearchProducts()
 
@@ -73,7 +75,7 @@ export default function Header() {
                 renderProps={
                   purchasesList && purchasesList?.length > 0 ? (
                     <section className={cx('ppv-cart__wrap')}>
-                      <h3 className={cx('ppv-cart__label')}> sản phẩm mới thêm</h3>
+                      <h3 className={cx('ppv-cart__label')}>{t('new products added')}</h3>
 
                       <ul className={cx('ppv-cart__list')}>
                         {purchasesList?.slice(0, MAX_PURCHASES).map((purchasesItem) => (
@@ -103,7 +105,7 @@ export default function Header() {
                             : ''}
                         </p>
                         <Link to={path.cart} className={cx('ppv-cart__btn')}>
-                          Xem giỏ hàng
+                          {t('view cart')}
                         </Link>
                       </div>
                     </section>
@@ -115,7 +117,7 @@ export default function Header() {
                           alt='no product'
                           className={cx('ppv-cart__no-product-img')}
                         />
-                        <p className={cx('ppv-cart__no-product-label')}>chưa có sản phẩm</p>
+                        <p className={cx('ppv-cart__no-product-label')}>{t('no product')}</p>
                       </div>
                     </section>
                   )

@@ -2,6 +2,8 @@
 import classNames from 'classnames/bind'
 import { Link, createSearchParams } from 'react-router-dom'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+import { Helmet } from 'react-helmet-async'
 
 // scss
 import style from './HistoryPurchases.module.scss'
@@ -14,22 +16,27 @@ import { purchasesStatus } from 'src/constants/purchases'
 import { PurchasesListStatus } from 'src/types/purchases.type'
 import { formatCurrency, generateNameId } from 'src/utils/util'
 import noCart from 'src/assets/images/no-cart.png'
-import { Helmet } from 'react-helmet-async'
+import { useMemo } from 'react'
 
 const cx = classNames.bind(style)
-const purchasesTabs = [
-  { status: purchasesStatus.all, name: 'Tất cả' },
-  { status: purchasesStatus.WaitForConfirmation, name: 'Chờ Xác Nhận' },
-  { status: purchasesStatus.waitForGetting, name: 'Chờ Lấy Hàng' },
-  { status: purchasesStatus.inProgress, name: 'Đang Vận Chuyển' },
-  { status: purchasesStatus.delivered, name: 'Đã Giao' },
-  { status: purchasesStatus.cancelled, name: 'Đã Hủy' }
-]
 
 export default function HistoryPurchases() {
+  const { t } = useTranslation(['profile']) //dùng ns nào thì khai báo cụ thể ra
   const queryParams = useQueryParams()
   const status: number = Number(queryParams.status) || purchasesStatus.all
-
+  const purchasesTabs = useMemo(() => {
+    return [
+      { status: purchasesStatus.all, name: `${t('purchase.all')}` },
+      {
+        status: purchasesStatus.WaitForConfirmation,
+        name: `${t('purchase.wait for confirmation')}`
+      },
+      { status: purchasesStatus.waitForGetting, name: `${t('purchase.wait for getting')}` },
+      { status: purchasesStatus.inProgress, name: `${t('purchase.in progress')}` },
+      { status: purchasesStatus.delivered, name: `${t('purchase.delivered')}` },
+      { status: purchasesStatus.cancelled, name: `${t('purchase.cancelled')}` }
+    ]
+  }, [t])
   // [GET] /purchases
   const getPurchasesList = useQuery({
     queryKey: ['purchases', { status }],
@@ -61,10 +68,7 @@ export default function HistoryPurchases() {
     <div>
       <Helmet>
         <title>Shopee Clone | Theo Dõi Đơn Hàng</title>
-        <meta
-          name='description'
-          content='Tra Cứu và theo dõi đơn hàng của bạn.'
-        />
+        <meta name='description' content='Tra Cứu và theo dõi đơn hàng của bạn.' />
       </Helmet>
 
       <nav className={cx('purchases-nav__wrap')}>{purchasesSideNav()}</nav>
@@ -97,7 +101,9 @@ export default function HistoryPurchases() {
               </Link>
 
               <div className={cx('purchases-item__row')}>
-                <span className={cx('purchases-item__total-name')}>Tổng giá tiền:</span>
+                <span className={cx('purchases-item__total-name')}>
+                  {t('purchase.total price')}:
+                </span>
                 <span className={cx('purchases-item__total-price')}>
                   ₫{formatCurrency(purchasesItem.price * purchasesItem.buy_count)}
                 </span>
@@ -108,7 +114,7 @@ export default function HistoryPurchases() {
           <>
             <div className={cx('purchases-no-cart')}>
               <img src={noCart} alt='no cart' className={cx('purchases-no-cart__img')} />
-              <p className={cx('purchases-no-cart__label')}>Chưa có đơn hàng</p>
+              <p className={cx('purchases-no-cart__label')}>{t('purchase.no orders yet')}</p>
             </div>
           </>
         )}

@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames/bind'
+import { useTranslation } from 'react-i18next'
 
 // scss
 import style from './DateSelect.module.scss'
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export default function DateSelect({ onChange, value, errorMessage }: Props) {
+  const { t } = useTranslation(['profile']) //dùng ns nào thì khai báo cụ thể ra
   // state local to manage form
   const [date, setDate] = useState({
     date: value?.getDate() || 1,
@@ -49,7 +51,7 @@ export default function DateSelect({ onChange, value, errorMessage }: Props) {
 
   return (
     <div className={cx('date-form__row')}>
-      <label className={cx('date-label')}>Date of Birth</label>
+      <label className={cx('date-label')}>{t('profile.date of birth')}</label>
       <div className={cx('date-input__wrap')}>
         <div className={cx('date-select__inner')}>
           <select
@@ -58,7 +60,7 @@ export default function DateSelect({ onChange, value, errorMessage }: Props) {
             onChange={handleChange}
             className={cx('date-select')}
           >
-            <option disabled>Ngày</option>
+            <option disabled>{t('profile.day')}</option>
             {range(1, 32).map((item) => (
               <option value={item} key={item}>
                 {item}
@@ -72,7 +74,7 @@ export default function DateSelect({ onChange, value, errorMessage }: Props) {
             onChange={handleChange}
             className={cx('date-select')}
           >
-            <option disabled>Tháng</option>
+            <option disabled>{t('profile.month')}</option>
             {range(0, 12).map((item) => (
               <option value={item} key={item}>
                 {item + 1}
@@ -86,7 +88,7 @@ export default function DateSelect({ onChange, value, errorMessage }: Props) {
             onChange={handleChange}
             className={cx('date-select')}
           >
-            <option disabled>Năm</option>
+            <option disabled>{t('profile.year')}</option>
             {range(1990, 2025).map((item) => (
               <option value={item} key={item}>
                 {item}

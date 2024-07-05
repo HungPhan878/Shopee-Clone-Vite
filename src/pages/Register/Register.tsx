@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 
 //scss
 import style from './Register.module.scss'
@@ -27,6 +28,7 @@ const cx = classNames.bind(style)
 type FormData = SchemaType
 
 export default function Register() {
+  const { t } = useTranslation(['login'])
   const navigate = useNavigate()
   const { setAuthenticated, setProfile } = useContext(AppContext)
   const {
@@ -98,14 +100,14 @@ export default function Register() {
           <div className='row'>
             <div className='offset-7 offset-lg-2 offset-md-0 col-5 col-lg-8 col-md-12'>
               <div className={cx('register-inner')}>
-                <h2 className={cx('register-title')}>Đăng Ký</h2>
+                <h2 className={cx('register-title')}>{t('register')}</h2>
 
                 {/* form */}
                 <form action='' className={cx('register-form')} noValidate onSubmit={onSubmit}>
                   <Input
                     name='email'
                     type='email'
-                    placeholder='Email/Số điện thoại/Tên đăng nhập'
+                    placeholder={`Email/${t('phone number')}/${t('user name')}`}
                     register={register}
                     errorMessage={errors.email?.message}
                   />
@@ -113,7 +115,7 @@ export default function Register() {
                   <Input
                     name='password'
                     type='password'
-                    placeholder='Mật Khẩu'
+                    placeholder={t('password')}
                     register={register}
                     autoComplete='on'
                     errorMessage={errors.password?.message}
@@ -122,7 +124,7 @@ export default function Register() {
                   <Input
                     name='confirm_password'
                     type='password'
-                    placeholder='Nhập lại Mật Khẩu'
+                    placeholder={t('confirm password')}
                     register={register}
                     autoComplete='on'
                     errorMessage={errors.confirm_password?.message}
@@ -133,23 +135,20 @@ export default function Register() {
                     disabled={registerAccountMutation.isPending}
                     className={cx('register-form__btn')}
                   >
-                    đăng ký
+                    {t('register')}
                   </Button>
                 </form>
 
                 <div className={cx('register-row')}>
                   <Link to='#' className={cx('register-text')}>
-                    Quên mật khẩu
-                  </Link>
-                  <Link to='#' className={cx('register-text')}>
-                    Đăng nhập với SMS
+                    {t('login with sms')}
                   </Link>
                 </div>
 
                 <div className={cx('register-link')}>
-                  Bạn đã có tài khoản?{' '}
+                  {t('do you have an account yet')}?{' '}
                   <Link to={path.login} className={cx('register-link__text')}>
-                    Đăng Nhập
+                    {t('login')}
                   </Link>
                 </div>
               </div>

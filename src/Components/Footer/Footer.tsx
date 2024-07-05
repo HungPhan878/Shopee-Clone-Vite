@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
+import { useTranslation } from 'react-i18next'
 
 //scss
 import style from './Footer.module.scss'
@@ -8,6 +9,7 @@ import { Link } from 'react-router-dom'
 const cx = classNames.bind(style)
 
 export default function Footer() {
+  const { t } = useTranslation(['home'])
   return (
     <footer className={cx('footer')}>
       <div className={cx('container')}>
@@ -15,12 +17,12 @@ export default function Footer() {
         <div className={cx('row row-cols-5 row-cols-lg-2 row-cols-md-1')}>
           {/* col1 */}
           <div className={cx('footer-col')}>
-            <h3 className={cx('footer-title')}>Chăm sóc khách hàng</h3>
+            <h3 className={cx('footer-title')}>{t('footer.CUSTOMER SERVICE')}</h3>
 
             <ul className={cx('footer-list')}>
               <li className={cx('footer-item')}>
                 <Link to='/' className={cx('footer-item__link')}>
-                  trung tâm trợ giúp
+                  {t('footer.Help Centre')}
                 </Link>
               </li>
 
@@ -38,43 +40,43 @@ export default function Footer() {
 
               <li className={cx('footer-item')}>
                 <Link to='/' className={cx('footer-item__link')}>
-                  hướng dẫn mua hàng
+                  {t('footer.How To Buy')}
                 </Link>
               </li>
 
               <li className={cx('footer-item')}>
                 <Link to='/' className={cx('footer-item__link')}>
-                  hướng dẫn bán hàng
+                  {t('footer.How To Sell')}
                 </Link>
               </li>
               <li className={cx('footer-item')}>
                 <Link to='/' className={cx('footer-item__link')}>
-                  thanh toán
+                  {t('footer.Payment')}
                 </Link>
               </li>
               <li className={cx('footer-item')}>
                 <Link to='/' className={cx('footer-item__link')}>
-                  shopee xu
+                  {t('footer.Shopee Coins')}
                 </Link>
               </li>
               <li className={cx('footer-item')}>
                 <Link to='/' className={cx('footer-item__link')}>
-                  vận chuyển
+                  {t('footer.Shipping')}
                 </Link>
               </li>
               <li className={cx('footer-item')}>
                 <Link to='/' className={cx('footer-item__link')}>
-                  trả hàng & hoàn tiền
+                  {t('footer.Return & Refund')}
                 </Link>
               </li>
               <li className={cx('footer-item')}>
                 <Link to='/' className={cx('footer-item__link')}>
-                  chăm sóc khách hàng
+                  {t('footer.Contact Us')}
                 </Link>
               </li>
               <li className={cx('footer-item')}>
                 <Link to='/' className={cx('footer-item__link')}>
-                  chính sách bảo hành
+                  {t('footer.Warranty Policy')}
                 </Link>
               </li>
             </ul>
@@ -82,50 +84,45 @@ export default function Footer() {
 
           {/* col2 */}
           <div className={cx('footer-col')}>
-            <h3 className={cx('footer-title')}>về shopee</h3>
+            <h3 className={cx('footer-title')}>{t('footer.ABOUT SHOPEE')}</h3>
             <ul className={cx('footer-list')}>
               <li className={cx('footer-item')}>
                 <Link to='#' className={cx('footer-item__link')}>
-                  giới thiệu về shopee
+                  {t('footer.About Us')}
                 </Link>
               </li>
 
               <li className={cx('footer-item')}>
                 <Link to='#' className={cx('footer-item__link')}>
-                  tuyển dụng
+                  {t('footer.Shopee Careers')}
                 </Link>
               </li>
 
               <li className={cx('footer-item')}>
                 <Link to='#' className={cx('footer-item__link')}>
-                  chính sách bảo mật
+                  {t('footer.Shopee Policies')}
                 </Link>
               </li>
 
               <li className={cx('footer-item')}>
                 <Link to='#' className={cx('footer-item__link')}>
-                  chính hãng
+                  {t('footer.Seller Centre')}
                 </Link>
               </li>
 
               <li className={cx('footer-item')}>
                 <Link to='#' className={cx('footer-item__link')}>
-                  kênh người bán
+                  {t('footer.Flash Deals')}
                 </Link>
               </li>
               <li className={cx('footer-item')}>
                 <Link to='#' className={cx('footer-item__link')}>
-                  flash sales
+                  {t('footer.Shopee Ambassador Programme')}
                 </Link>
               </li>
               <li className={cx('footer-item')}>
                 <Link to='#' className={cx('footer-item__link')}>
-                  chương trình tiếp thị liên kết shopee
-                </Link>
-              </li>
-              <li className={cx('footer-item')}>
-                <Link to='#' className={cx('footer-item__link')}>
-                  liên hệ với truyền thông
+                  {t('footer.Media Contact')}
                 </Link>
               </li>
             </ul>
@@ -133,13 +130,13 @@ export default function Footer() {
 
           {/* col3 */}
           <div className={cx('footer-col')}>
-            <h3 className={cx('footer-title')}>thanh toán</h3>
-            <h3 className={cx('footer-title')}>đơn vị vận chuyển</h3>
+            <h3 className={cx('footer-title')}>{t('footer.Payment')}</h3>
+            <h3 className={cx('footer-title')}>{t('footer.LOGISTICS')}</h3>
           </div>
 
           {/* col4 */}
           <div className={cx('footer-col')}>
-            <h3 className={cx('footer-title')}>theo dõi chúng tôi trên</h3>
+            <h3 className={cx('footer-title')}>{t('footer.FOLLOW US')}</h3>
 
             <ul className={cx('footer-list')}>
               <li className={cx('footer-item')}>
@@ -164,7 +161,7 @@ export default function Footer() {
 
           {/* col5 */}
           <div className={cx('footer-col')}>
-            <h3 className={cx('footer-title')}>tải ứng dụng shoppe ngay</h3>
+            <h3 className={cx('footer-title')}>{t('footer.SHOPEE APP DOWNLOAD')}</h3>
           </div>
         </div>
 
@@ -175,12 +172,15 @@ export default function Footer() {
           <div className={cx('footer-row__wrap')}>
             <div className='row'>
               <div className='col-4 col-xl-12'>
-                <p className={cx('footer-label')}>© 2024 Shopee. Tất cả các quyền được bảo lưu.</p>
+                <p className={cx('footer-label')}>
+                  © 2024 Shopee. {t('footer.All rights reserved')}.
+                </p>
               </div>
               <div className='col-8 col-xl-12'>
                 <p className={cx('footer-label')}>
-                  Quốc gia & Khu vực: Singapore Indonesia Thái Lan Malaysia Việt Nam Philippines
-                  Brazil México Colombia Chile Đài Loan
+                  {t(
+                    'footer.Country & Region: Singapore Indonesia Thailand Malaysia Vietnam Philippines Brazil Mexico Colombia Chile Taiwan'
+                  )}
                 </p>
               </div>
             </div>
@@ -190,47 +190,49 @@ export default function Footer() {
             <ul className={cx('footer-bottom__list', 'd-md-none')}>
               <li className={cx('footer-bottom__item')}>
                 <Link to='#' className={cx('footer-bottom__item-link')}>
-                  CHÍNH SÁCH BẢO MẬT
+                  {t('footer.PRIVACY POLICY')}
                 </Link>
               </li>
 
               <li className={cx('footer-bottom__item')}>
                 <Link to='#' className={cx('footer-bottom__item-link')}>
-                  QUY CHẾ HOẠT ĐỘNG
+                  {t('footer.OPERATION REGULATIONS')}
                 </Link>
               </li>
 
               <li className={cx('footer-bottom__item')}>
                 <Link to='#' className={cx('footer-bottom__item-link')}>
-                  CHÍNH SÁCH VẬN CHUYỂN
+                  {t('footer.SHIPPING POLICY')}
                 </Link>
               </li>
 
               <li className={cx('footer-bottom__item')}>
                 <Link to='#' className={cx('footer-bottom__item-link')}>
-                  CHÍNH SÁCH TRẢ HÀNG VÀ HOÀN TIỀN
+                  {t('footer.RETURN AND REFUND POLICY')}
                 </Link>
               </li>
             </ul>
 
             <p className={cx('footer-bottom__text', 'footer-bottom__text-mb')}>
-              Công ty TNHH Shopee
+              {t('footer.Shopee Company Limited')}
             </p>
             <p className={cx('footer-bottom__text')}>
-              Địa chỉ: Tầng 4-5-6, Tòa nhà Capital Place, số 29 đường Liễu Giai, Phường Ngọc Khánh,
-              Quận Ba Đình, Thành phố Hà Nội, Việt Nam. Tổng đài hỗ trợ: 19001221 - Email:
-              cskh@hotro.shopee.vn
+              {t(
+                'footer.Address: Floor 4-5-6, Capital Place Building, 29 Lieu Giai Street, Ngoc Khanh Ward, Ba Dinh District, Hanoi City, Vietnam. Support switchboard: 19001221 - Email: cskh@hotro.shopee.vn'
+              )}
             </p>
             <p className={cx('footer-bottom__text')}>
-              Chịu Trách Nhiệm Quản Lý Nội Dung: Nguyễn Đức Trí - Điện thoại liên hệ: 024 73081221
-              (ext 4678)
+              {t(
+                'footer.Responsible for Content Management: Nguyen Duc Tri - Contact phone: 024 73081221 (ext 4678)'
+              )}
             </p>
             <p className={cx('footer-bottom__text')}>
-              Mã số doanh nghiệp: 0106773786 do Sở Kế hoạch & Đầu tư TP Hà Nội cấp lần đầu ngày
-              10/02/2015
+              {t(
+                'footer.Business code: 0106773786 issued by Hanoi Department of Planning and Investment for the first time on February 10, 2015'
+              )}
             </p>
             <p className={cx('footer-bottom__text')}>
-              © 2015 - Bản quyền thuộc về Công ty TNHH Shopee
+              {t('footer.© 2015 - Copyright belongs to Shopee Company Limited')}
             </p>
           </div>
         </div>

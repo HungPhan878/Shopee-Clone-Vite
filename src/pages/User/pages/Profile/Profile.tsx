@@ -6,6 +6,7 @@ import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-fo
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { Fragment, useContext, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 // scss
 import style from './Profile.module.scss'
@@ -39,6 +40,8 @@ const cx = classNames.bind(style)
 //      thực hiện update .
 
 function Info() {
+  const { t } = useTranslation(['profile']) //dùng ns nào thì khai báo cụ thể ra
+
   const {
     register,
     control,
@@ -54,7 +57,7 @@ function Info() {
         />
       </Helmet>
       <div className={cx('profile-form__row')}>
-        <label className={cx('profile-label')}>Tên</label>
+        <label className={cx('profile-label')}>{t('profile.name')}</label>
         <div className={cx('profile-input__wrap')}>
           <div className={cx('profile-input__inner')}>
             <Input
@@ -71,7 +74,7 @@ function Info() {
       </div>
 
       <div className={cx('profile-form__row')}>
-        <label className={cx('profile-label')}>Số điện thoại</label>
+        <label className={cx('profile-label')}>{t('profile.phone number')}</label>
         <div className={cx('profile-input__wrap')}>
           <div className={cx('profile-input__inner')}>
             <Controller
@@ -80,7 +83,7 @@ function Info() {
               render={({ field }) => (
                 <InputNumber
                   type='text'
-                  placeholder='Số điện thoại'
+                  placeholder={t('profile.phone number')}
                   classNameInput={cx('profile-input')}
                   className={cx('mb-0')}
                   errorMessage={errors.phone?.message}
@@ -97,6 +100,8 @@ function Info() {
 }
 
 export default function Profile() {
+  const { t } = useTranslation(['profile']) //dùng ns nào thì khai báo cụ thể ra
+
   const { setProfile } = useContext(AppContext)
 
   const [file, setFile] = useState<File>()
@@ -205,8 +210,8 @@ export default function Profile() {
   return (
     <div className={cx('profile-wrap')}>
       <div className={cx('profile-info')}>
-        <h1 className={cx('profile-info__heading')}>Hồ Sơ Của Tôi</h1>
-        <p className={cx('profile-info__desc')}>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+        <h1 className={cx('profile-info__heading')}>{t('profile.my profile')}</h1>
+        <p className={cx('profile-info__desc')}>{t('profile.manage profile information for account security')}</p>
       </div>
 
       <FormProvider {...methods}>
@@ -224,13 +229,13 @@ export default function Profile() {
                 <Info />
 
                 <div className={cx('profile-form__row')}>
-                  <label className={cx('profile-label')}>Địa chỉ</label>
+                  <label className={cx('profile-label')}>{t('profile.address')}</label>
                   <div className={cx('profile-input__wrap')}>
                     <div className={cx('profile-input__inner')}>
                       <Input
                         type='text'
                         name='address'
-                        placeholder='Địa chỉ'
+                        placeholder={t('profile.address')}
                         classNameInput={cx('profile-input')}
                         className={cx('mb-0')}
                         register={register}
@@ -256,7 +261,7 @@ export default function Profile() {
                 <div className={cx('profile-form__row')}>
                   <div className={cx('profile-btn__wrap')}>
                     <Button className={cx('profile-btn__submit')} type='submit'>
-                      Lưu
+                    {t('profile.save')}
                     </Button>
                   </div>
                 </div>
@@ -277,8 +282,8 @@ export default function Profile() {
                 <InputFile onChange={handleChangeFile} />
 
                 <div className={cx('profile-image__desc')}>
-                  <div>Dụng lượng file tối đa 1 MB</div>
-                  <div>Định dạng:.JPEG, .PNG</div>
+                  <div>{t('profile.maximum file size')} 1 MB</div>
+                  <div>{t('profile.format')}:.JPEG, .PNG</div>
                 </div>
               </div>
             </div>

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { LoginSchemaType, loginSchema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useTranslation } from 'react-i18next'
 
 //scss
 import style from './Login.module.scss'
@@ -26,6 +27,7 @@ const cx = classNames.bind(style)
 type FormData = LoginSchemaType
 
 export default function Login() {
+  const { t } = useTranslation(['login']) //dùng ns nào thì khai báo cụ thể ra
   const navigate = useNavigate()
   const { setAuthenticated, setProfile } = useContext(AppContext)
   const {
@@ -83,14 +85,14 @@ export default function Login() {
           <div className='row'>
             <div className='offset-7 offset-lg-2 offset-md-0 col-5 col-lg-8 col-md-12'>
               <div className={cx('login-inner')}>
-                <h2 className={cx('login-title')}>Đăng Nhập</h2>
+                <h2 className={cx('login-title')}>{t('login')}</h2>
 
                 {/* form */}
                 <form action='' className={cx('login-form')} noValidate onSubmit={onSubmit}>
                   <Input
                     name='email'
                     type='email'
-                    placeholder='Email/Số điện thoại/Tên đăng nhập'
+                    placeholder={`Email/${t('phone number')}/${t('user name')}`}
                     register={register}
                     errorMessage={errors.email?.message}
                   />
@@ -98,7 +100,7 @@ export default function Login() {
                   <Input
                     name='password'
                     type='password'
-                    placeholder='Mật Khẩu'
+                    placeholder={t('password')}
                     register={register}
                     autoComplete='on'
                     errorMessage={errors.password?.message}
@@ -110,23 +112,23 @@ export default function Login() {
                     className={cx('login-form__btn')}
                     type='submit'
                   >
-                    đăng nhập
+                    {t('login')}
                   </Button>
                 </form>
 
                 <div className={cx('login-row')}>
                   <Link to='#' className={cx('login-text')}>
-                    Quên mật khẩu
+                    {t('forget password')}
                   </Link>
                   <Link to='#' className={cx('login-text')}>
-                    Đăng nhập với SMS
+                    {t('login with sms')}
                   </Link>
                 </div>
 
                 <div className={cx('login-link')}>
-                  Bạn mới biết đến Shopee?{' '}
+                  {t('are you new to shopee')}?{' '}
                   <Link to={path.register} className={cx('login-link__text')}>
-                    Đăng ký
+                    {t('register')}
                   </Link>
                 </div>
               </div>

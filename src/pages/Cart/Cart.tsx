@@ -7,6 +7,7 @@ import { Fragment, useContext, useEffect, useMemo } from 'react'
 //tree-shaking là import prop nào thì chỉ lấy ra prop đó thôi không lấy ra cả framework
 //visualizer chi duoc lay ra khi npm run build thoi nha
 import keyBy from 'lodash/keyBy'
+import { useTranslation } from 'react-i18next'
 import { Flip, toast } from 'react-toastify'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -32,6 +33,7 @@ const cx = classNames.bind(style)
 // 3. khi click vào nut chọn tất cả sẽ !isCheckAll
 
 export default function Cart() {
+  const { t } = useTranslation(['cart']) //dùng ns nào thì khai báo cụ thể ra
   const { extendedPurchases, setExtendedPurchases } = useContext(AppContext)
   const location = useLocation()
   // b2 + useMemo to optimize performance không bị tính toán đi lại qua nhìu lần khi re-render lại component khi checked
@@ -209,18 +211,18 @@ export default function Cart() {
                             onChange={handleCheckedAll}
                           />
                         </div>
-                        <span className={cx('cart-checkbox__label')}>Sản phẩm</span>
+                        <span className={cx('cart-checkbox__label')}>{t('product')}</span>
                       </div>
                     </div>
 
                     <div className='col'>
                       <div className='row'>
-                        <div className='col col-4'>Đơn giá</div>
+                        <div className='col col-4'>{t('unit price')}</div>
                         <div className='col col-8'>
                           <div className='row row-cols-3'>
-                            <div className='col '>Số lượng</div>
-                            <div className='col '>Số tiền</div>
-                            <div className='col '>Thao tác</div>
+                            <div className='col '>{t('quantity')}</div>
+                            <div className='col '>{t('amount of money')}</div>
+                            <div className='col '>{t('operation')}</div>
                           </div>
                         </div>
                       </div>
@@ -322,7 +324,7 @@ export default function Cart() {
                                     className={cx('cart-item__btn-delete')}
                                     onClick={() => handleDeletePurchases(index)}
                                   >
-                                    Xóa
+                                    {t('delete')}
                                   </button>
                                 </div>
                               </div>
@@ -349,24 +351,24 @@ export default function Cart() {
                     />
                   </div>
                   <button className={cx('cart-btn')} onClick={handleCheckedAll}>
-                    Chọn tất cả ({purchasesList?.length})
+                    {t('select all')} ({purchasesList?.length})
                   </button>
                   <button className={cx('cart-btn')} onClick={handleDeletePurchasesList}>
-                    Xóa Tất Cả ({checkedPurchasesCount})
+                    {t('delete all')} ({checkedPurchasesCount})
                   </button>
                 </div>
 
                 <div className={cx('cart-buy__purchases')}>
                   <div>
                     <div className={cx('cart-buy__purchases-total')}>
-                      <span>Tổng thanh toán :</span>
+                      <span>{t('total payment')} :</span>
                       <span className={cx('cart-buy__purchases-price-total')}>
                         ₫{formatCurrency(totalCheckedPurchasesPrice)}
                       </span>
                     </div>
 
                     <div className={cx('cart-buy__purchases-price-saving')}>
-                      <span>Tiết kiệm</span>
+                      <span>{t('savings')}</span>
                       <span className={cx('cart-buy__purchases-number')}>
                         ₫{formatCurrency(totalCheckedPurchasesSavingPrice)}
                       </span>
@@ -379,7 +381,7 @@ export default function Cart() {
                     disabled={buyPurchasesMutation.isPending}
                     isLoading={buyPurchasesMutation.isPending}
                   >
-                    <span>Mua hàng</span>
+                    <span>{t('purchase')}</span>
                   </Button>
                 </div>
               </div>
@@ -388,9 +390,9 @@ export default function Cart() {
         ) : (
           <div className={cx('cart__no-product')}>
             <img src={noProduct} alt='no product' className={cx('cart__no-product__img')} />
-            <p className={cx('cart__no-product__label')}>Giỏ hàng của bạn còn trống</p>
+            <p className={cx('cart__no-product__label')}>{t('your shopping cart is empty')}</p>
             <Link to={path.home} className={cx('cart__no-product__btn')}>
-              MUA NGAY
+              {t('buy now')}
             </Link>
           </div>
         )}

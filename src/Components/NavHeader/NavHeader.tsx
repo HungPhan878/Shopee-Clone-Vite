@@ -20,7 +20,7 @@ import { locales } from 'src/i18n/i18n'
 const cx = classNames.bind(style)
 
 export default function NavHeader() {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation(['header', 'login'])
   const currentLanguage = locales[i18n.language as keyof typeof locales]
   const { isAuthenticated, setAuthenticated, setProfile, profile } = useContext(AppContext)
   const queryClient = useQueryClient()
@@ -98,17 +98,17 @@ export default function NavHeader() {
                 <ul className={cx('ppv-info__list')}>
                   <li className={cx('ppv-info__item')}>
                     <Link to={path.profile} className={cx('ppv-info__link')}>
-                      tài khoản của tôi
+                      {t('my account')}
                     </Link>
                   </li>
                   <li className={cx('ppv-info__item')}>
                     <Link to={path.historyPurchases} className={cx('ppv-info__link')}>
-                      đơn mua
+                      {t('header:purchase')}
                     </Link>
                   </li>
                   <li className={cx('ppv-info__item')}>
                     <button className={cx('ppv-info__link')} onClick={handleLogout}>
-                      đăng xuất
+                      {t('logout')}
                     </button>
                   </li>
                 </ul>
@@ -126,11 +126,11 @@ export default function NavHeader() {
           {!isAuthenticated && (
             <div className={cx('header-item__btns-wrap')}>
               <Link to={path.register} className={cx('header-item__btn')}>
-                đăng ký
+                {t('login:register')}
               </Link>
               <span className={cx('header-item__separate')}></span>
               <Link to={path.login} className={cx('header-item__btn')}>
-                đăng nhập
+                {t('login:login')}
               </Link>
             </div>
           )}

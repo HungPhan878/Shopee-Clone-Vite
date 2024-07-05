@@ -1,4 +1,6 @@
+/* eslint-disable prettier/prettier */
 import classNames from 'classnames/bind'
+import { useTranslation } from 'react-i18next'
 
 //scss
 import style from './RegisterHeader.module.scss'
@@ -11,6 +13,7 @@ import path from 'src/constants/path'
 const cx = classNames.bind(style)
 
 export default function RegisterHeader() {
+  const { t } = useTranslation(['login'])
   // useMatch Dùng để kiểm tra url có match với một arg truyền vào hay không
   const registerMatch = useMatch(path.register)
   const isRegisterMatch = Boolean(registerMatch)
@@ -29,10 +32,12 @@ export default function RegisterHeader() {
             {/* <img src={icons.logo} alt='shopee' /> */}
           </Link>
 
-          <h1 className={cx('header-heading')}>{isRegisterMatch ? 'Đăng Ký' : 'Đăng Nhập'}</h1>
+          <h1 className={cx('header-heading')}>
+            {isRegisterMatch ? `${t('register')}` : `${t('login')}`}
+          </h1>
 
           <Link to='/' className={cx('d-md-none', { 'header-link': true })}>
-            <p className={cx('header-text')}>Bạn cần giúp đỡ?</p>
+            <p className={cx('header-text')}>{t('do you need any help')}?</p>
           </Link>
         </nav>
       </div>

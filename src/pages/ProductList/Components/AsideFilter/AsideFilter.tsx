@@ -155,7 +155,7 @@ export default function AsideFilter(props: Props) {
 
       <div className={cx('aside-filter__wrap')}>
         <div className={cx('aside-filter__price')}>
-          <div>Khoảng giá</div>
+          <div> {t('aside filter.price range')}</div>
           <form className={cx('aside-form')} onSubmit={onSubmit}>
             <div className={cx('aside-form__row')}>
               <Controller
@@ -164,7 +164,7 @@ export default function AsideFilter(props: Props) {
                 render={({ field }) => (
                   <InputNumber
                     type='text'
-                    placeholder='₫ TỪ'
+                    placeholder={`₫ ${t('aside filter.from')}`}
                     className={cx('aside-form__input-wrap')}
                     classNameInput={cx('aside-form__input')}
                     classNameError={cx('aside-form__err')}
@@ -189,7 +189,7 @@ export default function AsideFilter(props: Props) {
                 render={({ field }) => (
                   <InputNumber
                     type='text'
-                    placeholder='₫ ĐẾN'
+                    placeholder={`₫ ${t('aside filter.to')}`}
                     className={cx('aside-form__input-wrap')}
                     classNameInput={cx('aside-form__input')}
                     classNameError={cx('aside-form__err')}
@@ -203,20 +203,20 @@ export default function AsideFilter(props: Props) {
               />
             </div>
             <p className={cx('aside-form__input-err')}>{errors.price_min?.message}</p>
-            <Button type='submit'>Áp Dụng</Button>
+            <Button type='submit'> {t('aside filter.apply')}</Button>
           </form>
         </div>
       </div>
 
       <div className={cx('aside-separate')}></div>
 
-      <div className={cx('aside-filter__label')}>đánh giá</div>
+      <div className={cx('aside-filter__label')}> {t('aside filter.evaluate')}</div>
 
       {/* RatingStar */}
       <RatingStar queryConfig={queryConfig} />
       <div className={cx('aside-separate')}></div>
 
-      <Button onClick={handleRemoveAll}>Xóa tất cả</Button>
+      <Button onClick={handleRemoveAll}> {t('aside filter.delete all')}</Button>
     </div>
   )
 }

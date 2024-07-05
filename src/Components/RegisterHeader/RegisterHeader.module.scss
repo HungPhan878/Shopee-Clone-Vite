@@ -27,6 +27,7 @@
   &-heading {
     color: #222;
     font-size: 2.4rem;
+    text-transform: capitalize;
 
     @include abstracts.breakpoint(md) {
       font-size: 2rem;
@@ -38,6 +39,7 @@
   }
 
   &-text {
+    text-transform: capitalize;
     margin-right: 15px;
     color: var(--primary-color);
     font-size: 1.4rem;

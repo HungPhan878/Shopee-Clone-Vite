@@ -2,6 +2,7 @@
 import classNames from 'classnames/bind'
 import { Fragment } from 'react/jsx-runtime'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 
 // scss
 import style from './InputFile.module.scss'
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export default function InputFile({ onChange }: Props) {
+  const { t } = useTranslation(['profile']) //dùng ns nào thì khai báo cụ thể ra
   const inputFileRef = useRef<HTMLInputElement>(null)
   // Không cần local vì set file vẫn ok nha không phụ thuộc vào value mà vào files
 
@@ -55,7 +57,7 @@ export default function InputFile({ onChange }: Props) {
         ref={inputFileRef}
       ></input>
       <button className={cx('input-file__image-btn')} type='button' onClick={handleUpload}>
-        Chọn ảnh
+        {t('profile.choose photos')}
       </button>
     </Fragment>
   )
