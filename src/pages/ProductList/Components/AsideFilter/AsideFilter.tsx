@@ -100,7 +100,7 @@ export default function AsideFilter(props: Props) {
             </g>
           </g>
         </svg>
-        {t('aside filter.all categories')}
+        <h1>{t('aside filter.all categories')}</h1>
       </Link>
 
       <div className={cx('aside-separate')}></div>
@@ -150,7 +150,7 @@ export default function AsideFilter(props: Props) {
             />
           </g>
         </svg>
-        {t('aside filter.filter search')}
+        <h2>{t('aside filter.filter search')}</h2>
       </div>
 
       <div className={cx('aside-filter__wrap')}>
