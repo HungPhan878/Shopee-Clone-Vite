@@ -9,11 +9,14 @@ const cx = classNames.bind(style)
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean
   classNameWrap?: string
+  primary?: boolean
 }
 
 export default function Button(props: ButtonProps) {
-  const { disabled, children, className = cx('btn'), isLoading, ...rest } = props
-  const newClassName = disabled ? cx(className, 'btn__disable') : className
+  const { disabled, children, primary, className = cx('btn'), isLoading, ...rest } = props
+  const newClassName = disabled
+    ? cx(className, 'btn__disable', { primary: primary })
+    : cx(className, { primary: primary })
   // Nhu vay la them class cho cx nha
 
   return (
