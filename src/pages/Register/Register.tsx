@@ -25,7 +25,8 @@ import { Helmet } from 'react-helmet-async'
 
 const cx = classNames.bind(style)
 
-type FormData = SchemaType
+const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
+type FormData = Pick<SchemaType, 'email' | 'password' | 'confirm_password'>
 
 export default function Register() {
   const { t } = useTranslation(['login'])
@@ -43,7 +44,7 @@ export default function Register() {
       password: '',
       confirm_password: ''
     },
-    resolver: yupResolver(schema)
+    resolver: yupResolver(registerSchema)
   })
 
   // react query
